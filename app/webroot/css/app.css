@@ -1,0 +1,30 @@
+/**
+ * 	Layout CSS
+ */
+
+body {
+	background-color: #edeae5;
+	color: #555555;
+	font-size: 14px;
+}
+
+h1, h2, h3, h4 {
+	color: #ccc;
+	font-weight: normal;
+}
+
+h1 {
+	font-size: 22px;
+}
+
+/* HEADER */
+
+/* SIDEBAR */
+
+/* CONTENT */
+#content {
+	margin-top: 45px;
+}
+/* COMMON */
+
+/* END OF COMMON */
