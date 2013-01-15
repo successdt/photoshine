@@ -11,12 +11,9 @@
 	<meta name="description" content=""/>
 	<meta name="author" content=""/>
 
-	<?php echo $this->Html->css(array('bootstrap.min', 'colorbox/colorbox', 'app'), 'stylesheet') ?>
+	<?php echo $this->Html->css(array('bootstrap.min', 'app'), 'stylesheet') ?>
 	<?php echo $this->fetch('css'); ?>
 	
-	<style type="text/css">
-		body {background-color: #fff; /*overflow: hidden;*/}
-	</style>
 </head>
 
 <body>
