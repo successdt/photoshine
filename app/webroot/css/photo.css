@@ -11,9 +11,10 @@
 	text-overflow: ellipsis;
 }
 
+
 .photodetail-sns {
-	margin: 0px 0px 0px 610px;
-	height: 40px;
+	margin: 5px 0px 0px 610px;
+	height: 35px;
 	overflow: hidden;
 }
 
@@ -24,4 +25,9 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 	text-overflow: ellipsis;
+}
+.photodetail-caption-inner {
+	height: 100%;
+	margin-left: 45px;
+	margin-top: -45px;
 }

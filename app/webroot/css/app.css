@@ -26,5 +26,376 @@ h1 {
 	margin-top: 45px;
 }
 /* COMMON */
-
+.time-ago {
+	color: #989393;
+}
 /* END OF COMMON */
+
+/* PHOTO DETAIL */
+.photodetail-photo {
+	margin: 0px 0px;
+}
+
+.photodetail-caption {
+	margin: -600px 0px 0px 610px;
+	height: 120px;
+	border-bottom: solid 1px #AAA;
+	overflow-y: auto;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+}
+
+
+.photodetail-sns {
+	margin: 5px 0px 0px 610px;
+	height: 35px;
+	overflow: hidden;
+}
+
+.photodetail-list-like {
+	margin: 0px 0px 0px 610px;
+	height: 80px;
+	border-bottom: solid 1px #AAA;
+	overflow-y: auto;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+}
+.photodetail-caption-inner {
+	height: 100%;
+	margin-left: 45px;
+	margin-top: -45px;
+	text-overflow: ellipsis;
+}
+
+.photodetail-like-btn {
+	width: 20px;
+	height: 20px;
+	padding: 5px;
+	margin-right: 2px;
+}
+
+
+.photodetail-like-btn.active {
+    background-color: #DA4F49;
+    background-image: -moz-linear-gradient(center top , #EE5F5B, #BD362F);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.photodetail-list-comment {
+	margin: 5px 5px 0px 605px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	height: 266px;
+	padding-top: 10px;
+}
+
+.photodetail-comment-container {
+	width: 326px;
+	height: auto;
+	min-height: 45px;
+	padding-bottom: 5px;
+	float: left;
+	margin-top: 5px;
+	margin-left: 5px;
+	border-bottom: 1px solid #AAA;
+	padding-top: 15px;
+}
+
+.photodetail-comment-time {
+	width: 100%;
+	margin-top: 5px;
+}
+
+.photodetail-view-all {
+	margin: -10px 0px 0px 0px;
+	position: absolute;
+	height: 20px;
+	width: 332px;
+	text-align: center;
+	background-color: #edeae1;
+}
+
+.photodetail-post-comment {
+	height: 62px;
+	margin: 5px 0px 0px 605px;
+	padding: 0;
+}
+.photodetail-post-comment textarea{
+	height: 62px;
+	margin-bottom: 0px;
+	width: 335px;
+	float: left;
+}
+ /* TIMELINE */ 
+.timeline-cover-bg {
+	height: 250px;
+	width: 100%;
+	top: 0px;	
+	overflow: hidden;
+	background-image: url("../img/photoshine/noise-black.png");
+	background-repeat: repeat;
+	min-width: 980px;
+}
+.timeline-cover-bg img {
+	
+	transition-duration: 500ms;
+}
+
+.timeline-cover-bg div {
+	opacity: 0.5;
+	width:  105%;
+}
+
+.hi{
+	border: 2px #FFF inset;
+}
+.low{
+	border: 1px #FFF inset;
+}
+.timeline-cover {
+	position: absolute;
+	top: 0px;
+	height: 300px;
+	width: 100%;
+	min-width: 980px;
+	background-color: transparent;
+	box-shadow: 0px 0px 10px #111;
+}
+.timeline-cover-inner {
+	height: 130px;
+	width: 980px;
+	margin: 10px auto;
+/*	border:  1px solid #000; */
+}
+.timeline-cover-avatar {
+	height: 150px;
+	width: 150px;
+	border: 1px solid #000;
+	position: relative;
+	margin-top: -194px;
+	left: 20px;
+}
+.timeline-info-bg {
+	background-color: #000;
+	opacity: 0.8;
+	width: 100%;
+	height: 133px;
+	margin-top: 162px;
+}
+.timeline-cover-username {
+	margin-top: 5px;
+	font-size: 20px;
+	color: #FFF;
+	width: 150px;
+	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+}
+
+.timeline-cover-info {
+	width: 300px;
+	height: 123px;
+	margin: -85px 0px 0px 185px;
+	color: #FFF;
+	position: relative;
+	text-overflow: ellipsis;
+	overflow: hidden;
+
+}
+
+.timeline-cover-info a{
+	color: #FFF;
+}
+
+.timeline-info-fullname {
+	font-size: 24px;
+	height: 20px;
+	overflow: hidden;
+	width: 300px;
+	text-overflow:ellipsis;
+}
+
+.cover-btn-group {
+	width: 408px;
+	height: 30px;
+	margin: 10px 0px 0px 500px;
+}
+
+.cover-user-static {
+	width: 460px;
+	height: 75px;
+	margin: -123px 0px 0px 500px;
+}
+
+.timeline-stat {
+	width: 100px;
+	height: 75px;
+	margin: 5px 20px;
+	border-radius: 5px;
+	position: relative;
+	float: left;
+	border: 1px #EEE inset;
+}
+
+.timeline-stat-inner {
+	width: 100%;
+	height: 50px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	background-color: #FFF;
+	overflow: hidden;
+}
+.timeline-stat-text {
+	height: 20px;
+	margin-top: 5px;
+	border-bottom-left-radius: 5px ;
+	border-bottom-right-radius: 5px ;
+	text-align: center;
+	color: #FFF;
+	font-weight: bold;
+	overflow: hidden;
+	font-size: 12px;
+	text-overflow:ellipsis;
+}
+
+/* VIEWGROUP */
+.viewmode-btn {
+	width: 100%;
+	height: 30px;
+	margin: 20px 0;
+}
+.viewmode-group {
+	width: 152px;
+	margin: 0 auto;
+	border-radius: 5px;
+	overflow: hidden;
+	border: 1px solid #000;
+	
+}
+
+.viewmode-grid {
+	background: url("../img/photoshine/grid.png") no-repeat;	
+}
+
+.viewmode-list {
+	background: url("../img/photoshine/list.png") no-repeat;
+	border-left: 1px solid #000;
+}
+
+.viewmode-grid.active, .viewmode-grid:hover {
+	background: url("../img/photoshine/grid_active.png") no-repeat;
+	background-color: brown;
+	background-size: 16px 16px;
+	background-position: center;
+}
+
+.viewmode-list.active, .viewmode-list:hover {
+	background: url("../img/photoshine/list_active.png") no-repeat;
+	background-size: 16px 16px;
+	background-color: brown;
+	background-position: center;
+}
+
+.viewmode-grid, .viewmode-list {
+	width: 50px;
+	height: 30px;
+	float: left;
+	background-size: 16px 16px;
+	background-position: center;
+	cursor: pointer;
+}
+
+.viewmode-map {
+    background-image: url("../img/glyphicons-halflings.png");
+    background-repeat: no-repeat;
+    background-position: -19px -82px;
+	background-size: 670px 194px;
+    display: inline-block;
+	width: 50px;
+	height: 30px;
+	float: left;
+	border-left: 1px solid #000;
+	cursor: pointer;
+	
+}
+.viewmode-map.active, .viewmode-map:hover {
+	background-color: brown;
+    background-image: url("../img/glyphicons-halflings-white.png");
+    background-repeat: no-repeat;
+    background-position: -19px -82px;
+	background-size: 670px 194px;
+}
+
+/* GRIDVIEW */
+.gridview-wrapper {
+	margin-top: 10px;
+}
+.gridview-block {
+	background-color: #FFF;
+	width: 220px;
+	height: 240px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 10px #111;
+	margin: 3px;
+	float: left;
+}
+.gridview-image {
+	position: absolute;
+	margin: 10px 10px;
+}
+.gridview-caption {
+	position: absolute;
+	margin: 10px 20px 10px 20px;
+	width: auto;
+	max-width: 180px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: none;
+	font-size: 12px;
+	color: #000;
+}
+.gridview-block:hover  .gridview-image{
+	opacity: 0.1;
+}
+
+.gridview-block:hover  .gridview-caption{
+	display: block;
+}
+.gridview-static {
+	position: absolute;
+	width: 200px;
+	margin-top: 215px;
+	margin-left: 10px;
+}
+
+
+.gridview-like-btn{
+	background-image: url("../img/photoshine/small_like.png");
+}
+
+.gridview-like-btn.active{
+	opacity: 0.2;
+}
+
+.gridview-comment-btn{
+	background-image: url("../img/photoshine/small_comment.png");
+}
+
+.gridview-like-btn, .gridview-comment-btn {
+	background-repeat: no-repeat;
+	vertical-align: central;
+	height: 10px;
+	width: 14px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+/* 	MAPVIEW */
+.mapview-wrapper {
+	overflow: hidden;
+	display: none;
+}
