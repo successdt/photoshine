@@ -28,7 +28,6 @@
 		echo $this->Html->script(array(
 			'jquery.min',
 			'bootstrap.min',
-			'jquery.colorbox',
 			'common'
 		)) 
 	?>

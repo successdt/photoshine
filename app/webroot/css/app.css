@@ -17,6 +17,9 @@ h1 {
 	font-size: 22px;
 }
 
+.bold-link {
+	font-weight: bold;	
+}
 /* HEADER */
 
 /* SIDEBAR */
@@ -85,11 +88,10 @@ h1 {
 }
 
 .photodetail-list-comment {
-	margin: 5px 5px 0px 605px;
+	margin: 20px 5px 0px 605px;
 	overflow-x: hidden;
 	overflow-y: auto;
-	height: 266px;
-	padding-top: 10px;
+	height: 265px;
 }
 
 .photodetail-comment-container {
@@ -110,7 +112,7 @@ h1 {
 }
 
 .photodetail-view-all {
-	margin: -10px 0px 0px 0px;
+	margin: 0px 0px 0px 600px;
 	position: absolute;
 	height: 20px;
 	width: 332px;
@@ -124,10 +126,11 @@ h1 {
 	padding: 0;
 }
 .photodetail-post-comment textarea{
-	height: 62px;
+	height: 55px;
 	margin-bottom: 0px;
-	width: 335px;
+	width: 252px;
 	float: left;
+	margin: 0px 5px;
 }
  /* TIMELINE */ 
 .timeline-cover-bg {
@@ -222,7 +225,7 @@ h1 {
 .cover-btn-group {
 	width: 408px;
 	height: 30px;
-	margin: 10px 0px 0px 500px;
+	margin: 10px 0px 0px 498px;
 }
 
 .cover-user-static {
@@ -333,6 +336,7 @@ h1 {
 /* GRIDVIEW */
 .gridview-wrapper {
 	margin-top: 10px;
+	display: none;
 }
 .gridview-block {
 	background-color: #FFF;
@@ -398,4 +402,104 @@ h1 {
 .mapview-wrapper {
 	overflow: hidden;
 	display: none;
+}
+
+/* 	LISTVIEW */
+.listview-wrapper {
+	margin-top: 10px;
+	font-size: 12px;
+}
+.listview-block {
+	background-color: #FFF;
+	width: 220px;
+	height: auto;
+	box-shadow: 0px 0px 10px #111;
+	margin: 5px;
+	float: left;
+	transition-duration: 500ms;
+}
+.listview-img {
+	margin: 10px 10px 5px 10px;
+	float: left;
+}
+.listview-sns {
+	margin: -215px 0px 10px 0px;
+	width: 210px;
+	height: 32px;
+	float: left;
+	padding: 5px;
+	background-color: rgba(0, 0, 0, 0.7);
+	display: none;
+	transition-duration: 500ms;
+}
+
+.listview-block:hover .listview-sns {
+	display: inline;
+}
+
+.listview-static {
+	margin: 5px 10px 10px 10px;
+}
+.listview-sns .photodetail-like-btn {
+	margin: 0px 5px 0px 5px;
+}
+.sns-btn {
+	background: url("../img/photoshine/social_icon.gif");
+	background-repeat: no-repeat;	
+	width: 32px;
+	height: 32px;
+	margin: 0px 5px 0px 5px;
+}
+.sns-btn:hover{
+	opacity: 0.8;
+}
+.sns-btn.facebook {
+	background-position: 0px -160px;
+}
+
+.sns-btn.tumblr {
+	background-position: 0px -672px;
+}
+
+.sns-btn.twitter {
+	background-position: 0px -704px;
+}
+.sns-btn.pinterest {
+	background-position: 0px -544px;
+}
+
+.listview-caption {
+	margin: 5px 10px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	display: inline-block;
+}
+
+.listview-avatar {
+	width: 30px;
+	height: 30px;
+}
+.listview-caption-content {
+	margin: -35px 0px 0px 35px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: 165px;
+}
+
+.listview-tags {
+	width: 200px;
+}
+
+.listview-comment-wrapper {
+	width: 100%;
+	margin: 5px 0px 0px;
+	background-color: #F2F0F0;
+}
+.listview-comment {
+	width: 220px;
+	padding: 10px;
+}
+.listview-comment-content {
+	width: 165px;
+	margin: -35px 0px 0px 35px;
 }
