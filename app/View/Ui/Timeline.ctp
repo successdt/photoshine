@@ -111,7 +111,7 @@
 		</div>
 		<div class="gridview-static">
 			<span class="pull-left time-ago">
-				3 minutes ago
+				<i class="icon-time icon-black"></i> 3 minutes ago
 			</span>
 			<span class="pull-right">
 				<span class="gridview-like-btn"></span>
@@ -149,7 +149,7 @@
 			</div>	
 			<div class="listview-static">
 				<span class="pull-left time-ago">
-					3 minutes ago
+					<i class="icon-time icon-black"></i> 3 minutes ago
 				</span>
 				<span class="pull-right">
 					<span class="gridview-like-btn"></span>
@@ -197,7 +197,9 @@
 							Hello photoshine
 							<br />
 							welcome to photoshine
-							<span class="time-ago" style="display: block;"><?php echo rand(1, 5) ?> minutes ago</span>
+							<span class="time-ago" style="display: block;">
+								<?php echo $j + 1 ?> minutes ago
+							</span>
 						</div>
 					</div>
 				<?php endfor; ?>
@@ -249,7 +251,7 @@
 		$('.viewmode-list').click(function(){
 			$('.viewmode-group').find('div').removeClass('active');
 			$(this).addClass('active');
-			$('.listview-wrapper').show();
+			$('.listview-wrapper').show().masonry();
 			$('.mapview-wrapper, .gridview-wrapper').hide();
 		});
 	});

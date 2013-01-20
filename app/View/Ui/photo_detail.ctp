@@ -1,7 +1,28 @@
 <?php echo $this->Html->css(array('jquery.jscrollpane')) ?>
 <div class="photodetail-wrapper">
 	<div class="photodetail-photo">
-		<?php echo $this->Html->image('tmp/tmp3_hi.jpg', array('width' => '600', 'height' => '600')) ?>
+		<div class="photodetail-photo-inner">
+			<?php echo $this->Html->image('tmp/tmp3_hi.jpg', array('width' => '600', 'height' => '600')) ?>
+		</div>
+		<div class="photodetail-more-info">
+			<div class="info-locaiton">
+				<i class="icon-map-marker icon-white"></i>
+				<a href="#">Hanoi, Vietnam</a>
+			</div>
+			<div class="info-option">
+				<a href="#">
+					Share this photo to Faceboo, Twitter, Flickr, Tumblr...
+				</a>
+				
+			</div>
+			<div class="info-option">
+				<a>
+					Report this photo
+				</a>
+				
+			</div>
+		
+		</div>
 	</div>
 	<div class="photodetail-caption">
 			<div class="detail-avatar">
@@ -27,6 +48,9 @@
 		<a href="javascript:void(0)" class="pull-left sns-btn twitter"></a>
 		<a href="javascript:void(0)" class="pull-left sns-btn tumblr"></a>
 		<a href="javascript:void(0)" class="pull-left sns-btn pinterest"></a>
+		<a href="javascript:void(0)" class="pull-left btn more-opt">
+			<i class="icon-align-justify"></i>
+		</a>
 	</div>
 	<div class="photodetail-list-like">
 		<span><span class="photodetail-like-count">3</span> Likes</span> <br />

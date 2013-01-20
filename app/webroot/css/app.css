@@ -5,7 +5,7 @@
 body {
 	background-color: #edeae1;
 	color: #555555;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 h1, h2, h3, h4 {
@@ -17,15 +17,113 @@ h1 {
 	font-size: 22px;
 }
 
+.margin5 {
+	margin: 5px;
+}
+
+.margin10 {
+	margin: 10px;
+}
+
 .bold-link {
 	font-weight: bold;	
 }
 /* HEADER */
 
+.channel-menu {
+	height: 120px;
+	width: 732px;
+}
+
+.channel-menu a, .channel-menu a:hover{
+	color: #FFF;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.channel-menu .tag {
+	width: 173px;
+	height: 30px;
+	padding: 5px;
+	background: url("../img/photoshine/title_tag.png") no-repeat;
+	position: relative;
+	float: left;
+}
+
+.channel-menu .tag-icn {
+	width: 40px;
+	height: 30px;
+	margin-left: 10px;
+	background-image: url("../img/photoshine/channels_sprite.png");
+}
+
+.tag-featured-icn {
+	background-position: 0px -433px;
+}
+
+.tag-celebrities-icn {
+	background-position: 0px -45px;
+}
+
+.tag-fashion-icn {
+	background-position: 0px -83px;
+}
+
+.tag-food-icn {
+	background-position: 0px -123px;
+}
+
+.tag-travel-icn {
+	background-position: 0px -160px;
+}
+
+.tag-animals-icn {
+	background-position: 0px -200px;
+}
+
+.tag-sports-icn {
+	background-position: 0px -240px;
+}
+.tag-music-icn {
+	background-position: 0px -320px;
+}
+
+.tag-architecture-icn {
+	background-position: 0px -280px;
+}
+
+.tag-design-icn {
+	background-position: 0px -395px;
+}
+
+.tag-tech-icn {
+	background-position: 0px -357px;
+}
+
+.tag-brands-icn {
+	background-position: 0px -5px;
+}
 /* SIDEBAR */
 
+/* TOOL-PANE */
+#tool-pane {
+	position: fixed;
+	right: 10px;
+	bottom: 0px;
+	height: auto;
+	width: 32px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	background: rgba(0, 0, 0, 0.7);
+	padding: 10px;
+}
+#tool-pane .loading{
+	margin-bottom: 10px;
+	display: none;
+}
 /* CONTENT */
 #content {
+	min-width: 980px;
 	margin-top: 45px;
 }
 /* COMMON */
@@ -36,9 +134,75 @@ h1 {
 
 /* PHOTO DETAIL */
 .photodetail-photo {
-	margin: 0px 0px;
+	/*margin: 0px 0px;*/
+}
+.photodetail-photo-inner {
+	width: 600px;
+	height: 600px;
+	position: relative;
+}	
+.photodetail-more-info {
+	width: 600px;
+	height: 55px;
+	background-color: rgba(0, 0, 0, 0.7);
+	margin: -600px 0px 0px 0px;
+	position: absolute;
+	color: #FFF;
+	font-size: 14px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	display: none;
 }
 
+.photodetail-photo:hover .photodetail-more-info  {
+	display: inline;
+	animation: showinfo 500ms;
+	 -moz-animation: showinfo 500ms; /* Firefox */
+	 -webkit-animation: showinfo 500ms; /* Safari and Chrome */
+	 -o-animation: showinfo 500ms; /* Opera */
+}
+
+.photodetail-more-info a{
+	color: #FFF;
+
+}
+
+@keyframes showinfo{
+	from {height: 0px;}
+	to {height: 55px;}
+}
+
+@-moz-keyframes showinfo{
+	from {height: 0px;}
+	to {height: 55px;}
+}
+ 
+@-webkit-keyframes showinfo{
+	from {height: 0px;}
+	to {height: 55px;}
+}
+ 
+@-o-keyframes showinfo{
+	from {height: 0px;}
+	to {height: 55px;}
+}
+
+
+.info-locaiton {
+	width: 180px;
+	padding: 5px;
+	position: relative;
+	float: left;
+	height: 80px;
+}
+.info-option {
+	width: 190px;
+	padding: 5px;
+	border-left: #EEE solid 1px;
+	position: relative;
+	float: left;
+	height: 80px;
+}
 .photodetail-caption {
 	margin: -600px 0px 0px 610px;
 	height: 120px;
@@ -87,6 +251,12 @@ h1 {
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
+.more-opt {
+	width: 23px;
+	height: 23px;
+	padding: 5px;
+	margin: -1px 5px;	
+}
 .photodetail-list-comment {
 	margin: 20px 5px 0px 605px;
 	overflow-x: hidden;
@@ -207,6 +377,7 @@ h1 {
 	position: relative;
 	text-overflow: ellipsis;
 	overflow: hidden;
+	font-size: 14px;
 
 }
 
