@@ -50,6 +50,10 @@
 		$('#slidebox-wrapper').click(function(){
 			$().slidebox.close();
 		});
+		
+		$('#slidebox').click(function(e){
+			e.stopPropagation();
+		});
 				
 		$(document).keyup(function(e) {
 			if (e.keyCode == 27) {

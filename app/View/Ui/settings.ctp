@@ -6,6 +6,7 @@
 			<div class="edit-profile-header btn-success">Edit Profile</div>
 			<div class="edit-profile-body">
 				<div class="error-alert"></div>
+				<hr />
 				<table class="profile-table">
 					<tr>
 						<td style="width: 200px;">
@@ -90,17 +91,12 @@
 							Biography
 						</td>
 						<td>
-							<textarea class="bio input-xlarge" rows="5" cols="30">PHP developer at lifetimetech.vn
-							</textarea>					
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<button class="btn btn-success">Save</button>
+							<textarea class="bio input-xlarge" rows="5" cols="30">PHP developer at lifetimetech.vn</textarea>
 						</td>
 					</tr>
 				</table>
+				<hr />
+				<button class="btn btn-success" style="margin-left: 200px;">Save</button>				
 			</div>
 			<div class="edit-profile-footer btn-success"></div>
 		</div>

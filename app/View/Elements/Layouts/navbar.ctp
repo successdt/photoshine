@@ -53,7 +53,7 @@
 	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'findFriends')) ?>">Find Friends</a></li>
 	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'servicesMan')) ?>">Link Other Services</a></li>
 	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'privacy')) ?>">Privacy Settings</a></li>
-	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'feedback')) ?>">Feed back</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'feedback')) ?>" class="nav-feedback">Feed back</a></li>
 	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'help')) ?>">Help</a></li>
 	            	<li><a href="#">Logout</a></li>
 	            </ul>			
@@ -127,6 +127,28 @@
 	</div>
 </div>
 <?php echo $this->Html->script(array('jquery.jscrollpane.min', 'jquery.mousewheel'), array('inline' => false)) ?>
+
+<script type="text/template" id="feedback-template">
+<div style="width: 750px; height: 393px">
+	<div class="edit-profile" style="margin: 0px !important;">
+		<div class="edit-profile-header btn-success">Help Improve PhotoShine.</div>
+		<div class="edit-profile-body">
+			<hr />
+			<textarea class="feedback-text" style="width: 715px; height: 140px;"></textarea>
+			<hr />
+			<div class="row-fluid">
+				<div class="span6">
+					<button class="pull-right btn btn-success">Send</button>
+				</div>
+				<div class="span6">
+					<button class="pull-left btn btn-danger">Clear</button>
+				</div>
+			</div>
+		</div>
+		<div class="edit-profile-footer btn-success"></div>
+	</div>
+</div>
+</script>
 <?php echo $this->Html->scriptStart(array('inline' => false)) ?>
 //<script>
 	
@@ -155,6 +177,14 @@
 		});
 		$(document).click(function(){
 			$('.nf-popup').hide();
+		});
+		
+		$('.nav-feedback').click(function(e){
+			e.preventDefault();
+			var html = $('#feedback-template').html();
+			$().slidebox({
+				html: html,
+			});
 		});
 		
 	});

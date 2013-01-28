@@ -54,8 +54,7 @@
 	
 	<?php echo $this->Html->scriptStart() ?>
 		$(document).ready(function(){
-			$('a').tooltip({
-			});
+			$('a').tooltip({});
 		});
 	<?php echo $this->Html->scriptEnd() ?>
 </body>

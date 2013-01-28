@@ -13,7 +13,7 @@
 					<div class="span3"><div class="set-sns-btn fl"></div></div>
 				</div>
 				<hr />
-				<span style="font-size: 12px;">Click to turn on or turn off the connection to other Socials</span>
+				<span style="font-size: 12px; font-style: italic;">Click to turn on or turn off the connection to other Socials</span>
 				
 			</div>
 			<div class="edit-profile-footer btn-success"></div>
