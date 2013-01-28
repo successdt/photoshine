@@ -51,5 +51,12 @@
 		'common'
 	)) ?>
 	<?php echo $this->fetch('script'); ?>
+	
+	<?php echo $this->Html->scriptStart() ?>
+		$(document).ready(function(){
+			$('a').tooltip({
+			});
+		});
+	<?php echo $this->Html->scriptEnd() ?>
 </body>
 </html>

@@ -1,78 +1,64 @@
+<?php echo $this->Html->css(array('jquery.jscrollpane')) ?>
 <div class="navbar-inner">
     <div class="container">
+
         <ul class="nav">
             <li class="active">
             	<?php echo $this->Html->link(
             		$this->Html->image('photoshine/photoshine 100x100.png', array('width' => '24', 'height' => '24')) . ' PhotoShine',
-            		array('javascrip:void(0)'),
+            		array('controller' => 'photoshine'),
             		array('class' => 'brand', 'escape' => false)
 				); ?>
             </li>
-            <li>  
-                <a href="javascript:void(0)" class="navbar-channels">
-                    <i class="icon-th icon-black"></i> 
-                    Channels  
-                </a>  
-                <ul class="dropdown-menu">  
-                </ul>  
-            </li>
+            <li class="divider-vertical"/>
             <li>
-                <a class="" href="javascript:void(0)" id="nearby">
-                    <i class="icon-map-marker icon-black"></i>
-                    Nearby
-                </a>
-            </li>
+            	
+				<div class="btn-group">
+					<a href="javascript:void(0)" class="btn navbar-channels" rel="tooltip" title="Channels">
+						<i class="icon-th icon-black"></i>
+					</a>
+					<a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'nearby')) ?>" class="btn" rel="tooltip" title="Nearby">
+						<i class="icon-map-marker icon-black"></i>
+					</a>
+					<a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'popular')) ?>" class="btn" rel="tooltip" title="Popular">
+						<i class="icon-star icon-black"></i>
+					</a>
+					<a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'myLikes')) ?>" class="btn" rel="tooltip" title="My likes">
+						<i class="icon-thumbs-up icon-black"></i>
+					</a>
+					<a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'upload')) ?>" class="btn" rel="tooltip" title="Upload">
+						<i class="icon-camera icon-black"></i>
+					</a>
+					<a href="javascript:void(0)" class="btn navbar-nf" rel="tooltip" title="Notifications">
+						<i class="icon-globe icon-black"></i>
+					</a>
+					
+			<li class="divider-vertical"/>            
             <li>
-                <a class="" href="#">
-                    <i class="icon-star icon-black"></i>
-                    Popular
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class="icon-thumbs-up icon-black"></i>
-                    My Likes
-                </a>
-            </li>
-            <li class="dropdown">  
-                <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-search icon-black"></i> 
-                    Search 
-                    <b class="caret"></b>  
-                </a>  
-                <ul class="dropdown-menu">  
-                    <li>
-                        <form class="navbar-search pull-right input-append" method="post" action="#">
-                             <div class="input-append" style="padding: 10px;">
-                                <input class="span2" style="top: 6px;" name="search" placeholder="Search" autocomplete="off" id="inputString" size="16" type="text">
-                                <button type="submit" class="btn">Go!</button>
-                                <div id="suggestions"></div>
-                                <label class="radio" style="margin-top: 5px;">
-                                    <input type="radio" name="searchby" value="tag"  checked="checked"/>
-                                    Tag
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="searchby" value="user" /> 
-                                    Username
-                                </label>     
-                            </div>
-                        </form>  
-                    </li>
-                </ul>  
-            </li> 
-        </ul>
-        <ul class="nav pull-right">
-            <li class="dropdown">
-                <li class="divider-vertical"/>
-                <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                </ul>
-            </li>
-            <li>
+                <form class="navbar-form pull-left" action="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'searchResult')) ?>">
+                  <input type="text" class="span3" autocomplete="off" placeholder="Search for tags or users" style="padding-right: 44px;">
+                  <button type="submit" class="btn search-submit"><i class="icon-search icon-black"></i></button>
+                </form>
+            <div id="suggestions" style="display: none;"></div>
             </li>
         </ul>
+    	<ul class="pull-right nav">
+    		<li class="dropdown btn-group">
+				<button class="btn">thanhdd</button>
+				<button class="btn dropdown-toggle" data-toggle="dropdown">
+					<span class="icon-align-justify"></span>
+				</button>
+				<ul class="dropdown-menu">
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'settings')) ?>">Edit Profile</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'findFriends')) ?>">Find Friends</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'servicesMan')) ?>">Link Other Services</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'privacy')) ?>">Privacy Settings</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'feedback')) ?>">Feed back</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'help')) ?>">Help</a></li>
+	            	<li><a href="#">Logout</a></li>
+	            </ul>			
+			</li>
+		</ul>
     </div><!-- /container -->
 </div><!--/navbar-inner  -->
 
@@ -103,9 +89,51 @@
 
 	</div>
 </div>
+
+<div class="nf-popup">
+	<div class="up-arrow"></div>
+	<div class="nf-container">
+		<div class="nf-header btn-success">
+			Notifications
+		</div>
+		<div class="nf-content" id="nf-content">
+			<?php for ($i = 0; $i < 8; $i++): ?>
+				<a class="notifications" href="#">
+					<?php echo $this->Html->image('photoshine/common_default_avatar.png', array('class' => 'notifications-avatar')); ?>
+					<div class="notifications-text">
+						<strong>phuongnh</strong> likes your photo
+					</div>
+					<?php echo $this->Html->image('tmp/tmp' . rand(1, 10) . '.jpg', array('class' => 'notifications-photo')) ?>
+				</a>
+				<a class="notifications" href="#">
+					<?php echo $this->Html->image('photoshine/common_default_avatar.png', array('class' => 'notifications-avatar')); ?>
+					<div class="notifications-text">
+						<strong>phuongnh</strong> also commented on your photo
+					</div>
+					<?php echo $this->Html->image('tmp/tmp' . rand(1, 10) . '.jpg', array('class' => 'notifications-photo')) ?>
+				</a>
+				<a class="notifications" href="#">
+					<?php echo $this->Html->image('photoshine/common_default_avatar.png', array('class' => 'notifications-avatar')); ?>
+					<div class="notifications-text">
+						<strong>phuongnh</strong> mentioned your in a comment
+					</div>
+					<?php echo $this->Html->image('tmp/tmp' . rand(1, 10) . '.jpg', array('class' => 'notifications-photo')) ?>
+				</a>
+			<?php endfor; ?>
+		</div>
+		<div class="nf-footer btn-success">
+			<a href="#" style="color: #FFF;">See All</a>
+		</div>
+	</div>
+</div>
+<?php echo $this->Html->script(array('jquery.jscrollpane.min', 'jquery.mousewheel'), array('inline' => false)) ?>
 <?php echo $this->Html->scriptStart(array('inline' => false)) ?>
 //<script>
+	
 	$(document).ready(function(){
+		$('.navbar-inner a').tooltip({
+			placement : 'bottom'
+		});
 		$('.navbar-channels').click(function(){
 			var html = $('.channel-menu-html').html();
 			
@@ -113,5 +141,21 @@
 				html: html
 			});
 		});
+		
+		$('.navbar-nf').click(function(e){
+			e.stopPropagation();
+			var left = $(this).offset().left + 8;
+			
+			$('.nf-popup').css('left', left);
+			$('.nf-popup').show();
+			$('.nf-content').jScrollPane();
+		});
+		$('.nf-header, .nf-content').click(function(e){
+			e.stopPropagation();
+		});
+		$(document).click(function(){
+			$('.nf-popup').hide();
+		});
+		
 	});
 <?php echo $this->Html->scriptEnd() ?>

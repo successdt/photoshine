@@ -9,7 +9,7 @@ body {
 }
 
 h1, h2, h3, h4 {
-	color: #ccc;
+	color: #FFF;
 	font-weight: normal;
 }
 
@@ -27,6 +27,30 @@ h1 {
 
 .bold-link {
 	font-weight: bold;	
+}
+
+.image30 {
+	height: 30px;
+	width: 30px;
+}
+
+.image50 {
+	height: 50px;
+	width: 50px;
+}
+
+.image200 {
+	height: 200px;
+	width: 200px;
+}
+
+.ellipsis {
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.uppercase {
+	text-transform: uppercase;
 }
 /* HEADER */
 
@@ -102,6 +126,84 @@ h1 {
 
 .tag-brands-icn {
 	background-position: 0px -5px;
+}
+
+.search-submit {
+    position: relative;
+    top: 0px;
+    left: -47px;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+}
+
+
+.nf-popup {
+	top: 35px;
+	position: fixed;
+	width: 300px;
+	height: auto;
+	display: none;	
+}
+
+.up-arrow {
+	width: 0px;
+	height: 0px;
+	border-left: 15px solid transparent;
+	border-right: 15px solid transparent;
+	border-bottom: 15px solid #5AB45A;
+}
+
+.nf-container {
+	width: 300px;
+	height: auto;
+	margin-left: -140px;
+	background-color: #FFF;
+	box-shadow: 5px 5px 5px #333;
+	border-radius: 4px;
+	overflow: auto;
+}
+
+.nf-header, .nf-footer {
+	width: 280px;
+	height: 20px;
+	padding: 5px 10px;
+	text-align: center;
+	color: #FFF;
+	font-size: 18px;
+}
+.nf-content {
+	max-height: 500px;
+	overflow: auto;
+}
+
+.notifications {
+	width: 300px;
+	height: auto;
+	border-bottom: solid 1px #EEE;
+	overflow: hidden;
+	position: relative;
+	float: left;
+}
+
+.notifications {
+	text-decoration: none;
+}
+
+.notifications-avatar, .notifications-photo {
+	width: 50px;
+	height: 50px;
+	margin: 5px;
+	position: relative;
+	float: left;
+}
+
+.notifications-text {
+	width: 175px;
+	margin-top: 5px;
+	height: auto;
+	position: relative;
+	float: left;
+	min-height: 50px;
 }
 /* SIDEBAR */
 
@@ -585,7 +687,7 @@ h1 {
 	width: 220px;
 	height: auto;
 	box-shadow: 0px 0px 10px #111;
-	margin: 5px;
+	margin: 7px;
 	float: left;
 	transition-duration: 500ms;
 }
@@ -673,4 +775,390 @@ h1 {
 .listview-comment-content {
 	width: 165px;
 	margin: -35px 0px 0px 35px;
+}
+
+/* LOCATION */
+#location-canvas {
+	width: 100%;
+	height: 200px;
+	overflow: hidden;
+	border-bottom: 1px solid #333;
+}
+
+.location-info {
+	width: 100%;
+	height: 75px;
+	position: absolute;
+	top: 170px;
+	color: #FFF;
+}
+
+.location-info-inner {
+	width: 960px;
+	margin: 0 auto;
+	height: 75px;
+}
+
+.location-info-left{
+	width: 150px;
+	height: 0px;
+	border-bottom: 75px solid rgba(0, 0, 0, 0.7);
+	border-left: 75px solid transparent;
+	margin-right: 1px;
+	float: left;
+}
+
+.location-info .left-text, .location-info .right-text {
+	margin-top: 30px;
+	text-align: center;
+}
+
+.location-info-center{
+	width:508px;
+	height: 65px;
+	float: left;
+	text-transform: uppercase;
+	text-align: center;
+	padding: 0px 0px 10px;
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+.location-info-right{
+	width: 150px;
+	height: 0px;
+	border-bottom: 75px solid rgba(0, 0, 0, 0.7);
+	border-right: 75px solid transparent;
+	float: left;
+	margin-left: 1px;
+}
+
+
+
+/* CHANNEL */
+
+/* 	SEARCH RESULT */
+
+.user-result {
+	width: 220px;
+	height: auto;
+	float: left;
+	background-color: #FFF;
+	box-shadow: 0px 0px 10px #111;
+	float: left;
+	transition-duration: 500ms;
+	margin: 5px;
+}
+.user-result a{
+	text-decoration: none;
+}
+
+.result-avatar img {
+	width: 200px;
+	height: 200px;
+}
+
+.result-name {
+	text-align: center;
+	color: #0088CC;
+}
+
+.tag-result .tag-name {
+	margin: 0px 0px 2px 0px;
+	width: 220px;
+	float: left;
+	background-color: #000;
+	text-align: center;
+	height: 40px;
+}
+
+.tag-result .tag-user-counter {
+	margin: 0px 1px 0px 0px;
+	width: 109px;
+	float: left;
+	background-color: #000;
+	text-align: center;
+	height: 80px;
+}
+
+.tag-result .tag-photo-counter {
+	margin: 0px 0px 0px 1px;
+	width: 109px;
+	float: left;
+	background-color: #000;
+	text-align: center;
+	height: 80px;
+}
+
+/* NEARBY */
+.location-block {
+	width: 310px;
+	height: 75px;
+	background-color: #FFFFFF;
+	margin: 5px;
+	float: left;
+	box-shadow: 0px 0px 5px #333;
+}
+
+.location-block-img {
+	width: 75px;
+	height: 75px;
+	float: left;
+}
+
+.location-block-img img{
+	width: 75px;
+	height: 75px;
+}
+
+.location-block-info {
+	float: left;
+	margin: 5px;
+	width: 225px;
+	height: 65px;
+	position: relative;
+	display: inline-block;
+}
+
+.nearby-location-name {
+	font-size: 14px;
+	padding: 5px;
+	color: #000;
+	height: 35px;
+	border-bottom: 1px solid #EEE;
+}
+
+.nearby-location-desc {
+	width: 180px;
+	color: #938B8B;
+	position: relative;
+	float: left;
+}
+
+.nearby-location-counter {
+	width: 44px;
+	height: 20px;
+	float: left;
+	color: #938B8B;
+	left: 0px;
+	position: relative;
+}
+
+/* POPULAR */
+.skew-label {
+	width: 240px;
+	height: 30px;
+	position: fixed;
+	top: 90px;
+	left: -49px;
+	color: #FFF;
+	text-align: center;
+	font-size: 20px;
+	padding-top: 10px;
+	z-index: 10;
+	transform: rotate(-45deg);
+	 -ms-transform: rotate(-45deg); /* IE 9 */
+	 -webkit-transform: rotate(-45deg); /* Safari and Chrome */
+	 -o-transform: rotate(-45deg); /* Opera */
+	 -moz-transform: rotate(-45deg); /* Firefox */
+	box-shadow: 0px 0px 5px #333;
+}
+
+/* SETTINGS */
+.bs-docs-sidenav {
+    background-color: #FFFFFF;
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+    margin: 30px 0 0;
+    padding: 0;
+    width: 228px;
+}
+.bs-docs-sidenav > li > a {
+    border: 1px solid #E5E5E5;
+    display: block;
+    margin: 0 0 -1px;
+    padding: 8px 14px;
+}
+.bs-docs-sidenav > li:first-child > a {
+    border-radius: 6px 6px 0 0;
+}
+.bs-docs-sidenav > li:last-child > a {
+    border-radius: 0 0 6px 6px;
+}
+.bs-docs-sidenav > .active > a {
+    border: 0 none;
+    box-shadow: 1px 0 0 rgba(0, 0, 0, 0.1) inset, -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+    padding: 9px 15px;
+    position: relative;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+    z-index: 2;
+}
+.bs-docs-sidenav .icon-chevron-right {
+    float: right;
+    margin-right: -6px;
+    margin-top: 2px;
+    opacity: 0.25;
+}
+.bs-docs-sidenav > li > a:hover {
+    background-color: #F5F5F5;
+}
+.bs-docs-sidenav a:hover .icon-chevron-right {
+    opacity: 0.5;
+}
+.bs-docs-sidenav .active .icon-chevron-right, .bs-docs-sidenav .active a:hover .icon-chevron-right {
+    background-image: url("../img/glyphicons-halflings-white.png");
+    opacity: 1;
+}
+.bs-docs-sidenav.affix {
+    top: 40px;
+}
+.bs-docs-sidenav.affix-bottom {
+    bottom: 270px;
+    position: absolute;
+    top: auto;
+}
+.bs-docs-container {
+    max-width: 970px;
+}
+.bs-docs-sidenav {
+    width: 258px;
+}
+.bs-docs-sidenav > li > a {
+}
+body > .navbar-fixed-top .brand {
+    float: left;
+    margin-left: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.quick-links li {
+    display: inline-block;
+    margin: 5px;
+}
+.bs-docs-sidenav {
+    margin-right: 0;
+    margin-top: 30px;
+    top: 0;
+    width: 218px;
+}
+
+.jumbotron {
+    margin-top: -20px;
+}
+.bs-docs-sidenav {
+    margin-top: 20px;
+    width: 166px;
+}
+.bs-docs-sidenav.affix {
+    top: 0;
+}
+
+.jumbotron {
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-top: -20px;
+    padding: 40px 20px;
+}
+.masthead h1 {
+    font-size: 90px;
+}
+.masthead p, .masthead .btn {
+    font-size: 24px;
+}
+.marketing .span4 {
+    margin-bottom: 40px;
+}
+.bs-docs-social {
+    margin: 0 -20px;
+}
+.show-grid [class*="span"] {
+    margin-bottom: 5px;
+}
+.bs-docs-sidenav {
+    margin-bottom: 20px;
+    width: auto;
+    box-shadow: 0px 0px 5px #666;
+}
+.edit-profile-wrapper {
+	width: 960px;
+	margin: 0 auto;
+	padding-top: 20px;
+
+}
+
+.sidebar {
+	width: 200px;
+	font-size: 14px;
+	float: left;
+}
+.edit-profile {
+	margin: 20px 0px 0px 10px;
+	width: 750px;
+	float: left;
+	border-radius: 5px;
+	overflow: hidden;
+	box-shadow: 0px 0px 5px #666;
+}
+.edit-profile-header {
+	height: 30px;
+	padding: 5px 10px;
+	text-align: center;
+	font-size: 18px;
+}
+
+.edit-profile-body {
+	padding: 10px;
+	width: 730px;
+	background-color: #FFF;
+	font-size: 18px;
+}
+
+.edit-profile-footer {
+	height: 30px;
+	padding: 5px 10px;
+	text-align: center;
+	font-size: 18px;
+}
+
+/* SERVICESMAN */
+
+.set-sns-btn {
+	background-image: url("../img/photoshine/share_social.png");
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
+	width: 42px;
+	height: 42px;
+	margin: 0 auto;
+	cursor: pointer;
+}
+
+.set-sns-btn.fb {
+	background-position: 0px 0px;
+}
+
+.set-sns-btn.fb.active {
+	background-position: -42px 0px;
+}
+
+.set-sns-btn.tw {
+	background-position: -252px 0px;
+}
+
+.set-sns-btn.tw.active {
+	background-position: -294px 0px;
+}
+
+.set-sns-btn.tb {
+	background-position: -168px 0px;
+}
+
+.set-sns-btn.tb.active {
+	background-position: -210px 0px;
+}
+
+.set-sns-btn.fl {
+	background-position: -84px 0px;
+}
+
+.set-sns-btn.fl.active {
+	background-position: -126px 0px;
 }
