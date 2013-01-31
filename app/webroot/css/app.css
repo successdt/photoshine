@@ -39,6 +39,12 @@ h1 {
 	width: 50px;
 }
 
+.image80 {
+	height: 80px;
+	width: 80px;
+}
+
+
 .image200 {
 	height: 200px;
 	width: 200px;
@@ -231,6 +237,7 @@ h1 {
 /* COMMON */
 .time-ago {
 	color: #989393;
+	font-size: 11px;
 }
 /* END OF COMMON */
 
@@ -245,7 +252,7 @@ h1 {
 }	
 .photodetail-more-info {
 	width: 600px;
-	height: 55px;
+	height: 65px;
 	background-color: rgba(0, 0, 0, 0.7);
 	margin: -600px 0px 0px 0px;
 	position: absolute;
@@ -271,22 +278,22 @@ h1 {
 
 @keyframes showinfo{
 	from {height: 0px;}
-	to {height: 55px;}
+	to {height: 65px;}
 }
 
 @-moz-keyframes showinfo{
 	from {height: 0px;}
-	to {height: 55px;}
+	to {height: 65px;}
 }
  
 @-webkit-keyframes showinfo{
 	from {height: 0px;}
-	to {height: 55px;}
+	to {height: 65px;}
 }
  
 @-o-keyframes showinfo{
 	from {height: 0px;}
-	to {height: 55px;}
+	to {height: 65px;}
 }
 
 
@@ -1161,4 +1168,80 @@ body > .navbar-fixed-top .brand {
 
 .set-sns-btn.fl.active {
 	background-position: -126px 0px;
+}
+
+/* FINDFRIENDS */
+
+.find-fb-friend, .find-tw-friend {
+	width: 175px;
+	height: 38px;
+	background-image: url("../img/photoshine/sns_friend.png");
+	background-repeat: no-repeat;
+}
+
+.find-fb-friend {
+	background-position: 0px 0px;
+}
+.find-fb-friend.active {
+	background-position: 0px -38px;
+}
+.find-tw-friend {
+	background-position: 0px -76px;
+}
+.find-tw-friend.active {
+	background-position: 0px -114px;
+}
+.find-friend-input {
+	width: 165px;
+	height: 28px !important;
+	margin: 0px !important;
+}
+.find-friend-submit {
+	height: 38px;
+}
+.find-friend-wrapper .friend-result {
+	width: 230px;
+	height: 80px;
+	float: left;
+	border: 1px solid #666;
+	margin: 5px;
+	box-shadow: 0px 0px 3px #666;
+	overflow: hidden;
+}
+.friend-result-name {
+	width: 150px;
+	float: left;
+	display: block;
+	font-size: 12px;
+	text-align: center;
+	height: 80px;
+}
+.find-result-follow-btn {
+	width: 100%;
+	cursor: pointer;
+}
+
+.find-result-follow-btn:hover {
+	opacity: 0.8;
+}
+
+.friend-result-name a {
+	text-decoration: none;
+}
+.sns-overlay {
+	position: relative;
+	top: -22px;
+	left: 60px;
+}
+
+/* FEED */
+.feed-block {
+	width: 300px;
+	position: fixed;
+	top: 38px;
+	left: 0px;
+	overflow: hidden;
+	float: left;
+	transition-duration: 0ms;
+	margin-left: 0px;
 }

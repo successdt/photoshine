@@ -20,6 +20,10 @@ class UiController extends AppController {
 	public function help(){}
 	public function privac(){}
 	public function findFriends(){}
+	public function feed(){}
+	public function upload(){
+		$this->layout = 'popup';
+	}
 	public function notifications(){
 		$this->layout = 'popup';
 	}

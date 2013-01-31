@@ -1,28 +1,59 @@
 <?php echo $this->Html->css(array('jquery.jscrollpane')) ?>
 <div class="photodetail-wrapper">
 	<div class="photodetail-photo">
-		<div class="photodetail-photo-inner">
-			<?php echo $this->Html->image('tmp/tmp3_hi.jpg', array('width' => '600', 'height' => '600')) ?>
+
+		<div class="photodetail-group">
+			<div class="photodetail-photo-inner photo" >
+				<?php echo $this->Html->image('tmp/tmp3_hi.jpg', array('width' => '600', 'height' => '600')) ?>
+			</div>		
+			<div class="photodetail-more-info">
+				<div class="info-locaiton">
+					<i class="icon-map-marker icon-white"></i>
+					<a href="#">Hanoi, Vietnam</a>
+				</div>
+				<div class="info-option">
+					<a href="#">
+						Share this photo to Facebook, Twitter, Flickr, Tumblr...
+					</a>
+					
+				</div>
+				<div class="info-option">
+					<a>
+						Report this photo
+					</a>
+					
+				</div>
+			</div>		
 		</div>
-		<div class="photodetail-more-info">
-			<div class="info-locaiton">
-				<i class="icon-map-marker icon-white"></i>
-				<a href="#">Hanoi, Vietnam</a>
+		<div class="photodetail-photo-inner option" style="display: none;">
+			<div class="row-fluid">
+				<div class="span3"><div class="set-sns-btn fb"></div></div>
+				<div class="span3"><div class="set-sns-btn tw"></div></div>
+				<div class="span3"><div class="set-sns-btn tb"></div></div>
+				<div class="span3"><div class="set-sns-btn fl"></div></div>
 			</div>
-			<div class="info-option">
-				<a href="#">
-					Share this photo to Faceboo, Twitter, Flickr, Tumblr...
-				</a>
-				
+			<hr />
+			<textarea class="feedback-text" style="width: 585px; height: 130px;" placeholder="Share photo caption..."></textarea>
+			<div class="row-fluid" >
+				<div class="span6">
+					<button class="pull-right btn btn-success">Send</button>
+				</div>
+				<div class="span6">
+					<button class="pull-left btn btn-danger">Cancel</button>
+				</div>
+				<hr />
+				<div class="row-fluid">
+					<div class="span6">
+						<?php echo $this->Html->image('tmp/mini_map.png', array('width' => '300', 'height' => '300')) ?>
+					</div>
+					<div class="span6">
+						<textarea class="report-text" style="width: 280px; height: 250px;" placeholder="Report reason..."></textarea>
+						<button style="margin-left: 72px;" class="btn btn-danger pull-left">Report this photo</button>
+					</div>
+				</div>
 			</div>
-			<div class="info-option">
-				<a>
-					Report this photo
-				</a>
-				
-			</div>
-		
 		</div>
+
 	</div>
 	<div class="photodetail-caption">
 			<div class="detail-avatar">
@@ -102,6 +133,21 @@
 //<script>
  $(document).ready(function(){	
 	$('.photodetail-list-like, .photodetail-list-comment').jScrollPane();
+	
+	$('.more-opt').toggle(
+		function(){
+			$('.photodetail-group').fadeOut(0, function(){
+				$('.photodetail-photo-inner.option').fadeIn(200);
+			});	
+		},
+		function (){
+			$('.photodetail-photo-inner.option').fadeOut(0, function(){
+				$('.photodetail-group').fadeIn(200);
+			});
+			
+			
+		}
+	);
 });
 
 <?php echo $this->Html->scriptEnd() ?>

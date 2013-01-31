@@ -6,7 +6,7 @@
             <li class="active">
             	<?php echo $this->Html->link(
             		$this->Html->image('photoshine/photoshine 100x100.png', array('width' => '24', 'height' => '24')) . ' PhotoShine',
-            		array('controller' => 'photoshine'),
+            		array('controller' => 'Ui', 'action' => 'feed'),
             		array('class' => 'brand', 'escape' => false)
 				); ?>
             </li>
@@ -26,7 +26,7 @@
 					<a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'myLikes')) ?>" class="btn" rel="tooltip" title="My likes">
 						<i class="icon-thumbs-up icon-black"></i>
 					</a>
-					<a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'upload')) ?>" class="btn" rel="tooltip" title="Upload">
+					<a href="javascript:void(0)" class="btn upload-btn" rel="tooltip" title="Upload">
 						<i class="icon-camera icon-black"></i>
 					</a>
 					<a href="javascript:void(0)" class="btn navbar-nf" rel="tooltip" title="Notifications">
@@ -187,5 +187,13 @@
 			});
 		});
 		
+		$('.upload-btn').click(function(){
+			$().slidebox({
+				href: '<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'upload')) ?>',
+				iframe: true,
+				height: 75,
+				width: 960
+			});
+		});
 	});
 <?php echo $this->Html->scriptEnd() ?>

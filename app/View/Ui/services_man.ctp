@@ -21,3 +21,11 @@
 
 	</div>
 </div>
+<?php echo $this->Html->scriptStart(array('inline' =>false)) ?>
+//<script>
+$(document).ready(function(){
+	$('.set-sns-btn').click(function(){
+		$(this).toggleClass('active');
+	})
+});
+<?php echo $this->Html->scriptEnd() ?>
