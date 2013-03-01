@@ -1245,3 +1245,58 @@ body > .navbar-fixed-top .brand {
 	transition-duration: 0ms;
 	margin-left: 0px;
 }
+
+/* HOME BEFORE LOGIN */
+.home-logo {
+	font-size: 34px;
+}
+
+.home-big-block {
+	width:445px;
+	height: 505px;
+	margin: 5px 5px 0px 0px;
+	float: left;
+	background-color: #FFF;
+	box-shadow: 0px 0px 5px #333;
+	font-size: 18px;
+	transition-duration: 500ms;
+}
+
+.home-big-block .home-block-image img {
+	width: 435px;
+	height: 440px;
+}
+
+.home-small-block .home-block-image img {
+	width: 200px;
+	height: 200px;
+}
+
+.home-small-block {
+	width:220px;
+	height: 250px;
+	margin: 5px 5px 0px 0px;
+	float: left;
+	background-color: #FFF;
+	box-shadow: 0px 0px 5px #333;
+	transition-duration: 500ms;
+}
+.home-block-image {
+	margin: 10px;
+}
+/* LOGIN */
+.login-group {
+	width: 300px;
+	border-radius: 7px;
+	background-color: #FFF;
+	position: relative;
+	margin: 35px auto 5px;
+	overflow: hidden;
+
+}
+.login-input {
+	width: 300px;
+	margin: 0px !important;
+	border: none !important;
+	padding: 10px !important;
+}

@@ -21,6 +21,15 @@ class UiController extends AppController {
 	public function privac(){}
 	public function findFriends(){}
 	public function feed(){}
+	public function home(){
+		$this->layout = 'popup';
+	}
+	public function login(){
+		$this->layout = 'popup';
+	}
+	public function signup(){
+		$this->layout = 'popup';
+	}
 	public function upload(){
 		$this->layout = 'popup';
 	}
