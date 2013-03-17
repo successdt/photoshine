@@ -17,17 +17,12 @@
 </head>
 
 <body>
-	<div id="header" class="navbar navbar-fixed-top">
-		<?php 
-		if (!isset($navbarEnable) || $navbarEnable)
-			echo $this->element('Layouts/navbar');
-		?>		
+	<div id="header" class="navbar navbar-fixed-top">	
 	</div><!-- // END HEADER -->
-	
 	<div id="sidebar">
 	</div><!-- // END SIDEBAR -->
 	
-	<div id="content">
+	<div id="content" style="margin-top: 0px;">
 		
 		<?php echo $this->fetch('content') ?>
 	</div><!-- // END CONTENT -->
@@ -47,7 +42,6 @@
 	<!-- javascript
 	================================================== -->
 	<?php echo $this->Html->script(array(
-//		'live',
 		'jquery.min',
 		'slidebox',
 		'bootstrap.min',

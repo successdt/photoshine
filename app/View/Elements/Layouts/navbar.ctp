@@ -44,7 +44,7 @@
         </ul>
     	<ul class="pull-right nav">
     		<li class="dropdown btn-group">
-				<button class="btn">thanhdd</button>
+				<button class="btn"><?php echo AuthComponent::user('User.username') ?></button>
 				<button class="btn dropdown-toggle" data-toggle="dropdown">
 					<span class="icon-align-justify"></span>
 				</button>
@@ -55,7 +55,9 @@
 	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'privacy')) ?>">Privacy Settings</a></li>
 	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'feedback')) ?>" class="nav-feedback">Feed back</a></li>
 	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'help')) ?>">Help</a></li>
-	            	<li><a href="#">Logout</a></li>
+	            	<li>
+						<?php echo $this->Html->link('Logout', array('controller' => 'Account', 'action' => 'logout')) ?>
+					</li>
 	            </ul>			
 			</li>
 		</ul>
@@ -189,7 +191,7 @@
 		
 		$('.upload-btn').click(function(){
 			$().slidebox({
-				href: '<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'upload')) ?>',
+				href: '<?php echo $this->Html->url(array('controller' => 'Upload', 'action' => 'start')) ?>',
 				iframe: true,
 				height: 75,
 				width: 960

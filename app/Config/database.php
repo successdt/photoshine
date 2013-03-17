@@ -66,7 +66,7 @@ class DATABASE_CONFIG {
 		'login' => 'root',
 		'password' => '',
 		'database' => 'photoshine',
-		'prefix' => '',
+		'prefix' => 'tb_',
 		//'encoding' => 'utf8',
 	);
 

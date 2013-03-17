@@ -58,6 +58,10 @@ h1 {
 .uppercase {
 	text-transform: uppercase;
 }
+
+.block{
+	display: block;
+}
 /* HEADER */
 
 .channel-menu {
