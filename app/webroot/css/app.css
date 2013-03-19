@@ -1304,3 +1304,58 @@ body > .navbar-fixed-top .brand {
 	border: none !important;
 	padding: 10px !important;
 }
+
+/* CROP PHOTO */
+.crop-wrapper{
+	width: 601px;
+	margin: 0 auto;
+}
+
+/*FILTER PHOTO*/
+.process-left-box{
+	width: 401px;
+	height: 450px;
+	margin: 5px;
+}
+.process-right-box{
+	width: 200px;
+	margin: -460px 0px 0px 410px;
+}
+.func-preview {
+	cursor: pointer;
+}
+.location-layer, .frame-container {
+	width: 400px;
+	height: 400px;
+	margin: -400px 0px 0px 0px;
+	display: none;
+}
+.location-text-title{
+	color: #FFF;
+	font-size: 24px;
+	margin: -60px 0px 0px 88px;
+	width: 300px;
+	height: 20px;
+	text-align: center;
+	overflow: hidden;
+}
+
+.location-layer.active, .frame-container.active{
+	display: block;
+}
+
+.location-text-desc{
+	color: #FFF;
+	font-size: 18px;
+	margin: 10px 0px 0px 88px;
+	width: 300px;
+	height: 20px;
+	text-align: center;
+	overflow: hidden;
+}
+.process-tab{
+	width: 345px;
+	margin: -20px 0px 0px 1px;
+	background-color: #FFF;
+	height: 410px;
+}

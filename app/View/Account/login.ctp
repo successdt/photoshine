@@ -13,8 +13,8 @@
 				<div class="site-name" style="margin: -23px 42px;">PhotoShine</div>
 			</div>		
 			<div class="login-group">
-				<input type="text" name="username" class="login-input" id="username" placeholder="User name"/>
-				<input type="password" name="password" class="login-input" id="password" placeholder="Password"/>
+				<input type="text" name="data[username]" class="login-input" id="username" placeholder="User name"/>
+				<input type="password" name="data[password]" class="login-input" id="password" placeholder="Password"/>
 			</div>
 			<div style="width: 300px; margin: 0 auto;">
 				<button class="btn btn-success submit" style="width: 100%;">Log in</button>

@@ -7,9 +7,9 @@
 				Choose photo
 			</button>
 			<span class="input-xxlarge uneditable-input pull-left margin5 file-src" ></span>
-			<form method="POST" action="<?php echo $this->Html->url(array('controller' => 'Upload', 'action' => 'upload')) ?>">
-				<input type="file" class="file-browser" style="display: none;" />
-				<button class="upload-next btn btn-warning pull-left margin5" title="submit">Next</button>			
+			<form method="POST" enctype="multipart/form-data" action="<?php echo $this->Html->url(array('controller' => 'Upload', 'action' => 'upload')) ?>">
+				<input type="file" name="file" id="file" class="file-browser" style="display: none;" />
+				<button type="submit" class="upload-next btn btn-warning pull-left margin5" title="submit">Next</button>		
 			</form>
 
 	</div>
@@ -17,15 +17,21 @@
 <?php echo $this->Html->scriptStart(array('inline' =>false)) ?>
 //<script>
 $(document).ready(function(){
+	 var height = $('.upload-wrapper').outerHeight();
+	 
+	 //resize slidebox
+	 parent.$('#slidebox, #slidebox iframe').css('height', height + 'px');
+	 
 	$('.choose-btn').click(function(){		
 		$('.file-browser').trigger('click');
-		parent.$('.loading').show();
+		
 	});
 	$('.file-browser').change(function(){
 		$('.file-src').html($(this).val());
-		console.log($(this));
 	});
-
+	$('.upload-next').click(function(){
+		parent.$('.loading').show();
+	});
 	
 });
 <?php echo $this->Html->scriptEnd() ?>

@@ -278,3 +278,19 @@ Cache::config('_cake_model_', array(
 	'serialize' => ($engine === 'File'),
 	'duration' => $duration
 ));
+
+
+/**
+ * =============================================================================================
+ * custom config
+ * =============================================================================================
+ */
+/*
+ * Upload image folder
+ */
+define('FILTERS_DIR', 'img/upload/filters/');
+define('MASKS_DIR', 'img/masks/');
+define('IMG_DIR', 'img/upload/');
+define('FRAMES_DIR', 'img/frames/');
+define('IMG_TEMP_DIR', 'img/upload/tmp/');
+define('IMG_AVATAR_DIR', 'img/avatar/');
