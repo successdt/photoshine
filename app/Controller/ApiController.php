@@ -3,7 +3,7 @@
  * @author thanhdd@lifetimetech.vn
  */
 class ApiController extends AppController {
-	public $uses = array('User', 'Photo');
+	public $uses = array('User', 'Photo', 'Location');
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -149,5 +149,112 @@ class ApiController extends AppController {
 		$return['meta']['success'] = true;	
 		
 		return $return;
+	}
+	
+	/**
+	 * post photo
+	 */
+	public function postPhoto($data){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array('id' => '')
+		);
+		$output = str_replace('/', DS, IMG_DIR);
+		
+		$this->Photo->save($data);
+		$return['data']['id'] = $this->Photo->getInsertID();
+		$return['meta']['success'] = true;
+		
+		$id = $return['data']['id'];
+		$this->Photo->id = $id;
+		$newData = array(
+			'standard_resolution' => $output . $id . '.jpg',
+			'thumbnail' => $output . $id . '_thumb.jpg',
+			'low_resolution_url' => $output . $id . '_low.jpg'
+		);
+		$this->Photo->save($newData);
+		return $return;
+	}
+	
+	/**
+	 * update photo infomation
+	 */
+	public function updatePhoto($photoId, $data){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array('id' => $photoId)
+		);
+		
+		if (!isset($photoId) && $photoId){
+			$return['meta']['error_message'] = 'Empty photo id';
+			return $return;
+		}
+		$this->Photo->id = $photoId;
+		$this->Photo->save($data);
+		
+		$return['meta']['success'] = true;
+		
+		return $return;
+	}
+	
+	/**
+	 * add new location
+	 */
+	public function addLocation($data){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array('id' => '')
+		);
+		
+		$response = $this->Location->find('first', array('conditions' => array('facebook_id' => $data['facebook_id'])));
+	
+		if(isset($response['Location']['id']) && $response['Location']['id']){
+			$return['meta']['success'] = true;
+			$return['data']['id'] = $response['Location']['id'];
+		}
+		else {
+			$this->Location->save($data);
+			$return['meta']['success'] = true;
+			$return['data']['id'] = $this->Location->getInsertID();
+		}
+		return $return;			
+	}
+	
+	/**
+	 * update user info
+	 */
+	public function updateUser($userId, $data){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array('id' => '')
+		);
+		$notAllowed = array('id', 'username', 'report');
+		
+		if (!isset($userId) && $userId){
+			$return['meta']['error_message'] = 'Empty user id';
+			return $return;
+		}
+		
+		foreach ($notAllowed as $field){
+			if (isset($data[$field]))
+				unset($data[$field]);
+		}
+		$this->User->id = $photoId;
+		$this->User->save($data);
+		$return['meta']['success'] = true;
+		
+		return $return;						
 	}
 }

@@ -31,4 +31,10 @@ App::uses('Model', 'Model');
  * @package       app.Model
  */
 class AppModel extends Model {
+	function getLastQueries(){ 
+		  $dbo = $this->getDatasource(); 
+		  $logs = $dbo->getLog(); 
+		 
+		  return $logs; 
+ 	}
 }

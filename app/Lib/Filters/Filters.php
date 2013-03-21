@@ -240,7 +240,6 @@ class Filters {
         $this->execute("convert {$this->input} ( '$frame' -resize {$with}x{$height}! -unsharp 1.5×1.0+1.5+0.02 ) -flatten {$this->output}");
     }
 	public function drawText($text = '', $text2 = ''){
-//		$str = 'convert ' . $this->output . ' -pointsize 48 -fill white -gravity center -draw "text 100 -200 \'' . $text . '\' " ' . $this->output;
 		$str = 'convert ' . $this->output . ' -fill white -gravity South -pointsize 36 -undercolor none -annotate +60+60  \'' . $text . '\' append ' . $this->output;
 		$this->execute($str);
 		$str = 'convert ' . $this->output . ' -fill white -gravity South -pointsize 28 -undercolor none -annotate +60+10  \'' . $text2 . '\' append ' . $this->output;

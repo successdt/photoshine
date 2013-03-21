@@ -2,7 +2,11 @@
 /**
  * @author thanhdd@lifetimetech.vn
  */
+App::uses('Folder', 'Utility');
 App::uses('Filters', 'Lib/Filters');
+App::uses('Common', 'Lib');
+App::import('Controller', 'Api');
+
 class UploadController extends AppController{
 	public $name = 'Upload';
 	public $layout = 'popup';
@@ -53,6 +57,7 @@ class UploadController extends AppController{
 			$this->set('data', $data);
 		}
 	}
+	
 	public function crop(){
 		if (!isset($_SESSION)) {
 			session_start();
@@ -65,6 +70,7 @@ class UploadController extends AppController{
 		}
 		$this->set('data', array('source' => $source));	
 	}
+	
 	public function cropProcessing(){
 		$this->autoRender = false;
 		if (!isset($_SESSION)) {
@@ -146,7 +152,24 @@ class UploadController extends AppController{
 	}
 	public function filter(){
 		
+		$source = WWW_ROOT . str_replace('/', DS, IMG_TEMP_DIR) . session_id() . '.jpg';
+		$exif = exif_read_data($source, 'ANY_TAG', true);
+
+		if ($exif && isset($exif['GPS'])) {
+			$gpsInfo = $exif['GPS'];
+		}
+		
+		if (isset($gpsInfo) && $gpsInfo && isset($gpsInfo['GPSLatitude']) && isset($gpsInfo['GPSLongitude'])) {
+			$common = new Common();
+			$latlon = $common->triphoto_getGPS($source);
+			$latitude = $latlon['latitude'];
+			$longitude = $latlon['longitude'];
+			$this->set(compact('latitude', 'longitude'));
+		}		
 	}
+	
+
+	
 	public function finish(){
 		
 	}
@@ -207,6 +230,78 @@ class UploadController extends AppController{
 		copy($output, $destination);
 	}
 	
+	public function postPhoto(){
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		//Configure::write('debug', 0);
+		$data = $this->request->data;
+		
+		$this->autoRender = false;
+		$input = WWW_ROOT . str_replace('/', DS, FILTERS_DIR) . session_id() . DS . 'filter' . DS . 'output.jpg';
+		$mask = WWW_ROOT . str_replace('/', DS, FRAMES_DIR) . 'place.png';
+		$Filter = new Filters($input, $input);
+		
+		//add text
+		if (isset($data['placeName']) && $data['placeName']){
+			if (!isset($data['placeAdd']))
+				$data['placeAdd'] = '';
+			//limit string length
+			if (strlen($data['placeName']) > 27)
+				$data['placeName'] = substr($data['placeName'], 0, 24) . '...';
+			if (strlen($data['placeAdd']) > 30)
+				$data['placeAdd'] = substr($data['placeAdd'], 0, 26) . '...';
+			$Filter->frame($mask);
+			$Filter->drawText($data['placeName'], $data['placeAdd']);
+		}
+		
+		//add frame
+		if ($data['frame'] != 'none'){
+			$frame = WWW_ROOT . str_replace('/', DS, FRAMES_DIR) . $data['frame'] . '.png';
+			$Filter->frame($frame);
+		}
+		$userInfo = $this->Auth->user();
+		$photo = array('user_id' => $userInfo['User']['id']);
+		$Api = new ApiController();
+
+
+		if (isset($data['id']) && $data['id'] && isset($data['latitude']) && $data['latitude'] && isset($data['longitude']) && $data['longitude']){
+			$location = array(
+				'facebook_id' => $data['id'],
+				'latitude' => $data['latitude'],
+				'longitude' => $data['longitude']
+			);
+			$result = $Api->addLocation($location);
+			$locationId = $result['data']['id'];
+			$photo['location_id'] = $locationId;	
+		}
+		$photo['user_had_liked'] = 0;
+		$photo['report'] = 0;
+		$result = $Api->postPhoto($photo);
+		
+		if ($result['meta']['success'] && $result['data']['id']){
+			$photoId = $result['data']['id'];
+			$ouput = WWW_ROOT . str_replace('/', DS, IMG_DIR) . $photoId . '.jpg';
+			$thumb = WWW_ROOT . str_replace('/', DS, IMG_DIR) . $photoId . '_thumb.jpg';
+			$low = WWW_ROOT . str_replace('/', DS, IMG_DIR) . $photoId . '_low.jpg';
+			$tmp = WWW_ROOT . str_replace('/', DS, IMG_TEMP_DIR). session_id() . '.jpg';
+			$tmpDir = WWW_ROOT . str_replace('/', DS, FILTERS_DIR) . session_id();
+			
+			copy($input, $ouput);
+			$Filter->extract($ouput, $thumb, 0, 0 , 600, 150);
+			$Filter->extract($ouput, $low, 0, 0 , 600, 300);
+			unlink($tmp);
+			$folder = new Folder($tmpDir);
+			$folder->delete();
+			echo json_encode(array('status' => 'success', 'id' => $photoId));
+		}
+		else {
+			echo json_encode(array('status' => 'error'));
+		}
+	}
+	
+	
+	
 	public function thumb() {
 		if (!isset($_SESSION)) {
 			session_start();
@@ -230,13 +325,19 @@ class UploadController extends AppController{
 		$input = WWW_ROOT . str_replace('/', DS, FILTERS_DIR) . session_id() . DS . 'filter' . DS . 'source.jpg';
 		$output = WWW_ROOT . str_replace('/', DS, FILTERS_DIR) . session_id() . DS . 'filter' . DS . 'test.jpg';
 		$mask = WWW_ROOT . str_replace('/', DS, FRAMES_DIR) . 'place.png';
+		$source = WWW_ROOT . str_replace('/', DS, IMG_TEMP_DIR) . session_id() . '.jpg';
 		
 		$Filter = new Filters($input, $output);
 		$Filter->frame($mask);
-		$txt = 'VIETA BUILDING';
-		$txt2 = 'DUY TAN, HANOI | VIETNAM';
+		$txt = 'Twitter Beans Coffee Hanoi vietnam';
+		debug(strlen($txt));
+		if (strlen($txt) > 27)
+			 $txt = substr($txt, 0, 24) . '...';
+		$txt2 = 'DUY TAN, HANOI | VIETNAMVIETNAMVIETNAMVIETNAMVIETNAM';
+		if (strlen($txt2) > 30)
+			 $txt2 = substr($txt2, 0, 26) . '...';
 		$Filter->drawText($txt, $txt2);
-		debug(exif_read_data($input));
+
 		
 	}
 }

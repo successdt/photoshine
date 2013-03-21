@@ -228,10 +228,12 @@ h1 {
 	border-top-right-radius: 5px;
 	background: rgba(0, 0, 0, 0.7);
 	padding: 10px;
+	z-index: 1101;
 }
 #tool-pane .loading{
 	margin-bottom: 10px;
 	display: none;
+	
 }
 /* CONTENT */
 #content {
@@ -1338,6 +1340,7 @@ body > .navbar-fixed-top .brand {
 	height: 20px;
 	text-align: center;
 	overflow: hidden;
+	white-space: nowrap;
 }
 
 .location-layer.active, .frame-container.active{
@@ -1352,10 +1355,39 @@ body > .navbar-fixed-top .brand {
 	height: 20px;
 	text-align: center;
 	overflow: hidden;
+	white-space: nowrap;
 }
 .process-tab{
 	width: 345px;
 	margin: -20px 0px 0px 1px;
 	background-color: #FFF;
 	height: 410px;
+}
+.frame-func {
+	cursor: pointer;
+}
+.location-result{
+	width: 334px;
+	height: 280px;
+	overflow: scroll;
+}
+.location-row {
+	width: 323px;
+	height: 20px;
+	padding:  5px;
+	border-bottom: 1px solid #AAA;
+	background-color: #EDEAE1;
+	cursor: pointer;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;}
+.location-row:hover{
+	background-color: #FFF;
+}
+.location-select {
+	width: 333px;
+	height: 38px;
+	margin-top: 5px;
+	color: #FD6A01;
+	border:solid 1px  #FF6301;
 }

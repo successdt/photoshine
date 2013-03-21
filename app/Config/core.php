@@ -285,6 +285,7 @@ Cache::config('_cake_model_', array(
  * custom config
  * =============================================================================================
  */
+
 /*
  * Upload image folder
  */
@@ -294,3 +295,29 @@ define('IMG_DIR', 'img/upload/');
 define('FRAMES_DIR', 'img/frames/');
 define('IMG_TEMP_DIR', 'img/upload/tmp/');
 define('IMG_AVATAR_DIR', 'img/avatar/');
+
+define('FB_TOKEN', '187469724661182|vwCngrIYJJHlqcnaxCJ5WvldhGg');
+
+Configure::write('Facebook.config', array(
+ 	'appId' => '407687702659722',
+ 	'secret' => 'fc776ed1aa4627033568b4bccd1c290d',
+ 	'perms' => 'offline_access, user_groups, publish_stream,publish_actions'
+	
+));
+
+Configure::write('Twitter.config', array(
+	'appKey' => 'FyH5y1Hn496ddDHpag2A',
+	'appSecret' => 'q0HIeb8YtwF76sw3q8Hyo6nfByyNEyQgT5V0zlm5k'
+	
+));
+
+Configure::write('Tumblr.config', array(
+	'appKey' => 'Mkcc3JvcyJ7gtMYn6KNm97g0R4Nb8gulc8MXt1uOlAprEBGH7J',
+	'appSecret' => 'RPUcFilfAh00Y8EcjfzcLfsqgG5aSVfvBOPjBLVhJzP1Io9UNg'
+	
+));
+
+Configure::write('Flickr.config', array(
+	'appKey' => '86490fc29f9568bc2537ef6039782788',
+	'appSecret' => '0ccf3e754053b353'
+));
