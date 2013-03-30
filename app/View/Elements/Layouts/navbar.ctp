@@ -6,7 +6,7 @@
             <li class="active">
             	<?php echo $this->Html->link(
             		$this->Html->image('photoshine/photoshine 100x100.png', array('width' => '24', 'height' => '24')) . ' PhotoShine',
-            		array('controller' => 'Ui', 'action' => 'feed'),
+            		array('controller' => 'home', 'action' => 'feed'),
             		array('class' => 'brand', 'escape' => false)
 				); ?>
             </li>
@@ -44,17 +44,19 @@
         </ul>
     	<ul class="pull-right nav">
     		<li class="dropdown btn-group">
-				<button class="btn"><?php echo AuthComponent::user('User.username') ?></button>
+				<button class="btn" onclick="javascript:goto('<?php echo $this->Html->url(array('controller' => 'u', 'action' => AuthComponent::user('User.username'))); ?>')">
+					<?php echo AuthComponent::user('User.username') ?>
+				</button>				
 				<button class="btn dropdown-toggle" data-toggle="dropdown">
 					<span class="icon-align-justify"></span>
 				</button>
 				<ul class="dropdown-menu">
-	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'settings')) ?>">Edit Profile</a></li>
-	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'findFriends')) ?>">Find Friends</a></li>
-	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'servicesMan')) ?>">Link Other Services</a></li>
-	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'privacy')) ?>">Privacy Settings</a></li>
-	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'feedback')) ?>" class="nav-feedback">Feed back</a></li>
-	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'help')) ?>">Help</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'user', 'action' => 'editProfile')) ?>">Edit Profile</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'user', 'action' => 'findFriends')) ?>">Find Friends</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'user', 'action' => 'servicesMan')) ?>">Link Other Services</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'user', 'action' => 'privacy')) ?>">Privacy Settings</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'user', 'action' => 'feedback')) ?>" class="nav-feedback">Feed back</a></li>
+	            	<li><a href="<?php echo $this->Html->url(array('controller' => 'user', 'action' => 'help')) ?>">Help</a></li>
 	            	<li>
 						<?php echo $this->Html->link('Logout', array('controller' => 'Account', 'action' => 'logout')) ?>
 					</li>
@@ -83,7 +85,7 @@
 		);
 		?>
 		<?php foreach ($listChannels as $channel): ?>
-			<a class="tag" href="<?php echo $this->Html->url(array('controller' => 'ui', 'action' => 'channel', $channel['class'])) ?>">
+			<a class="tag" href="<?php echo $this->Html->url(array('controller' => 'photo', 'action' => 'channel', $channel['class'])) ?>">
 				<i class="tag-<?php echo $channel['class'] ?>-icn tag-icn pull-left"></i>
 				<span class="pull-left"></span><?php echo $channel['text'] ?>
 			</a>
@@ -198,4 +200,8 @@
 			});
 		});
 	});
+	
+	function goto(url){
+		window.location = url;
+	}
 <?php echo $this->Html->scriptEnd() ?>

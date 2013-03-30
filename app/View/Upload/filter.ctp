@@ -242,7 +242,7 @@
 				placeAdd = $('.location-text-desc').html();
 			}
 
-			$('.loading').show();
+			parent.$('.loading').show();
 			$.ajax({
 				url: '<?php echo $this->Html->url(array('controller' => 'upload', 'action' => 'postPhoto')) ?>',
 				type: 'POST',
@@ -253,7 +253,8 @@
 					var result =  $.parseJSON(response.responseText);
 					$('.loading').hide();
 					if (result.status == 'success' && result.id) {
-						
+						parent.$('.loading').show();
+						window.location.href = '<?php echo $this->Html->url(array('controller' => 'upload', 'action' => 'finish')) ?>/' + result.id;
 					} else {
 						alert('<?php echo __('Posting failed! Please try again.') ?>');
 					}
@@ -270,7 +271,7 @@
 		$('.location-result').jScrollPane();
 		$('#location').removeClass('active');
 		
-		var height = $('#process-box').outerHeight() + 5;
+		var height = $('#process-box').outerHeight(true) + 5;
 		//resize slidebox
 		parent.$('#slidebox, #slidebox iframe').css('height', height + 'px');
 		

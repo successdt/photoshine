@@ -20,8 +20,7 @@ class SocialController extends AppController {
 	public function postPhoto(){
 		set_time_limit(60);
 		$this->autoRender = false;
-		$facebookConfig = Configure::read('Facebook.config');
-		$weiboConfig = Configure::read('Weibo.config');
+		$facebookConfig = Configure::read('Facebook.config');;
 		$flickrConfig = Configure::read('Flickr.config');
 		$data = $this->request->data;
 		$this->autoRender = false;
@@ -29,11 +28,6 @@ class SocialController extends AppController {
 		$photoUrl = $data['photoUrl'];
 		$photoId = $data['photoId'];
 		$caption = $data['caption'];
-		$listTags = $data['listTags'];
-		$locationText = $data['locationText'];
-		$friend = $data['friend'];
-		$viewUrl = $data['viewUrl'];
-		$photoCaption = $data['photoCaption'];
 		
 		$uploadFailed = array(
 			'token_expired' => array(),
@@ -42,18 +36,17 @@ class SocialController extends AppController {
 		$errorCode = array(
 			'facebook' => array(190, 102, 2500),
 			'twitter' => array(34, 89, 215, 32),
-			'weibo' => array(21314, 21315, 21316, 21317, 21318, 21327, 21332),
 			'tumblr' => array(401),
 			'flickr' => array(96, 97, 98)
 		);
 		
-		$MeshtilesApi = new MeshtilesApi();
-							
-		$token = $MeshtilesApi->getUserAccessToken(array(
-			'access_token' => $this->Auth->user('credentials.access_token'), 
-			'app_key' => APP_KEY, 
-			'app_secret' => APP_SECRET)
-		);
+		$user = $this->Auth->user();
+		$data['userId'] = '';
+		if (isset($user['User']['id']))
+			$data['userId'] = $user['User']['id'];
+		$Api = new ApiController;
+		$response = $Api->getSocialToken($data);							
+		$token = $response['data'];
 		
 		//save image to local disk		
 		$imageString = file_get_contents($photoUrl);
@@ -61,49 +54,8 @@ class SocialController extends AppController {
 		$img = imagecreatefromstring($imageString); 
 		imagejpeg($img, $tmp); 
 		unset($img);
-		$imagePath = '@' . realpath('files/tmp/' . $photoId . '.jpg');
+		$imagePath = '@' . realpath('img/upload/tmp/' . $photoId . '.jpg');
 		
-		$originCaption = $caption;
-		
-		//split $caption into 140 characters
-		if (strlen($caption) > 140){
-			$splittedCaption = $viewUrl;
-			$tempText = null;
-			$caption = str_replace($viewUrl, null, $caption);
-			$remainingChars = 134 - strlen($splittedCaption);
-			$defaultText = $photoCaption ? __('with a tile') . $listTags : __('I just posted a tile') . $listTags;
-
-			if(strlen($caption) &&(($remainingChars - strlen($defaultText)) >= 0) && strstr($caption, $defaultText)){
-				$remainingChars -= strlen($defaultText);
-				$tempText .= $defaultText ;
-				$caption = str_replace($defaultText, null, $caption);
-			}
-			
-			if(strlen($caption) &&(($remainingChars - strlen($listTags)) >= 0) && strstr($caption, $listTags)){
-				$remainingChars -= strlen($listTags);
-				$tempText .= $listTags ;
-				$caption = str_replace($listTags, null, $caption);
-			}						
-			if(strlen($locationText) &&(($remainingChars - strlen($locationText) >= 0) && strstr($caption, $locationText))){
-				$remainingChars -= strlen($locationText);
-				$tempText .= $locationText;
-				$caption = str_replace($locationText, null, $caption);
-			}	
-			if(strlen($friend) && ($remainingChars - strlen($friend) >= 0) && strstr($caption, $friend)){
-				$remainingChars -= strlen($friend);
-				$tempText .= $friend;
-				$caption = str_replace($friend, null, $caption);
-			}
-			if($photoCaption){
-				$splittedCaption = substr(trim($caption), 0 , $remainingChars) . '...' .' (' . $tempText . ')' . $viewUrl;
-			}
-			else{
-				$splittedCaption = substr(trim($caption), 0 , $remainingChars) . '...' . ' ' . $tempText . $viewUrl;
-			}	
-		}
-		else{
-			$splittedCaption = $caption;
-		}
 
 		if ($data['facebook'] == 'true'){
 			$Facebook = new Facebook($facebookConfig);
@@ -111,11 +63,10 @@ class SocialController extends AppController {
 			$Facebook->setFileUploadSupport(true);
 			$facebookArgs = array(
 				'image' => $imagePath,
-				'message' => $originCaption
+				'message' => $caption
 			);
 			
 			$response = $Facebook->api('/me/photos','post',$facebookArgs);
-			
 			if (!isset($response['id']) || !$response['id']){
 				array_push($uploadFailed['upload_error'], 'Facebook');
 				
@@ -128,7 +79,7 @@ class SocialController extends AppController {
 
 		if ($data['twitter'] == 'true'){
 			$twitterArgs = array(
-				'status' => $splittedCaption
+				'status' => $caption
 			);
 			
 			$response = $this->OAuthConsumer->postMultipartFormData(
@@ -136,7 +87,7 @@ class SocialController extends AppController {
 				$token['twitter_token'],
 				$token['twitter_secret'],
 				'https://api.twitter.com/1.1/statuses/update_with_media.json',
-				array('media[]' => realpath('files/tmp/' . $photoId . '.jpg')),
+				array('media[]' => realpath('img/upload/tmp/' . $photoId . '.jpg')),
 				$twitterArgs
 			);
 			
@@ -156,7 +107,7 @@ class SocialController extends AppController {
 		if ($data['tumblr'] == 'true'){
 			$tumblrArgs = array(
 				'type' => 'photo',
-				'caption' => $originCaption,
+				'caption' => $caption,
 				'source' => $photoUrl
 			);
 			$blogName = explode('//',$token['tumblr_id']);
@@ -183,7 +134,7 @@ class SocialController extends AppController {
 			$Flickr = new Flickr($flickrConfig['appKey'], $flickrConfig['appSecret']);
 		
 			$Flickr->setToken($token['flickr_token']);
-			$response = $Flickr->async_upload($imagePath, '',$originCaption);
+			$response = $Flickr->async_upload($imagePath, '',$caption);
 			
 			if (isset($response['error'])){
 				array_push($uploadFailed['upload_error'], 'Flickr');
@@ -280,7 +231,7 @@ class SocialController extends AppController {
 		
 		$Api = new ApiController();
 		$userInfo = $this->Auth->user();
-		$id = $userId['User']['id'];
+		$id = $userInfo['User']['id'];
 		
 		$isSuccess = true;
 		
@@ -289,9 +240,9 @@ class SocialController extends AppController {
 			case 'facebook': 
 				$Facebook = new Facebook($facebookConfig);
 				$accessToken = $Facebook->getAccessToken();
-				$userId = $Facebook->getUser();
+				$response = $Facebook->api('/me','get','');;
 				$args = array(
-					'facebook_id' => $userId,
+					'facebook_id' => $response['id'],
 					'facebook_token' => $accessToken
 				);
 				break;
@@ -344,10 +295,10 @@ class SocialController extends AppController {
 				$isSuccess = false;
 					
 		}
-		if ($isSuccess && isset($args['token']) && $args['token']){
-			$response = $Api->updateUser($id, $args);
+		if ($isSuccess){
+			$response = $Api->updateYourData($args, $id);
 		}
-		if (isset($response['success']) && $response['success']){
+		if (isset($response['meta']['success']) && $response['meta']['success']){
 			$isSuccess = true;
 		}
 		else {
@@ -357,5 +308,27 @@ class SocialController extends AppController {
 		$this->set(compact('isSuccess', 'name'));
 		$this->layout = "popup";
 	}
-
+	/*
+	public function test(){
+		$this->autoRender = false;
+		$facebookConfig = Configure::read('Facebook.config');
+		$Facebook = new Facebook($facebookConfig);
+		$Api = new ApiController;
+		$user = $this->Auth->user();
+		$data['userId'] = '';
+		if (isset($user['User']['id']))
+			$data['userId'] = $user['User']['id'];
+		$response = $Api->getSocialToken($data);							
+		$token = $response['data'];
+		$Facebook->setAccessToken($token['facebook_token']);
+		$facebookArgs = array(
+			'tags' => '100000270981562',
+			'message' => 'Này thì test tag friend này',
+			'place' => '454604644608832'
+		);
+		
+		$response = $Facebook->api('/me/feed','post',$facebookArgs);
+		debug($response);	
+	}
+	*/
 }

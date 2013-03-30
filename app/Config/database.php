@@ -67,7 +67,7 @@ class DATABASE_CONFIG {
 		'password' => '',
 		'database' => 'photoshine',
 		'prefix' => 'tb_',
-		//'encoding' => 'utf8',
+		'encoding' => 'utf8',
 	);
 
 	public $test = array(

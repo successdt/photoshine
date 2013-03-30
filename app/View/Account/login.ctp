@@ -11,17 +11,19 @@
 			<div class="home-logo margin10" style="width: 235px; margin: 0 auto;">
 				<?php echo $this->Html->image('photoshine/photoshine 100x100.png', array('width' => '32', 'height' => '32')) ?>
 				<div class="site-name" style="margin: -23px 42px;">PhotoShine</div>
-			</div>		
-			<div class="login-group">
-				<input type="text" name="data[username]" class="login-input" id="username" placeholder="User name"/>
-				<input type="password" name="data[password]" class="login-input" id="password" placeholder="Password"/>
 			</div>
-			<div style="width: 300px; margin: 0 auto;">
-				<button class="btn btn-success submit" style="width: 100%;">Log in</button>
-				<span>
-					<?php echo $this->Html->link(__('Forgot your password?'), array('controller' => 'Account', 'action' => 'resetPassword')) ?>
-				</span>
-			</div>
+			<form id="login-form" accept-charset="utf-8" method="post" action="#">
+				<div class="login-group">
+					<input type="text" name="data[username]" class="login-input" id="username" placeholder="User name"/>
+					<input type="password" name="data[password]" class="login-input" id="password" placeholder="Password"/>
+				</div>
+				<div style="width: 300px; margin: 0 auto;">
+					<button class="btn btn-success submit" style="width: 100%;">Log in</button>
+					<span>
+						<?php echo $this->Html->link(__('Forgot your password?'), array('controller' => 'Account', 'action' => 'resetPassword')) ?>
+					</span>
+				</div>
+			</form>
 		</div>
 
 	</div>
@@ -30,7 +32,8 @@
 <?php echo $this->Html->scriptStart(array('inline' =>false)) ?>
 //<script>
 $(document).ready(function(){
-	$('.submit').click(function(){
+	$('.submit').click(function(e){
+		e.preventDefault();
 		login();
 	});
 	$("#password").bind("keypress", function(event) {

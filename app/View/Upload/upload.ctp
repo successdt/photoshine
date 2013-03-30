@@ -7,6 +7,9 @@
 <?php echo $this->Html->scriptStart(array('inline' =>false)) ?>
 //<script>
 $(document).ready(function(){
+	var height = $('.alert-error').outerHeight(true) + 5;
+	//resize slidebox
+	parent.$('#slidebox, #slidebox iframe').css('height', height + 'px');
 	parent.$('.loading').hide();
 });
 <?php echo $this->Html->scriptEnd() ?>

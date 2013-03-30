@@ -170,10 +170,6 @@ class UploadController extends AppController{
 	
 
 	
-	public function finish(){
-		
-	}
-	
 	public function rotate() {
 		if (!isset($_SESSION)) {
 			session_start();
@@ -224,8 +220,14 @@ class UploadController extends AppController{
 		$output = WWW_ROOT . str_replace('/', DS, FILTERS_DIR) . session_id() . DS . 'filter' . DS . $filterName . '.jpg';
 		$destination = WWW_ROOT . str_replace('/', DS, FILTERS_DIR) . session_id() . DS . 'filter' . DS . 'output.jpg';
 		
-		$Filter = new Filters($input, $output);
-		$Filter->{$filterName}();
+		if ($filterName == 'reset'){
+			copy($input, $output);
+		}
+		else{
+			$Filter = new Filters($input, $output);
+			$Filter->{$filterName}();			
+		}
+
 		
 		copy($output, $destination);
 	}
@@ -300,7 +302,23 @@ class UploadController extends AppController{
 		}
 	}
 	
-	
+	public function finish($photoId = null){
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		if ($photoId){
+			$Api = new ApiController;
+			$photoUrl = 'http://' . $_SERVER['SERVER_NAME'] . Router::url(array('controller' => 'img', 'action' => 'upload')) . '/' . $photoId . '.jpg';
+			
+			$user = $this->Auth->user();
+			$data = array('userId' => $user['User']['id']);
+			$token = $Api->getSocialToken($data, $data['userId']);
+			
+			$this->set('token', $token['data']);
+			$this->set('photoId', $photoId);
+			$this->set('photoUrl', $photoUrl);
+		}
+	}
 	
 	public function thumb() {
 		if (!isset($_SESSION)) {
@@ -327,10 +345,11 @@ class UploadController extends AppController{
 		$mask = WWW_ROOT . str_replace('/', DS, FRAMES_DIR) . 'place.png';
 		$source = WWW_ROOT . str_replace('/', DS, IMG_TEMP_DIR) . session_id() . '.jpg';
 		
+
 		$Filter = new Filters($input, $output);
 		$Filter->frame($mask);
-		$txt = 'Twitter Beans Coffee Hanoi vietnam';
-		debug(strlen($txt));
+		$txt = 'Cầu Long Biên';
+
 		if (strlen($txt) > 27)
 			 $txt = substr($txt, 0, 24) . '...';
 		$txt2 = 'DUY TAN, HANOI | VIETNAMVIETNAMVIETNAMVIETNAMVIETNAM';

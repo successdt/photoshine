@@ -291,6 +291,7 @@ Cache::config('_cake_model_', array(
  */
 define('FILTERS_DIR', 'img/upload/filters/');
 define('MASKS_DIR', 'img/masks/');
+define('PROFILE_DIR', 'img/profile/');
 define('IMG_DIR', 'img/upload/');
 define('FRAMES_DIR', 'img/frames/');
 define('IMG_TEMP_DIR', 'img/upload/tmp/');
