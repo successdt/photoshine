@@ -33,7 +33,6 @@ class UserController extends AppController{
 		if (!isset($this->request->data))
 			return;
 		$data = $this->request->data;
-		debug($data);
 		
 		$user = $this->Auth->user();
 		$imgFormat = array('image/png', 'image/jpeg', 'image/pjeg');	
@@ -66,7 +65,7 @@ class UserController extends AppController{
 		$data['profile_picture'] = 'profile/' . $user['User']['id'] . '.jpg';
 		$Api = new ApiController;
 		$Api->updateYourData($data, $user['User']['id']);
-		$this->redirect(array('controller' => 'user', 'action' => $user['User']['username']));		
+		$this->redirect(array('controller' => 'u', 'action' => $user['User']['username']));		
 	}
 	
 	public function changePassword(){
@@ -105,6 +104,20 @@ class UserController extends AppController{
 	public function feedback(){
 		if (!isset($_SESSION)) {
 			session_start();
+		}		
+	}
+	
+	public function timeline($username = null){
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		if ($username){
+			$data['name'] = $username;
+			$Api = new ApiController;		
+			$data = $Api->getUserInfo($data);
+			if(isset($data['data']['User']) && $data['data']['User']){
+				$this->set('data', $data['data']);
+			}			
 		}		
 	}
 }

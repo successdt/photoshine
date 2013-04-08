@@ -17,13 +17,13 @@
 					<a href="javascript:void(0)" class="btn navbar-channels" rel="tooltip" title="Channels">
 						<i class="icon-th icon-black"></i>
 					</a>
-					<a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'nearby')) ?>" class="btn" rel="tooltip" title="Nearby">
+					<a href="javascript:void(0)" onclick="javascript:getLocation()" class="btn" rel="tooltip" title="Nearby">
 						<i class="icon-map-marker icon-black"></i>
 					</a>
-					<a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'popular')) ?>" class="btn" rel="tooltip" title="Popular">
+					<a href="<?php echo $this->Html->url(array('controller' => 'photo', 'action' => 'popular')) ?>" class="btn" rel="tooltip" title="Popular">
 						<i class="icon-star icon-black"></i>
 					</a>
-					<a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'myLikes')) ?>" class="btn" rel="tooltip" title="My likes">
+					<a href="<?php echo $this->Html->url(array('controller' => 'photo', 'action' => 'myLikes')) ?>" class="btn" rel="tooltip" title="My likes">
 						<i class="icon-thumbs-up icon-black"></i>
 					</a>
 					<a href="javascript:void(0)" class="btn upload-btn" rel="tooltip" title="Upload">
@@ -203,5 +203,17 @@
 	
 	function goto(url){
 		window.location = url;
+	}
+	function getLocation(){
+		if (navigator.geolocation){
+			navigator.geolocation.getCurrentPosition(showPosition);
+		}
+		else{
+			x.innerHTML="Geolocation is not supported by this browser.";
+		}
+	}
+	function showPosition(position){
+		var url = '<?php echo $this->Html->url(array('controller' => 'location', 'action' => 'nearby')) ?>/' + position.coords.latitude + '/' + position.coords.longitude;
+		goto(url);
 	}
 <?php echo $this->Html->scriptEnd() ?>

@@ -3,7 +3,7 @@
  * @author thanhdd@lifetimetech.vn
  */
 class ApiController extends AppController {
-	public $uses = array('User', 'Photo', 'Location', 'Follow');
+	public $uses = array('User', 'Photo', 'Location', 'Follow', 'Like', 'Comment');
 
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -166,7 +166,8 @@ class ApiController extends AppController {
 			),
 			'data' => array('id' => '')
 		);
-		$output = 'http://' . $_SERVER['SERVER_NAME'] . Router::url(array('controller' => 'img', 'action' => 'upload')) . '/' ;
+//		$output = 'http://' . $_SERVER['SERVER_NAME'] . Router::url(array('controller' => 'img', 'action' => 'upload')) . '/' ;
+		$output = 'upload/';
 
 		$this->Photo->save($data);
 		$return['data']['id'] = $this->Photo->getInsertID();
@@ -194,7 +195,7 @@ class ApiController extends AppController {
 			),
 			'data' => array('id' => '')
 		);
-		if (!isset($data['photoId']) && $data['photoId']){
+		if (!isset($data['photoId']) || !$data['photoId']){
 			$return['meta']['error_message'] = 'Empty photo id';
 			return $return;
 		}
@@ -254,7 +255,7 @@ class ApiController extends AppController {
 		);
 		$notAllowed = array('id', 'username', 'report');
 		
-		if (!isset($userId) && $userId){
+		if (!isset($userId) || !$userId){
 			$return['meta']['error_message'] = 'Empty user id';
 			return $return;
 		}
@@ -282,12 +283,12 @@ class ApiController extends AppController {
 			'data' => array()
 		);
 
-		if (!isset($userId) && $userId){
+		if (!isset($userId) || !$userId){
 			$return['meta']['error_message'] = 'Empty user id';
 			return $return;
 		}
 		$result = $this->User->find('first', array(
-			'conditions' => array('id' => $data['userId']),
+			'conditions' => array('id' => $userId),
 			'fields' => array('facebook_id', 'facebook_token', 'twitter_id', 'twitter_token', 'twitter_secret',
 				'tumblr_id', 'tumblr_token', 'tumblr_secret', 'flickr_id', 'flickr_token')	
 		));
@@ -435,7 +436,7 @@ class ApiController extends AppController {
 		);
 		$notAllowed = array('id', 'username', 'report');
 		
-		if (!isset($data['type']) && $data['type']){
+		if (!isset($data['type']) || !$data['type']){
 			$return['meta']['error_message'] = 'Empty type name';
 			return $return;
 		}
@@ -470,14 +471,14 @@ class ApiController extends AppController {
 			),
 			'data' => array()
 		);
-		if (!isset($data['id']) && $data['id']){
+		if (!isset($data['id']) || !$data['id']){
 			$return['meta']['error_message'] = 'Empty user id';
 			return $return;
 		}
 		$params = array(
 			'from_user_id' => $userId,
 			'to_user_id' => $data['id'],
-			'user_had_accepted' => 0
+			'user_had_accepted' => 1 //muốn confirm thì sửa cái này
 		);
 		$this->Follow->save($params);
 		$return['meta']['success'] = true;
@@ -496,7 +497,7 @@ class ApiController extends AppController {
 			),
 			'data' => array()
 		);
-		if (!isset($data['id']) && $data['id']){
+		if (!isset($data['id']) || !$data['id']){
 			$return['meta']['error_message'] = 'Empty user id';
 			return $return;
 		}
@@ -529,41 +530,723 @@ class ApiController extends AppController {
 			),
 			'data' => array()
 		);
-		if (!isset($data['id']) && $data['id']){
+		if (!isset($data['id']) || !$data['id']){
 			$return['meta']['error_message'] = 'Empty photo id';
 			return $return;
 		}
-		$result = $this->Photo->find('first', array(
+		$photo = $this->Photo->find('first', array(
+			'conditions' => array(
+				'Photo.id' => $data['id']
+			),
 			'joins' => array(
 				array(
-					'table' => 'likes',
+					'table' => 'locations',
+					'alias' => 'Location',
 					'type' => 'LEFT',
 					'conditions' => array(
-						'photos.id = likes.photo_id'
+						'Photo.location_id = Location.id'
 					)
 				),
 				array(
-					'table' => 'comments',
+					'table' => 'users',
+					'alias' => 'User',
 					'type' => 'LEFT',
 					'conditions' => array(
-						'photos.id = comments.photo_id'
-					)				
+						'Photo.user_id = User.id'
+					)
+				)
+			),
+			'fields' => array('Photo.*', 'Location.*', 'User.id', 'User.username', 'User.profile_picture')
+		));
+		$like = $this->Like->find('all', array(
+			'conditions' => array('photo_id' => $data['id']),
+			'joins' => array(
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Like.user_id = User.id'
+					)
+				)
+			),
+			'fields' => array('Like.id', 'Like.created_time', 'User.id', 'User.username', 'User.profile_picture')
+		));
+		$comment = $this->Comment->find('all', array(
+			'conditions' => array('photo_id' => $data['id']),
+			'joins' => array(
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Comment.user_id = User.id'
+					)
+				)
+			),
+			'fields' => array('Comment.id', 'Comment.created_time', 'Comment.text', 'User.id', 'User.username', 'User.profile_picture'),
+			'order' => array('Comment.created_time DESC'),
+			'limit' => 5
+		));
+		$comment = array_reverse($comment, true);
+		$commentCount = $this->Comment->find('count', array(
+			'conditions' => array('photo_id' => $data['id']),
+		));
+		$liked = false;
+		foreach ($like as $eachLike){
+			if ($eachLike['User']['id'] == $userId){
+				$liked = true;
+			}
+		}
+		
+		$return['data']['Photo'] = $photo['Photo'];
+		$return['data']['Photo']['User'] = $photo['User'];
+		$return['data']['Photo']['Location'] = $photo['Location'];
+		$return['data']['Comment'] = $comment;
+		$return['data']['Like'] = $like;
+		$return['data']['comment_count'] = $commentCount;
+		$return['data']['Photo']['user_had_liked'] = $liked;
+		return $return;
+	}
+	
+	/**
+	 * like a photo
+	 */
+	public function likePhoto($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!isset($data['id']) || !$data['id']){
+			$return['meta']['error_message'] = 'Empty photo id';
+			return $return;
+		}
+		$params = array(
+			'user_id' => $userId,
+			'photo_id' => $data['id']
+		);
+		$liked = $this->Like->find('first', array('conditions' => $params));
+		if (isset($liked['Like']['id'])){
+			$return['meta']['error_message'] = 'You had liked this photo';
+			return $return;			
+		}
+		$this->Like->save($params);
+		$return['meta']['status'] = true;
+		
+		return $return;
+	}
+	/**
+	 * unlike a photo
+	 */
+	public function unlikePhoto($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!isset($data['id']) || !$data['id']){
+			$return['meta']['error_message'] = 'Empty photo id';
+			return $return;
+		}
+		$params = array(
+			'user_id' => $userId,
+			'photo_id' => $data['id']
+		);
+		$this->Like->deleteAll($params);
+		$return['meta']['status'] = true;
+		
+		return $return;
+	}
+	/**
+	 * post a comment
+	 */
+	public function postComment($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!isset($data['photo_id']) || !$data['photo_id']){
+			$return['meta']['error_message'] = 'Empty photo id';
+			return $return;
+		}
+		if (!isset($data['text']) || !$data['text']){
+			$return['meta']['error_message'] = 'Empty comment';
+			return $return;
+		}
+		$data['user_id'] = $userId;
+		$this->Comment->save($data);
+		$return['meta']['status'] = true;
+		
+		return $return;		
+	}
+	
+	/**
+	 * get all comment of a photo
+	 */
+	public function getCommentOfPhoto($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!isset($data['id']) || !$data['id']){
+			$return['meta']['error_message'] = 'Empty photo id';
+			return $return;
+		}
+		$comment = $this->Comment->find('all', array(
+			'conditions' => array('photo_id' => $data['id']),
+			'joins' => array(
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Comment.user_id = User.id'
+					)
+				)
+			),
+			'fields' => array('Comment.id', 'Comment.created_time', 'Comment.text', 'User.id', 'User.username', 'User.profile_picture'),
+		));
+		
+		$return['meta']['status'] = true;
+		$return['data'] = $comment;
+		return $return;		
+	}
+	/**
+	 * get list photo for channel
+	 */
+	public function getListPhotoByChannel($data, $userId = null){
+		$itemsPerPage = 20;
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!isset($data['tag']) || !$data['tag']){
+			$return['meta']['error_message'] = 'Empty tag';
+			return $return;
+		}
+		
+		if (!isset($data['page']) || !$data['page'] || !($data['page']) || ($data['page'] < 0)){
+			$data['page'] = 0;
+		}
+
+		$limit = ($itemsPerPage * $data['page']) . "," . $itemsPerPage;
+		$photos = $this->Photo->find('all', array(
+			'conditions' => array(
+				'OR' => array(
+					array('Photo.tags LIKE' => '#' . $data['tag'] . ',%'),
+					array('Photo.tags LIKE' => '%,#' . $data['tag'])
+				)
+			),
+			'joins' => array(
+				array(
+					'table' => 'locations',
+					'alias' => 'Location',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Photo.location_id = Location.id'
+					)
+				),
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Photo.user_id = User.id'
+					)
+				)
+			),
+			'fields' => array('Photo.*', 'Location.*', 'User.id', 'User.username', 'User.profile_picture'),
+			'limit' => $limit
+		));
+		$query = $this->Photo->getLastQueries();
+
+		//next page
+		$return['meta']['next_page'] = $data['page'] + 1;
+		if (count($photos) < $itemsPerPage){
+			$return['meta']['next_page'] = 0;
+		}
+				
+		
+		$return['data'] = $this->getListPhoto($photos, $userId);
+		return $return;	
+	}
+	
+	/**
+	 * get list photo information
+	 */
+	public function getListPhoto($photos, $userId){
+		$return = array();
+		$i = 0;
+		foreach($photos as $photo){
+			$photoId = $photo['Photo']['id'];
+			$like = $this->Like->find('all', array(
+				'conditions' => array('photo_id' => $photoId),
+				'fields' => 'Like.user_id'
+			));
+			$comment = $this->Comment->find('all', array(
+				'conditions' => array('photo_id' => $photoId),
+				'joins' => array(
+					array(
+						'table' => 'users',
+						'alias' => 'User',
+						'type' => 'LEFT',
+						'conditions' => array(
+							'Comment.user_id = User.id'
+						)
+					)
+				),
+				'fields' => array('Comment.id', 'Comment.created_time', 'Comment.text', 'User.id', 'User.username', 'User.profile_picture'),
+				'order' => array('Comment.created_time DESC'),
+				'limit' => 5
+			));
+			$comment = array_reverse($comment, true);
+			$commentCount = $this->Comment->find('count', array(
+				'conditions' => array('photo_id' => $photoId),
+			));
+			$liked = false;
+			foreach ($like as $eachLike){
+				if ($eachLike['Like']['user_id'] == $userId){
+					$liked = true;
+				}
+			}
+			$return[$i] = $photo['Photo'];
+			$return[$i]['Location'] = $photo['Location'];
+			$return[$i]['User'] = $photo['User'];
+			$return[$i]['like_count'] = count($like);
+			$return[$i]['user_had_liked'] = $liked;
+			$return[$i]['Comment'] = $comment;
+			$return[$i]['comment_count'] = $commentCount;
+			$i++;			
+		}
+		
+		return $return;		
+	}
+	
+	/**
+	 * get photos are liked by you
+	 */
+	public function getYourLiked($data, $userId = null){
+		$itemsPerPage = 20;
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!isset($userId) || !$userId){
+			$return['meta']['error_message'] = 'Empty your id';
+			return $return;
+		}
+		if (!isset($data['page']) || !$data['page'] || !($data['page']) || ($data['page'] < 0)){
+			$data['page'] = 0;
+		}
+
+		$limit = ($itemsPerPage * $data['page']) . "," . $itemsPerPage;		
+		$likes = $this->Like->find('all', array(
+			'conditions' => array('Photo.user_id' => $userId),
+			'joins' => array(
+				array(
+					'table' => 'photos',
+					'alias' => 'Photo',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Like.photo_id = Photo.id'
+					)
 				),
 				array(
 					'table' => 'locations',
+					'alias' => 'Location',
 					'type' => 'LEFT',
 					'conditions' => array(
-						'photos.location_id = locations.id'
-					)				
+						'Photo.location_id = Location.id'
+					)
+				),
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Photo.user_id = User.id'
+					)
 				)
 			),
-			'conditions' => array(
-				'id' => $data['id']
-			)
+			'limit' => $limit,
+			'order' => array('Like.created_time' => 'desc'),
+			'fields' => array('Photo.*', 'Location.*','User.id', 'User.username', 'User.profile_picture')
 		));
-		debug($this->Photo->getLastQueries());
-		debug($result);
-		die;
+		
+		$return['meta']['next_page'] = $data['page'] + 1;
+		if (count($likes) < $itemsPerPage){
+			$return['meta']['next_page'] = 0;
+		}
+				
+		
+		$return['data'] = $this->getListPhoto($likes, $userId);
+		return $return;	
 	}
 	
+	/**
+	 * get Channel extra info
+	 */
+	public function getChannelExtraInfo($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!isset($data['tag']) || !$data['tag']){
+			$return['meta']['error_message'] = 'Empty tag';
+			return $return;
+		}
+		$photos = $this->Photo->find('all', array(
+			'conditions' => array(
+				'OR' => array(
+					array('Photo.tags LIKE' => '#' . $data['tag'] . ',%'),
+					array('Photo.tags LIKE' => '%,#' . $data['tag'])
+				)
+			),
+			'joins' => array(
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Photo.user_id = User.id'
+					)				
+				
+				)
+
+			),
+			'fields' => array('Photo.id, Photo.thumbnail, User.id')
+		));
+		
+		$photoCount = $this->Photo->find('count', array(
+			'conditions' => array(
+				'OR' => array(
+					array('Photo.tags LIKE' => '#' . $data['tag'] . ',%'),
+					array('Photo.tags LIKE' => '%,#' . $data['tag'])
+				)
+			)
+		));
+		$userIDArray = array();
+		$i = 0;
+		foreach ($photos as $photo){
+			array_push($userIDArray, $photo['User']['id']);
+			
+			//chỉ lấy 10 ảnh
+			if ($i > 9){
+				unset($photos[$i]);
+			}
+			$i++;
+		}
+		$userIDArray = array_unique($userIDArray);
+		
+		$return['meta']['success'] = true;
+		$return['data']['user_count'] = count($userIDArray);
+		$return['data']['photo_count'] = $photoCount;
+		$return['data']['photo'] = $photos;
+		
+		return $return;
+	}
+	/**
+	 * get popular photos
+	 */
+	function getPopularPhotos($data, $userId = null){
+		$itemsPerPage = 5;
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!isset($data['page']) || !$data['page'] || !($data['page']) || ($data['page'] < 0)){
+			$data['page'] = 0;
+		}
+
+		$limit = ($itemsPerPage * $data['page']) . "," . $itemsPerPage;	
+		$photo = $this->Like->find('all', array(
+			'joins' => array(
+				array(
+					'table' => 'photos',
+					'alias' => 'Photo',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Like.photo_id = Photo.id'
+					)
+				),
+				array(
+					'table' => 'locations',
+					'alias' => 'Location',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Photo.location_id = Location.id'
+					)
+				),
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Photo.user_id = User.id'
+					)
+				)
+			),
+			'limit' => $limit,
+			'fields' => array('Photo.*', 'Location.*','User.id', 'User.username', 'User.profile_picture'),
+			'group' => 'Like.photo_id',
+			'order' => 'COUNT(photo_id) DESC'
+		));
+		
+		$return['meta']['next_page'] = $data['page'] + 1;
+		if (count($photo) < $itemsPerPage){
+			$return['meta']['next_page'] = 0;
+		}
+				
+		
+		$return['data'] = $this->getListPhoto($photo, $userId);
+		return $return;	
+	}
+	
+	/**
+	 * get user information
+	 */
+	public function getUserInfo($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!isset($data['name']) || !$data['name']){
+			$return['meta']['error_message'] = 'Empty user name';
+			return $return;
+		}
+		$user = $this->User->find('first', array(
+			'conditions' => array('username' => $data['name']),
+			'fields' => array(
+				'id',
+				'username',
+				'first_name',
+				'last_name',
+				'profile_picture',
+				'city',
+				'country',
+				'website',
+				'bio'
+		)));
+		if(!isset($user['User']['id'])){
+			$return['meta']['error_message'] = 'User not found';
+			return $return;			
+		}
+		$photos = $this->Photo->find('all', array(
+			'conditions' => array(
+				'user_id' => $user['User']['id']
+			),
+			'order' => 'RAND()',
+			'fields' => array('Photo.thumbnail')
+		));		
+		$photoCount = $this->Photo->find('count', array(
+			'conditions' => array(
+				'user_id' => $user['User']['id']
+			)		
+		));
+		$followers = $this->Follow->find('all', array(
+			'conditions' => array(
+				'to_user_id' => $user['User']['id'],
+				'user_had_accepted' => '1'
+			),
+			'joins' => array(
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Follow.from_user_id = User.id'
+					)				
+				
+				)
+
+			),
+			'order' => 'RAND()',
+			'fields' => array('User.username, User.id, User.profile_picture'),
+			'limit' => '0, 2'
+		));
+		$followerCount = $this->Follow->find('count', array(
+			'conditions' => array(
+				'to_user_id' => $user['User']['id'],
+				'user_had_accepted' => '1'
+			)
+		));
+		$following = $this->Follow->find('all', array(
+			'conditions' => array(
+				'from_user_id' => $user['User']['id'],
+				'user_had_accepted' => '1'
+			),
+			'joins' => array(
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Follow.to_user_id = User.id'
+					)				
+				
+				)
+
+			),
+			'order' => 'RAND()',
+			'fields' => array('User.username, User.id, User.profile_picture'),
+			'limit' => '0, 2'
+		));
+		$followingCount = $this->Follow->find('count', array(
+			'conditions' => array(
+				'from_user_id' => $user['User']['id'],
+				'user_had_accepted' => '1'
+			)
+		));
+		
+		$return['meta']['success'] = true;
+		$return['data']['User'] = $user['User'];
+		$return['data']['Photo'] = $photos;
+		$return['data']['photo_count'] = $photoCount;
+		$return['data']['Follower'] = $followers;
+		$return['data']['follower_count'] = $followerCount;
+		$return['data']['Following'] = $following;
+		$return['data']['following_count'] = $followingCount;
+		
+		return $return;
+	}
+	
+	/**
+	 * get list photo of user
+	 */
+	public function getListPhotoOfUser($data, $userId = null){
+		$itemsPerPage = 20;
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!isset($data['id']) || !$data['id']){
+			$return['meta']['error_message'] = 'Empty user id';
+			return $return;
+		}
+		
+		if (!isset($data['page']) || !$data['page'] || !($data['page']) || ($data['page'] < 0)){
+			$data['page'] = 0;
+		}
+
+		$limit = ($itemsPerPage * $data['page']) . "," . $itemsPerPage;
+		$photos = $this->Photo->find('all', array(
+			'conditions' => array(
+				'user_id' => $data['id']
+			),
+			'joins' => array(
+				array(
+					'table' => 'locations',
+					'alias' => 'Location',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Photo.location_id = Location.id'
+					)
+				),
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Photo.user_id = User.id'
+					)
+				)
+			),
+			'fields' => array('Photo.*', 'Location.*', 'User.id', 'User.username', 'User.profile_picture'),
+			'limit' => $limit
+		));
+		$query = $this->Photo->getLastQueries();
+
+		//next page
+		$return['meta']['next_page'] = $data['page'] + 1;
+		if (count($photos) < $itemsPerPage){
+			$return['meta']['next_page'] = 0;
+		}
+				
+		
+		$return['data'] = $this->getListPhoto($photos, $userId);
+		return $return;	
+	}
+	
+	/**
+	 * get location information
+	 */
+	public function getLocationInfo($data, $userId = null){
+		$itemsPerPage = 20;
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!isset($data['location']) || !is_array($data['location'])){
+			$return['meta']['error_message'] = 'Empty list of location id';
+			return $return;
+		}
+
+		$locations = $this->Location->find('all', array(
+			'conditions' => array(
+				'Location.facebook_id' => $data['location']
+			),
+			'joins' => array(
+				array(
+					'table' => 'photos',
+					'alias' => 'Photo',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Photo.location_id = Location.id'
+					)
+				)
+			),
+			'group' => array('Photo.location_id'),
+			'fields' => array('count(Photo.id), Location.id, Location.facebook_id'),
+		));
+		foreach ($locations as $location){
+			$photo = $this->Photo->find('first', array(
+				'conditions' => array('location_id' => $location['Location']['id']),
+				'order' => 'RAND()',
+				'fields' => 'thumbnail'
+			));
+			$query = $this->Photo->getLastQueries();
+			if (isset($photo['Photo']['thumbnail']) && $photo['Photo']['thumbnail']){
+				$arr = array(
+					'id' => $location['Location']['id'],
+					'photo_count' => $location[0]['count(`Photo`.`id`)'],
+					'thumbnail' => $photo['Photo']['thumbnail']
+				);
+				$return['data'][$location['Location']['facebook_id']] = $arr;				
+			}
+
+		}
+		return $return;	
+	}
 }

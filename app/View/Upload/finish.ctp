@@ -109,30 +109,37 @@ $(document).ready(function(){
 			'flickr' : false
 		};
 		var name = '';
+		var enableSharing = false;
 		
 		$('.set-sns-btn').each(function(){
 			if ($(this).hasClass('active')){
 				name = $(this).attr('data-name');
 				listSns[name] = true;
+				enableSharing = true;
 			}
-		
-				
 		});
 		
-		$.ajax({
-			url : root + 'social/postPhoto',
-			type : 'POST',
-			data : {'photoId' : photoId, 'photoUrl' : photoUrl, 'caption' : caption, 'facebook' : listSns.facebook, 'twitter' : listSns.twitter, 'tumblr' : listSns.tumblr, 'flickr' : listSns.flickr},
-			complete : function (response){
-				var result = $.parseJSON(response.responseText);
-				parent.$('.loading').hide();
-				$('.finish-btn').show();
-				if (result.upload_error.length > 0)
-					alert('Failed upload to ' +  result.upload_error.join(', '))
-				else
-					parent.$().slidebox.close();	
-			}
-		});			
+		if (enableSharing){
+			$.ajax({
+				url : root + 'social/postPhoto',
+				type : 'POST',
+				data : {'photoId' : photoId, 'photoUrl' : photoUrl, 'caption' : caption, 'facebook' : listSns.facebook, 'twitter' : listSns.twitter, 'tumblr' : listSns.tumblr, 'flickr' : listSns.flickr},
+				complete : function (response){
+					var result = $.parseJSON(response.responseText);
+					parent.$('.loading').hide();
+					$('.finish-btn').show();
+					if (result.upload_error.length > 0)
+						alert('Failed upload to ' +  result.upload_error.join(', '))
+					else
+						parent.$().slidebox.close();	
+				}
+			});				
+		}
+		else {
+			parent.$('.loading').hide();
+			parent.$().slidebox.close();
+		}
+		
 
 	}
 });

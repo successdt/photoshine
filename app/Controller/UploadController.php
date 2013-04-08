@@ -308,7 +308,7 @@ class UploadController extends AppController{
 		}
 		if ($photoId){
 			$Api = new ApiController;
-			$photoUrl = 'http://' . $_SERVER['SERVER_NAME'] . Router::url(array('controller' => 'img', 'action' => 'upload')) . '/' . $photoId . '.jpg';
+			$photoUrl = 'upload/' . $photoId . '.jpg';
 			
 			$user = $this->Auth->user();
 			$data = array('userId' => $user['User']['id']);

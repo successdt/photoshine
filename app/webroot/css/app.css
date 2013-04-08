@@ -342,6 +342,11 @@ h1 {
 	overflow-x: hidden;
 	text-overflow: ellipsis;
 }
+
+.liked-user a {
+	margin-left: 5px;	
+}
+
 .photodetail-caption-inner {
 	height: 100%;
 	margin-left: 45px;
@@ -1390,4 +1395,11 @@ body > .navbar-fixed-top .brand {
 	margin-top: 5px;
 	color: #FD6A01;
 	border:solid 1px  #FF6301;
+}
+
+/*PHOTO DETAIL*/
+abbr.time-ago {
+	color: #989393;
+	font-size: 11px;
+	border: none;
 }

@@ -18,7 +18,7 @@ class SocialController extends AppController {
 	}
 
 	public function postPhoto(){
-		set_time_limit(60);
+		set_time_limit(0);
 		$this->autoRender = false;
 		$facebookConfig = Configure::read('Facebook.config');;
 		$flickrConfig = Configure::read('Flickr.config');
@@ -45,10 +45,11 @@ class SocialController extends AppController {
 		if (isset($user['User']['id']))
 			$data['userId'] = $user['User']['id'];
 		$Api = new ApiController;
-		$response = $Api->getSocialToken($data);							
+		$response = $Api->getSocialToken($data, $data['userId']);							
 		$token = $response['data'];
 		
-		//save image to local disk		
+		//save image to local disk	
+		$photoUrl = 'http://' . $_SERVER['SERVER_NAME'] . Router::url(array('controller' => 'img')) . '/' . $photoUrl;
 		$imageString = file_get_contents($photoUrl);
 		$tmp = WWW_ROOT . str_replace('/', DS, IMG_TEMP_DIR) . $photoId . '.jpg';
 		$img = imagecreatefromstring($imageString); 

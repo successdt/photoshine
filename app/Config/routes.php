@@ -34,7 +34,7 @@
 /**
  * customize config
  */	
-	Router::connect('/', array('controller' => 'home', 'action' => 'feed'));
+	Router::connect('/', array('controller' => 'home', 'action' => 'index'));
 	Router::connect('/u/*', array('controller' => 'user', 'action' => 'timeline'));
 
 /**
