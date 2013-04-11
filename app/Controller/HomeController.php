@@ -14,6 +14,14 @@ class HomeController extends AppController{
 			$this->redirect(array('controller' => 'home', 'action' => 'feed'));
 	}
 	public function feed(){
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		$data = array();
+		$user = $this->Auth->user();
+		$Api = new ApiController;		
+		$data = $Api->getFriendActivity($data, $user['User']['id']);
+		$this->set('activities', $data['data']);				
 	}
 	
 }

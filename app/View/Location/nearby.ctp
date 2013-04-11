@@ -8,7 +8,7 @@
 			<?php foreach ($locations as $location): ?>
 			
 				<div class="location-block">
-					<a href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'location')) ?>">
+					<a href="<?php echo $this->Html->url(array('controller' => 'location', 'action' => 'place', $location['id'])) ?>">
 						<div class="location-block-img">
 							<?php
 							if (key_exists($location['id'], $locationInfo)){

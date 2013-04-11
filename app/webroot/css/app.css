@@ -90,7 +90,9 @@ h1 {
 	margin-left: 10px;
 	background-image: url("../img/photoshine/channels_sprite.png");
 }
-
+.navbar .btn{
+	margin-top: 5px;
+}
 .tag-featured-icn {
 	background-position: 0px -433px;
 }

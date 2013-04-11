@@ -291,17 +291,13 @@
 		
 		
 		$('#place-submit').live('click', function(){
-			var keyword = $('#place-search').val();
-			
-			$('.loading').show();
-			$.ajax({
-				url : 'https://graph.facebook.com/search?q=' +  keyword + '&type=place&access_token=<?php echo FB_TOKEN ?>',
-				complete : function(response){
-					var result = $.parseJSON(response.responseText);
-					showResult(result.data);
-					$('.loading').hide();
-				}	
-			});			
+			searchLocation();
+		});
+		
+		$('#place-search').keypress(function(e){
+			if (e.keyCode == 13){
+				searchLocation();
+			}
 		});
 		
 		$('.location-row').live('click', function(){
@@ -315,6 +311,22 @@
 		$('.location-select i').live('click', function(){
 			$('.location-select span').html('').attr('data-id', 0);
 		});
+		
+		parent.$('#slidebox').addClass('confirm');
+		
+		function searchLocation(){
+			var keyword = $('#place-search').val();
+			
+			parent.$('.loading').show();
+			$.ajax({
+				url : 'https://graph.facebook.com/search?q=' +  keyword + '&type=place&access_token=<?php echo FB_TOKEN ?>',
+				complete : function(response){
+					var result = $.parseJSON(response.responseText);
+					showResult(result.data);
+					parent.$('.loading').hide();
+				}	
+			});				
+		}
 		
 		function showResult(data){
 			$('.location-result').html('');

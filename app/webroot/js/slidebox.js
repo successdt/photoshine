@@ -14,7 +14,7 @@
 		    height 		: 0,
 		    offset 		: 200,
 		    loadingDiv 	: '',
-		    html		: ''
+		    html		: '',
 		};
 		var opts=$.extend(defaults,options);
 		var initDiv = '<div id="slidebox-background"></div>' +
@@ -28,6 +28,7 @@
 			$('#slidebox-wrapper').show();
 			$('#slidebox-wrapper').css('top', - opts.height - 10);
 			$('#slidebox').html('<iframe src="' + opts.href + '" width="' + opts.width + '" height="' + opts.height + '"></iframe>');
+//			window.history.pushState("{}", "Photoshine", opts.href.replace('popup', ''));
 			setTimeout(function(){
 				$('#slidebox-wrapper').css('top', '0px');	
 			}, 400);
@@ -43,12 +44,27 @@
 			}, 400);
 		}
 		
-		$('#slidebox-background').click(function(){
-			$().slidebox.close();
+		$('#slidebox-background').live('click', function(){
+			if($('#slidebox').hasClass('confirm')){
+				if (confirm('Are you sure you want to close this window?')){
+					$().slidebox.close();
+				}				
+			}
+			else{
+				$().slidebox.close();
+			}
 		});
 		
-		$('#slidebox-wrapper').click(function(){
-			$().slidebox.close();
+		$('#slidebox-wrapper').click('click', function(){
+			if($('#slidebox').hasClass('confirm')){
+				if (confirm('Are you sure you want to close this window?')){
+					$().slidebox.close();
+				}
+			}
+			else{
+				$().slidebox.close();
+			}
+				
 		});
 		
 		$('#slidebox').click(function(e){
@@ -58,6 +74,7 @@
 		$(document).keyup(function(e) {
 			if (e.keyCode == 27) {
 				$().slidebox.close();
+				
 			}
 		});
 	}
@@ -69,6 +86,7 @@
 		
 		$('#slidebox-background').fadeOut(200, function(){
 			$(this).remove();
-		})	
+		});
+//		window.history.back();
 	}
 })(jQuery);

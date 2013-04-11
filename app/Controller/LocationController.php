@@ -17,22 +17,11 @@ class LocationController extends AppController{
 		}
 		$facebookConfig = Configure::read('Facebook.config');;
 		$user = $this->Auth->user();
-		$data['userId'] = '';
-		if (isset($user['User']['id']))
-			$data['userId'] = $user['User']['id'];
 		$Api = new ApiController;
-		$response = $Api->getSocialToken($data, $data['userId']);							
-		$token = $response['data'];
 		
 		$Facebook = new Facebook($facebookConfig);
-		$Facebook->setAccessToken($token['facebook_token']);
-		$Facebook->setFileUploadSupport(true);
-		$facebookArgs = array(
-			'type' => 'place',
-			'center' => $latitude . ',' . $longitude,
-			'distance' => 1000
-		);
-		$response = $Facebook->api("/search?type=place&center=$latitude,$longitude&distance=1000&limit=50&access_token=" . $token['facebook_token']);
+		$Facebook->setAccessToken(FB_TOKEN);
+		$response = $Facebook->api("/search?type=place&center=$latitude,$longitude&distance=1000&limit=50&access_token=" . FB_TOKEN);
 
 		if (isset($response['data']) && count($response['data'])){
 			$locationId = array();
@@ -44,6 +33,39 @@ class LocationController extends AppController{
 			$locations = $response['data'];
 			$this->set(compact('latitude', 'longitude', 'locations', 'locationInfo'));
 		}
+	}
+	public function place($placeId = null){
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		if (!$placeId){
+			die;
+		}
+		$Api = new ApiController;
+		$response = $Api->getPlaceExtraInfo(array('facebook_id' => $placeId));
+		
+		if (isset($response['data']) && $response['data']){
+			$this->set('location', $response['data']);
+			
+		    $fql = 'SELECT name,description,type,location FROM page WHERE page_id="' . $placeId . '"';
+		    $result = json_decode(file_get_contents('https://graph.facebook.com/fql?q=' . rawurlencode($fql) . '&access_token=' . FB_TOKEN), true);
+		    
+		    $locationName = '';
+		    if (isset($result['data'][0]['name'])){
+		    	$locationName = $result['data'][0]['name'];
+		    }
+
+		    $addArray = array();
+		    if (isset($result['data'][0]['location']['city']))
+		    	$addArray[0] = $result['data'][0]['location']['city'];
+		    if (isset($result['data'][0]['location']['country']))
+		    	$addArray[1] = $result['data'][0]['location']['country'];
+	    	$locationAddress = implode('-', $addArray);
+	    	
+	    	$this->set(compact('locationName', 'locationAddress'));
+
+		}
+		
 	}
 
 }

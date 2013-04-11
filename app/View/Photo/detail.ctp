@@ -8,7 +8,7 @@ $likeBtn = $data['Photo']['user_had_liked'] ? 'active' : '';
 ?>
 
 <?php echo $this->Html->css(array('jquery.jscrollpane')) ?>
-<div class="photodetail-wrapper">
+<div class="photodetail-wrapper" style="width: 958px; margin: 0px auto;">
 	<div class="photodetail-photo">
 
 		<div class="photodetail-group">
@@ -64,13 +64,13 @@ $likeBtn = $data['Photo']['user_had_liked'] ? 'active' : '';
 				<?php echo $this->Html->link(
 					$this->Html->image($data['Photo']['User']['profile_picture'], array('width' => '40', 'height' => '40')),
 					array('controller' => 'u', 'action' => $data['Photo']['User']['username']),
-					array('escape' => false)
+					array('escape' => false, 'target' => '_blank')
 			 	)?>
 			</div>
 			<div class="photodetail-caption-inner">
 				<div>
 					<b>
-						<?php echo $this->Html->link($data['Photo']['User']['username'], array('controller' => 'u', 'action' => $data['Photo']['User']['username']), array('class' => 'author'));?> :
+						<?php echo $this->Html->link($data['Photo']['User']['username'], array('controller' => 'u', 'action' => $data['Photo']['User']['username']), array('class' => 'author', 'target' => '_blank'));?> :
 					</b>				
 				</div>
 				<div>
@@ -117,7 +117,8 @@ $likeBtn = $data['Photo']['user_had_liked'] ? 'active' : '';
 							'action' => $like['User']['username']
 						),
 						array(
-							'class' => $like['User']['username'] . '-liked'
+							'class' => $like['User']['username'] . '-liked',
+							'target' => '_blank'
 						)
 					);
 				endforeach; ?>	
@@ -136,12 +137,12 @@ $likeBtn = $data['Photo']['user_had_liked'] ? 'active' : '';
 					<?php echo $this->Html->link(
 						$this->Html->image($comment['User']['profile_picture'], array('width' => '40', 'height' => '40')),
 						array('controller' => 'u', 'action' => $comment['User']['username']),
-						array('escape' => false)
+						array('escape' => false, 'target' => '_blank')
 				 	)?>
 				</div>
 				<div class="photodetail-caption-inner">
 					<b>
-						<?php echo $this->Html->link($comment['User']['username'], array('controller' => 'u', 'action' => $comment['User']['username']), array('class' => 'author'));?> :
+						<?php echo $this->Html->link($comment['User']['username'], array('controller' => 'u', 'action' => $comment['User']['username']), array('class' => 'author', 'target' => '_blank'));?> :
 					</b>
 					<?php echo $comment['Comment']['text'] ?>
 				</div>
@@ -159,7 +160,7 @@ $likeBtn = $data['Photo']['user_had_liked'] ? 'active' : '';
 		<?php echo $this->Html->link(
 			$this->Html->image(AuthComponent::user('User.profile_picture'), array('width' => '60', 'height' => '60')),
 			array('controller' => 'u', 'action' => AuthComponent::user('User.username')),
-			array('escape' => false, 'class' => 'pull-left')
+			array('escape' => false, 'class' => 'pull-left', 'target' => '_blank')
 	 	)?>
 		<textarea class="post-comment" placeholder="Write a comment..."></textarea>
 	</div>
@@ -168,13 +169,13 @@ $likeBtn = $data['Photo']['user_had_liked'] ? 'active' : '';
 	<% var root = '<?php echo $this->webroot ?>'; %>
 	<div class="photodetail-comment-container">
 		<div class="photodetail-avatar">
-		 	<a href="<%= root + 'u/' + username %>">
+		 	<a href="<%= root + 'u/' + username %>" target="_blank">
 			 	<img src="<%= root + 'img/' + profile_picture %>" width="40" height="40" alt="<%= username %>" />
 			</a>
 		</div>
 			<div class="photodetail-caption-inner">
 			<b>
-				<a href="<%= root + 'u/' + username %>" class="author"><%= username %></a> :
+				<a href="<%= root + 'u/' + username %>" class="author" target="_blank"><%= username %></a> :
 			</b>
 			<%= text %>
 		</div>
@@ -194,8 +195,12 @@ var username = '<?php echo AuthComponent::user('User.username') ?>';
 var photoId = '<?php echo $data['Photo']['id'] ?>';
 var profile_picture = '<?php echo AuthComponent::user('User.profile_picture') ?>';
  $(document).ready(function(){	
+ 	 	
 	$('.photodetail-list-like, .photodetail-list-comment').jScrollPane();
-	
+	var height = $('.photodetail-wrapper').outerHeight(true) + 15;
+
+	//resize slidebox
+	parent.$('#slidebox, #slidebox iframe').css('height', height + 'px');
 	$('.more-opt').toggle(
 		function(){
 			$('.photodetail-group').fadeOut(0, function(){
@@ -303,7 +308,12 @@ var profile_picture = '<?php echo AuthComponent::user('User.profile_picture') ?>
 		     	$( "#comment-template" ).html()
 		    );
 		    var date=new Date();
-		 	var time=date.toUTCString();
+		 	var time=date.getFullYear() +
+			 	'-' + (date.getMonth() + 1) +
+			 	'-' + date.getDate() +
+				' ' + date.getHours() +
+				':' + date.getMinutes() +
+				':' + date.getSeconds(); 
 		 	
 			var markup = template({text : text, created_time : time, username : username, profile_picture : profile_picture});
 //			$('.photodetail-list-comment').append(markup);
@@ -341,6 +351,8 @@ var profile_picture = '<?php echo AuthComponent::user('User.profile_picture') ?>
 	}, 10000);
 	
 	callback();
+	
+	
 });
 
 function updateComment(){

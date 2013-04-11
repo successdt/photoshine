@@ -11,8 +11,9 @@ class PhotoController extends AppController{
 		parent::beforeFilter();
 	}
 	
-	public function detail($photoId = null){
-		$this->layout = 'popup';
+	public function detail($photoId = null, $popup = null){
+		if ($popup == 'popup')
+			$this->layout = 'popup';
 		if (!$photoId){
 			die;
 		}

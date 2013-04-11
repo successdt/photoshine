@@ -96,7 +96,7 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
+	parent.$('#slidebox').addClass('confirm');
 	
 	function sharePhoto(){
 		var caption = $('.caption-text').val();

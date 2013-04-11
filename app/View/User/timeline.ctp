@@ -14,13 +14,6 @@
 				echo $this->Html->image($data['Photo'][$j]['Photo']['thumbnail'], array('width' => '100', 'height' => '100', 'class' => 'hi'));
 		endfor;		
 	}
-
-	for ($i = 1; $i <= 100; $i++):
-		//echo $this->Html->image('http://placehold.it/50x50');
-		echo $this->Html->image('tmp/tmp' . rand(1, 5) . '.jpg', array('width' => '50', 'height' => '50', 'class' => 'low'));
-		if ($i % 4 == 0)
-			echo $this->Html->image('tmp/tmp' . rand(6, 10) . '.jpg', array('width' => '100', 'height' => '100', 'class' => 'hi'));
-	endfor
 	?>	
 	</div>
 
@@ -101,7 +94,7 @@
 					 
 				</div>
 			</div>
-			<div class="followers-static timeline-stat">
+			<div class="followers-static timeline-stat" style="cursor: pointer;">
 				<div class="timeline-stat-inner">
 					<?php
 					foreach ($data['Follower'] as $follower){
@@ -113,13 +106,13 @@
 					if (isset($data['follower_count']) && ($data['follower_count'] > 1)){
 						echo $data['follower_count'] . ' Followers';
 					}
-					if (isset($data['follower_count'])){
+				 	elseif (isset($data['follower_count'])){
 						echo $data['follower_count'] . ' Follower';
 					}					
 				 	?>
 				</div>
 			</div>
-			<div class="following-static timeline-stat">
+			<div class="following-static timeline-stat" style="cursor: pointer;">
 				<div class="timeline-stat-inner">
 					<?php
 					foreach ($data['Following'] as $following){
@@ -137,18 +130,21 @@
 		</div>
 		
 		<div class="cover-btn-group">
-			<div class="btn-group pull-right">
-				<button class="btn">Follow</button>	  
-				<button class="btn dropdown-toggle" data-toggle="dropdown">
-			    	<span class="icon-align-justify"></span>
-			  	</button>
-				<ul class="dropdown-menu">
-					<li><a href="#">Report user</a></a></li>
-					<li><a href="#">Block user</a></li>
-				<!-- dropdown menu links -->
-				</ul>
-			</div>
-	
+			<?php if ($data['User']['id'] != AuthComponent::user('User.id')): ?>
+				<div class="btn-group pull-right">
+					<button class="btn follow-btn <?php echo ($data['you_are_following'] ? 'active' : 'Follow') . ' u' .$data['User']['id'] ?>" data-user-id="<?php echo $data['User']['id'] ?>">
+						<?php echo $data['you_are_following'] ? 'Unfollow' : 'Follow' ?>
+					</button>	  
+					<button class="btn dropdown-toggle" data-toggle="dropdown">
+				    	<span class="icon-align-justify"></span>
+				  	</button>
+					<ul class="dropdown-menu">
+						<li><a href="#">Report user</a></a></li>
+						<li><a href="#">Block user</a></li>
+					<!-- dropdown menu links -->
+					</ul>
+				</div>
+			<?php endif; ?>
 		</div>
 	</div>
 </div>
@@ -166,6 +162,23 @@
 		$('.timeline-cover-bg div img').imagesLoaded(function(){
 			$('.timeline-cover-bg div').masonry({});	
 		});
+		$('.followers-static').click(function(){
+			$('.loading').show();
+			$().slidebox({
+				iframe: true,
+				width: 958,
+				href: '<?php echo $this->Html->url(array('controller' => 'user', 'action' => 'follower', $data['User']['id'])) ?>'
+			});
+		});
+		$('.following-static').click(function(){
+			$('.loading').show();
+			$().slidebox({
+				iframe: true,
+				width: 958,
+				href: '<?php echo $this->Html->url(array('controller' => 'user', 'action' => 'following', $data['User']['id'])) ?>'
+			});
+		});
 	});
 <?php echo $this->Html->scriptEnd() ?>
+<?php echo $this->element('follow') ?>
 <?php endif ?>

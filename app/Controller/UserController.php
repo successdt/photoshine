@@ -113,11 +113,34 @@ class UserController extends AppController{
 		}
 		if ($username){
 			$data['name'] = $username;
+			$user = $this->Auth->user();
 			$Api = new ApiController;		
-			$data = $Api->getUserInfo($data);
+			$data = $Api->getUserInfo($data, $user['User']['id']);
 			if(isset($data['data']['User']) && $data['data']['User']){
 				$this->set('data', $data['data']);
 			}			
 		}		
+	}
+	
+	public function follower($userId = null){
+		$this->layout = 'popup';
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		if ($userId){
+			$this->set('type', 'follower');
+			$this->set('userId', $userId);
+		}		
+	}
+	public function following($userId = null){
+		$this->layout = 'popup';
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		if ($userId){
+			$this->set('type', 'following');
+			$this->set('userId', $userId);		
+		}
+		$this->render('follower');
 	}
 }

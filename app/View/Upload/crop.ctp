@@ -1,5 +1,5 @@
 <?php if (isset($data['source']) && $data['source']): ?>
-<div class="crop-wrapper">
+<div class="crop-wrapper" style="min-height: 596px;">
 	<div class="crop-btn">
 		<button class="btn-danger btn-large" id="back-button" style="width: 299px;">Back</button>
 		<button class="btn-success btn-large" id="next-button" style="width: 299px;">Next</button>
@@ -90,5 +90,7 @@ $(document).ready(function(){
 	$('#back-button').click(function(){
 		window.location.href = '<?php echo $this->Html->url(array('controller' => 'upload', 'action' => 'start')) ?>';
 	});
+	
+	parent.$('#slidebox').addClass('confirm');
 });
 <?php echo $this->Html->scriptEnd() ?>

@@ -62,7 +62,7 @@
 			 </a>
 		</div>
 		<div class="listview-sns">
-			<a href="javascript:void(0)" class="pull-left photodetail-like-btn btn btn-success <%= photo.user_had_liked ? 'active' : '' %>">
+			<a href="javascript:void(0)" class="pull-left  photodetail-like-btn btn btn-success <%= photo.user_had_liked ? 'active' : '' %>">
 				<i class="icon-heart icon-white"></i>	
 			</a>
 			<a href="javascript:void(0)" class="pull-left sns-btn facebook"></a>
@@ -185,7 +185,7 @@
 		
 		
 		$('.gridview-image a, .listview-img a, .view-all a').live('click', function(e){
-			var url = $(this).attr('href');
+			var url = $(this).attr('href') + '/popup';
 			e.preventDefault();
 			$().slidebox({
 				iframe: true,
@@ -229,7 +229,7 @@
 		
 
 		//like photo process
-		$('.gridview-like-btn').live('click', function(){
+		$('.gridview-like-btn, .photodetail-like-btn').live('click', function(){
 			var outter = $(this).closest('.data-div');
 			var photoId = $(outter).data('id');
 			var likeCount =  parseInt($(outter).find('.gridview-like-count').html());
@@ -238,11 +238,13 @@
 				url =  root + 'ajax/callApi/unlikePhoto';
 				$('.photo_' + photoId + ' .gridview-like-count').html(likeCount - 1);
 				$('.photo_' + photoId).find('.gridview-like-btn').removeClass('active');
+				$('.photo_' + photoId).find('.photodetail-like-btn').removeClass('active');
 			}
 			else{
 				url = root + 'ajax/callApi/likePhoto';
 				$('.photo_' + photoId + ' .gridview-like-count').html(likeCount + 1);
 				$('.photo_' + photoId).find('.gridview-like-btn').addClass('active');
+				$('.photo_' + photoId).find('.photodetail-like-btn').addClass('active');
 			}
 			$('.loading').show();
 			
@@ -420,7 +422,7 @@
 		});
 	}
 	function viewPhotoDetail(id){
-		var url = root + 'photo/detail/' + id;
+		var url = root + 'photo/detail/' + id + '/popup';
 		$().slidebox({
 			iframe: true,
 			height: 600,

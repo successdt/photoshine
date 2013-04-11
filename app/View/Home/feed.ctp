@@ -1,121 +1,157 @@
 <div class="feed-block listview-block">
-		<?php for ($i = 0; $i < 8; $i++): ?>
-			<a class="notifications" href="#">
-				<?php echo $this->Html->image('photoshine/common_default_avatar.png', array('class' => 'notifications-avatar')); ?>
+		<?php foreach($activities as $activity): ?>
+			<?php
+			$photoUrl = '';
+			if (isset($activity['photo_id']))
+				$photoUrl = $this->Html->url(array('controller' => 'photo', 'action' => 'detail', $activity['photo_id']));
+		
+		 	?>
+			<a class="notifications" href="<?php echo $photoUrl ?>">
+				<?php
+				if (isset($activity['profile_picture']))
+						echo $this->Html->image($activity['profile_picture'], array('class' => 'notifications-avatar')); ?>
 				<div class="notifications-text">	
 					<span>
-						<strong>phuongnh</strong> likes <strong>successdt</strong>'s photo
+						<strong><?php echo $activity['from_user'] ?></strong>
+						<?php
+						if ($activity['type'] == 'like'){
+							echo ' likes ';
+						}
+						if ($activity['type'] == 'comment'){
+							echo '  also commented on  ';
+						}
+					 	?>	
+				 		<?php
+				 		if ($activity['to_user'] == AuthComponent::user('User.username'))
+					 		echo "your ";
+				 		else
+				 			echo '<strong>' . $activity['to_user'] . "</strong>'s ";
+					  	?>
+					 	photo
 					</span>
 					<span class="time-ago" style="display: block;">
-						<?php echo $i + 1 ?> minutes ago
+						<?php $time = date('Y-m-d H:i:s', $activity['created_time']); ?>
+						<abbr class="time-ago" title="<?php echo $time ?>"><?php echo $time ?></abbr>
 					</span>
 				</div>
-				<?php echo $this->Html->image('tmp/tmp' . rand(1, 10) . '.jpg', array('class' => 'notifications-photo')) ?>
+				<?php echo $this->Html->image($activity['thumbnail'], array('class' => 'notifications-photo')) ?>
 			</a>
-			<a class="notifications" href="#">
-				<?php echo $this->Html->image('photoshine/common_default_avatar.png', array('class' => 'notifications-avatar')); ?>
-				<div class="notifications-text">
-					<span>
-						<strong>phuongnh</strong> also commented on your photo
-					</span>
-					
-					<span class="time-ago" style="display: block;">
-						<?php echo $i + 1 ?> minutes ago
-					</span>
-				</div>
-				<?php echo $this->Html->image('tmp/tmp' . rand(1, 10) . '.jpg', array('class' => 'notifications-photo')) ?>
-			</a>
-		<?php endfor; ?>
+		<?php endforeach; ?>
 </div>
 
 <div class="listview-wrapper" style="margin-left: 310px;">
 
-	<?php for ($i = 0; $i < 32; $i++): ?>
-	
-	
-	
-		<div class="listview-block">
-			<div class="listview-img">
-				<?php
-					echo $this->Html->link(
-						$this->Html->image('tmp/tmp' . rand(1, 10) . '.jpg', array('width' => '200', 'height' => '200')),
-						array('controller' => 'ui', 'action' => 'photoDetail'),
-						array('escape' => false)
-					);
-				?>
-			</div>
-			<div class="listview-sns">
-				<a href="javascript:void(0)" class="pull-left photodetail-like-btn btn btn-success">
-					<i class="icon-heart icon-white"></i>	
+</div>
+
+<script type="text/template" id="list-template">
+	<% var root = '<?php echo $this->webroot ?>'; %>
+	<div class="listview-block data-div photo_<%= photo.id %>" data-id="<%= photo.id %>">
+		<div class="listview-img">
+		 	<a href="<%= root + 'photo/detail/' + photo.id %>">
+			 	<img src="<%= root + 'img/' + photo.low_resolution_url %>" width="200" height="200" />
+			 </a>
+		</div>
+		<div class="listview-sns">
+			<a href="javascript:void(0)" class="pull-left photodetail-like-btn btn btn-success <%= photo.user_had_liked ? 'active' : '' %>">
+				<i class="icon-heart icon-white"></i>	
+			</a>
+			<a href="javascript:void(0)" class="pull-left sns-btn facebook"></a>
+			<a href="javascript:void(0)" class="pull-left sns-btn twitter"></a>
+			<a href="javascript:void(0)" class="pull-left sns-btn tumblr"></a>
+			<a href="javascript:void(0)" class="pull-left sns-btn pinterest"></a>				
+		</div>	
+		<div class="listview-static">
+			<span class="pull-left time-ago">
+				<i class="icon-time icon-black"></i>
+				<abbr class="time-ago" title="<%= photo.created_time %>"><%= photo.created_time %></abbr>
+			</span>
+			<span class="pull-right">
+				<span class="gridview-like-btn <%= photo.user_had_liked ? 'active' : '' %>"></span>
+				<span class="gridview-like-count"><%= photo.like_count %></span>
+				<span class="gridview-comment-btn"></span>
+				<span class="gridview-comment-count"><%= photo.comment_count %></span>
+			</span>
+		</div>
+		<div class="listview-caption">
+			<div class="listview-avatar">
+			 	<a href="<%= root + 'u/' + photo.User.username %>">
+				 	<img src="<%= root + 'img/' + photo.User.profile_picture %>" width="40" height="40" alt="<%= photo.User.username %>" />
 				</a>
-				<a href="javascript:void(0)" class="pull-left sns-btn facebook"></a>
-				<a href="javascript:void(0)" class="pull-left sns-btn twitter"></a>
-				<a href="javascript:void(0)" class="pull-left sns-btn tumblr"></a>
-				<a href="javascript:void(0)" class="pull-left sns-btn pinterest"></a>				
-			</div>	
-			<div class="listview-static">
-				<span class="pull-left time-ago">
-					<i class="icon-time icon-black"></i> 3 minutes ago
-				</span>
-				<span class="pull-right">
-					<span class="gridview-like-btn"></span>
-					<span class="gridview-like-count">3</span>
-					<span class="gridview-comment-btn"></span>
-					<span class="gridview-comment-count">4</span>
-				</span>
-			</div>
-			<div class="listview-caption">
-				<div class="listview-avatar">
-					<?php echo $this->Html->link(
-						$this->Html->image('photoshine/common_default_avatar.png', array('width' => '30', 'height' => '30')),
-						array('controller' => 'u', 'action' => 'successdt'),
-						array('escape' => false)
-				 	)?>
-				</div>
-				
-				<div class="listview-caption-content">
-					<?php echo $this->Html->link('thanhdd', array('controller' => 'Ui', 'action' => 'timeline'), array('class' => 'bold-link')); ?> :
-					<br />
-					Photocaption
-				</div>
-				
-				<div class="listview-tags">
-					<i class="icon-tag icon-black"></i>
-					<?php echo $this->Html->link('#hanoi', array('javascript:void(0)')); ?>
-					<?php echo $this->Html->link('#travel', array('javascript:void(0)')); ?>
-				</div>
-				
 			</div>
 			
-			<div class="listview-comment-wrapper">
-				<?php for ($j = 0; $j < rand(1, 5); $j++): ?>
+			<div class="listview-caption-content">
+				<a href="<%= root + 'u/' + photo.User.username %>" class="bold-link"><%= photo.User.username %></a> :
+				<br />
+				<%= text2link(photo.caption, root) %>
+				<br />
+			</div>
+			
+			<div class="listview-tags">
+				<i class="icon-tag icon-black"></i>
+				<%
+					var tag1 = '';
+					var tag2 = '';
+					if(photo.tags){
+						var tags = photo.tags.split(',');
+						tag1 = tags[0];
+						tag2 = tags[1];
+					}
+				%>
+				<%= text2link(tag1, root) %>
+				<%= text2link(tag2, root) %>
+			</div>
+			
+		</div>
+		<% if(photo.comment_count > 5){ %>
+		<div class = "view-all" style="text-align:center;">
+			<a href="<%= root + 'photo/detail/' + photo.id + '/popup' %>">View all <span data-count="<%=photo.comment_count %>"><%=photo.comment_count %></span> comments</a>
+		</div>
+					
+		<%}%>
+		<div class="listview-comment-wrapper">
+			<% var len = _.size(photo.Comment);
+			%>
+			<% if (len == 1){ %>
+				<div class="listview-comment">
+					<div class="listview-avatar">
+					 	<a href="<%= root + 'u/' + photo.Comment[0].User.username %>">
+						 	<img src="<%= root + 'img/' + photo.Comment[0].User.profile_picture %>" width="30" height="30" alt="<%= photo.Comment[0].User.username %>" />
+						</a>
+					</div>
+					
+					<div class="listview-comment-content">
+						<a href="<%= root + 'u/' + photo.Comment[0].User.username %>" class="bold-link"><%= photo.Comment[0].User.username %></a> :
+						<%= text2link(photo.Comment[0].Comment.text, root) %>
+						<span class="time-ago" style="display: block;">
+							<abbr class="time-ago" title="<%= photo.Comment[0].Comment.created_time %>"><%= photo.Comment[0].Comment.created_time %></abbr>
+						</span>
+					</div>
+				</div>			
+			<% }
+			else { %>
+				<% for (var i = len - 1; i >= 0; i--){ %>
 					<div class="listview-comment">
 						<div class="listview-avatar">
-							<?php echo $this->Html->link(
-								$this->Html->image('photoshine/common_default_avatar.png', array('width' => '30', 'height' => '30')),
-								array('controller' => 'Ui', 'action' => 'timeline'),
-								array('escape' => false)
-						 	)?>
+						 	<a href="<%= root + 'u/' + photo.Comment[i].User.username %>">
+							 	<img src="<%= root + 'img/' + photo.Comment[i].User.profile_picture %>" width="30" height="30" alt="<%= photo.Comment[i].User.username %>" />
+							</a>
 						</div>
 						
 						<div class="listview-comment-content">
-							<a href="#" class="bold-link">lumia</a> :
-							Hello photoshine
-							<br />
-							welcome to photoshine
+							<a href="<%= root + 'u/' + photo.Comment[i].User.username %>" class="bold-link"><%= photo.Comment[i].User.username %></a> :
+							<%= text2link(photo.Comment[i].Comment.text, root) %>
 							<span class="time-ago" style="display: block;">
-								<?php echo $j + 1 ?> minutes ago
+								<abbr class="time-ago" title="<%= photo.Comment[i].Comment.created_time %>"><%= photo.Comment[i].Comment.created_time %></abbr>
 							</span>
 						</div>
 					</div>
-				<?php endfor; ?>
-			</div>
-			
-			
+				<% } %>
+			<% } %>
 		</div>
-	<?php endfor; ?>
-</div>
-
+		
+		
+	</div>
+</script>
 
 
 <?php echo $this->Html->script(array('jquery.masonry.min', 'jquery.imagesloaded'), array('inline' => false)) ?>
@@ -127,8 +163,25 @@
 			feedCallback();
 		});
 		$('.listview-wrapper').masonry();
-		$('.gridview-image, .listview-img').click(function(e){
-			var url = $(this).find('a').attr('href');
+	});
+	
+	function feedCallback(){
+		$('.feed-block').height($(window).height() - 38);
+		$('.feed-block').jScrollPane();		
+	}
+<?php echo $this->Html->scriptEnd() ?>
+<?php echo $this->Html->script(array('jquery.masonry.min', 'autobrowse', 'underscore.min', 'jquery.textreplace', 'jquery.timeago'), array('inline' => false)) ?>
+<?php echo $this->Html->scriptStart(array('inline' => false)) ;?>
+//<script>
+	var root = '<?php echo $this->webroot ?>';
+	var page = 0;
+
+	
+	$(document).ready(function(){
+		
+		
+		$('.listview-img a, a.notifications').live('click', function(e){
+			var url = $(this).attr('href') + '/popup';
 			e.preventDefault();
 			$().slidebox({
 				iframe: true,
@@ -137,10 +190,98 @@
 				href: url
 			});
 		});
+
+		
+		$('.loading').show();
+		loadPhotos();
+		
+		$(window).scroll(function(){     
+			if(($(window).scrollTop() + $(window).height() > ($(document).height() - 400)) && loadingLock)
+			{
+				$('.loading').show();
+				loadingLock = false;
+				loadPhotos();
+			}
+		});
+		
+
+		//like photo process
+		$('.gridview-like-btn').live('click', function(){
+			var outter = $(this).closest('.data-div');
+			var photoId = $(outter).data('id');
+			var likeCount =  parseInt($(outter).find('.gridview-like-count').html());
+			
+			if ($(this).hasClass('active')){
+				url =  root + 'ajax/callApi/unlikePhoto';
+				$('.photo_' + photoId + ' .gridview-like-count').html(likeCount - 1);
+				$('.photo_' + photoId).find('.gridview-like-btn').removeClass('active');
+			}
+			else{
+				url = root + 'ajax/callApi/likePhoto';
+				$('.photo_' + photoId + ' .gridview-like-count').html(likeCount + 1);
+				$('.photo_' + photoId).find('.gridview-like-btn').addClass('active');
+			}
+			$('.loading').show();
+			
+			$.ajax({
+				url : url,
+				type : 'POST',
+				data : {'id' : photoId},
+				complete : function(response){
+					var result = $.parseJSON(response.responseText);
+					$('.loading').hide();
+					if (!result.meta.success){
+						
+					}
+				}
+			});		
+		});
+
+		setInterval(function(){
+			$('abbr.time-ago').timeago();
+		}, 10000);
+		
+		
 	});
 	
-	function feedCallback(){
-		$('.feed-block').height($(window).height() - 38);
-		$('.feed-block').jScrollPane();		
+	//load photo from ajax request
+	function loadPhotos(){
+		$('.loading').show();
+		$.ajax({
+			url : root + 'ajax/callApi/getListPhotoFeed',
+			type : 'POST',
+			data : { page : page},
+			complete : function (response){
+				var result = $.parseJSON(response.responseText);
+				$('.loading').hide();
+				loadingLock = true;
+				page = result.meta.next_page;
+				if (!page){
+					loadingLock = false;
+				}
+				
+				for (var i = 0; i < result.data.length; i++){
+					
+					var listTemplate = _.template(
+				     	$( "#list-template" ).html()
+				    );
+					var listMarkup = listTemplate({photo : result.data[i]});
+					$('.listview-wrapper').append(listMarkup);				
+				}
+				callback();
+			}
+		});		
 	}
+	
+	function callback(){
+		setTimeout(function(){
+			$('.listview-wrapper').masonry();
+			$('.listview-wrapper').masonry('reload');	
+		}, 200);
+		
+		$('abbr.time-ago').timeago();
+	}
+	
+	
+	
 <?php echo $this->Html->scriptEnd() ?>
