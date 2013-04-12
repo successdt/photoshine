@@ -70,7 +70,10 @@ class ApiController extends AppController {
 		$result = $this->User->save($userInfo);
 		if($result['User']['id']){
 			$return['meta']['success'] = true;
-			$return['data'] = $result;
+			unset($userInfo['password']);
+			$return['data']['User'] = $userInfo;
+			$return['data']['User']['id'] = $result['User']['id'];
+			$return['data']['status'] = 'ok';
 		}
 			
 		return $return;
@@ -1702,9 +1705,9 @@ class ApiController extends AppController {
 			'fields' => array('Photo.tags'),
 			'limit' => $limit			
 		));
-		
+		$tagList = array();
 		foreach($tags as $tag){
-			$tagArray = explode(',', $tag);
+			$tagArray = explode(',', $tag['Photo']['tags']);
 			$tagName = '';
 			if (isset($tagArray[0]) && preg_match('/#' . $data['keyword'] . '/i', $tagArray[0])){
 				$tagName = $tagArray[0];
@@ -1740,6 +1743,8 @@ class ApiController extends AppController {
 				'fields' => array('Photo.id, Photo.thumbnail, User.id')
 			));
 			
+
+			
 			$userIDArray = array();
 			$i = 0;
 			foreach ($photos as $photo){
@@ -1751,7 +1756,13 @@ class ApiController extends AppController {
 				}
 				$i++;
 			}
+			$tagList[] = array(
+				'photo_count' => $photoCount,
+				'Photo' => $photos['Photo'],
+				'user_count' => count($userIDArray)
+			);			
 		}
-		
+		$return['Photo'] = $tagList;
+		return $return;
 	}
 }

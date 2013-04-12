@@ -30,7 +30,7 @@
 <script type="text/template" id="grid-template">
 	<% var root = '<?php echo $this->webroot ?>'; %>
 	<div class="gridview-block data-div photo_<%= photo.id %>" data-id="<%= photo.id %>">
-		<div class="gridview-image">
+		<div class="gridview-image" style="width: 200px; height: 200px;">
 		 	<a href="<%= root + 'photo/detail/' + photo.id %>">
 			 	<img src="<%= root + 'img/' + photo.low_resolution_url %>" width="200" height="200" />
 			 </a>
@@ -56,7 +56,7 @@
 <script type="text/template" id="list-template">
 	<% var root = '<?php echo $this->webroot ?>'; %>
 	<div class="listview-block data-div photo_<%= photo.id %>" data-id="<%= photo.id %>">
-		<div class="listview-img">
+		<div class="listview-img" style="width: 200px; height: 200px;">
 		 	<a href="<%= root + 'photo/detail/' + photo.id %>">
 			 	<img src="<%= root + 'img/' + photo.low_resolution_url %>" width="200" height="200" />
 			 </a>

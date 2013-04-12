@@ -76,7 +76,15 @@ $(document).ready(function(){
 	
 	$('.finish-btn').click(function(){
 		var caption = $('.caption-text').val();
-		var arrTag = [$('.addtag1').val(), $('.addtag2').val()];
+		var tag1 = $('.addtag1').val();
+		var tag2 = $('.addtag2').val();
+		if(!tag1.match(/^#/) && tag1){
+			tag1 = '#' + tag1;
+		}
+		if(!tag2.match(/#/) && tag2){
+			tag2 = '#' + tag2;
+		}
+		var arrTag = [tag1, tag2];
 		var tags = arrTag.join(',');
 		var photoId = '<?php echo $photoId ?>';
 		parent.$('.loading').show();

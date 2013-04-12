@@ -38,9 +38,8 @@ class AjaxController extends AppController{
 		$result = $Api->{$apiName}($data, $userId);
 		
 		//case login
-		if (($apiName == 'login') && ($result['data']['status'] == 'ok'))
+		if ((($apiName == 'login') || ($apiName == 'registerUser')) && ($result['data']['status'] == 'ok'))
 			$this->Auth->login($result['data']);
-			
 		return json_encode($result);
 	}
 	

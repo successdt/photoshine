@@ -143,9 +143,10 @@ $(document).ready(function(){
 					
 					$('.loading').hide();
 					if (result.meta.success){
-						$('.user-error').html('Register successfully!');
+//						$('.user-error').html('Register successfully!');
 						$('.login-group').html('');
 						$('.submit').remove();
+						window.location = '<?php echo $this->Html->url(array('controller' => 'home', 'action' => 'feed')) ?>';
 					}
 					else {
 						$('.user-error').html(result.meta.error_message);
