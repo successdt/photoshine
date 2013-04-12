@@ -1692,47 +1692,66 @@ class ApiController extends AppController {
 		
 		$limit = ($itemsPerPage * $data['page']) . "," . $itemsPerPage;
 		
-		$photos = $this->Photo->find('all', array(
+		$tags = $this->Photo->find('all', array(
 			'conditions' => array(
 				'OR' => array(
-					array('Photo.tags LIKE' => '#' . $data['keyword'] . '%,%'),
-					array('Photo.tags LIKE' => '%,#' . $data['keyword']) . '%'
+					array('Photo.tags LIKE' => '#' . $data['keyword'] . '%'),
+					array('Photo.tags LIKE' => '%,#' . $data['keyword']. '%') 
 				)
 			),
-			'joins' => array(
-				array(
-					'table' => 'users',
-					'alias' => 'User',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'Photo.user_id = User.id'
-					)				
-				
-				)
-
-			),
-			'fields' => array('Photo.id, Photo.thumbnail, User.id')
+			'fields' => array('Photo.tags'),
+			'limit' => $limit			
 		));
 		
-		$photoCount = $this->Photo->find('count', array(
-			'conditions' => array(
-				'OR' => array(
-					array('Photo.tags LIKE' => '#' . $data['keyword'] . '%,%'),
-					array('Photo.tags LIKE' => '%,#' . $data['keyword']) . '%'
-				)
-			)
-		));
-		$userIDArray = array();
-		$i = 0;
-		foreach ($photos as $photo){
-			array_push($userIDArray, $photo['User']['id']);
-			
-			//chỉ lấy 10 ảnh
-			if ($i > 9){
-				unset($photos[$i]);
+		foreach($tags as $tag){
+			$tagArray = explode(',', $tag);
+			$tagName = '';
+			if (isset($tagArray[0]) && preg_match('/#' . $data['keyword'] . '/i', $tagArray[0])){
+				$tagName = $tagArray[0];
+				$conditionsArray = array(
+					'Photo.tags LIKE' => '#' . $tagName . ',%'
+				);
 			}
-			$i++;
+			elseif(isset($tagArray[1]) && preg_match('/#' . $data['keyword'] . '/i', $tagArray[1])){
+				$tagName = $tagArray[1];
+				$conditionsArray = array(
+					'Photo.tags LIKE' => '%,#' . $tagName
+				);
+			}
+			if ($tagName){
+				$photoCount = $this->Photo->find('count', array(
+					'conditions' => $conditionsArray
+				));
+			}
+			$photos = $this->Photo->find('all', array(
+				'conditions' => $conditionsArray,
+				'joins' => array(
+					array(
+						'table' => 'users',
+						'alias' => 'User',
+						'type' => 'LEFT',
+						'conditions' => array(
+							'Photo.user_id = User.id'
+						)				
+					
+					)
+	
+				),
+				'fields' => array('Photo.id, Photo.thumbnail, User.id')
+			));
+			
+			$userIDArray = array();
+			$i = 0;
+			foreach ($photos as $photo){
+				array_push($userIDArray, $photo['User']['id']);
+				
+				//chỉ lấy 16 ảnh
+				if ($i > 15){
+					unset($photos[$i]);
+				}
+				$i++;
+			}
 		}
-		$userIDArray = array_unique($userIDArray);	
+		
 	}
 }

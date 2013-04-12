@@ -5,8 +5,8 @@
 			PhotoShine
 		</div>
 		<div class="home-button-group pull-right margin10" style="margin-top: 11px;">
-			<a class="btn btn-success" href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'login')) ?>">Log in</a>
-			<a class="btn" href="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'signup')) ?>">Sign up</a>
+			<a class="btn btn-success" href="<?php echo $this->Html->url(array('controller' => 'account', 'action' => 'login')) ?>">Log in</a>
+			<a class="btn" href="<?php echo $this->Html->url(array('controller' => 'account', 'action' => 'signup')) ?>">Sign up</a>
 		</div>
 	</div>
 	<div id="home-content">
