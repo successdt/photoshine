@@ -1706,26 +1706,29 @@ class ApiController extends AppController {
 			'limit' => $limit			
 		));
 		$tagList = array();
-		foreach($tags as $tag){
-			$tagArray = explode(',', $tag['Photo']['tags']);
-			$tagName = '';
-			if (isset($tagArray[0]) && preg_match('/#' . $data['keyword'] . '/i', $tagArray[0])){
-				$tagName = $tagArray[0];
-				$conditionsArray = array(
-					'Photo.tags LIKE' => '#' . $tagName . ',%'
-				);
+		$tagArray = array();
+		
+		foreach($tags  as $tag){
+			$string = explode(',', $tag['Photo']['tags']);
+			if (preg_match('/#' . $data['keyword'] . '/i', $string[0])){
+				$tagArray[] = $string[0];
 			}
-			elseif(isset($tagArray[1]) && preg_match('/#' . $data['keyword'] . '/i', $tagArray[1])){
-				$tagName = $tagArray[1];
-				$conditionsArray = array(
-					'Photo.tags LIKE' => '%,#' . $tagName
-				);
-			}
-			if ($tagName){
-				$photoCount = $this->Photo->find('count', array(
-					'conditions' => $conditionsArray
-				));
-			}
+			if (preg_match('/#' . $data['keyword'] . '/i', $string[1])){
+				$tagArray[] = $string[1];
+			}	
+		}
+		$tagArray = array_unique($tagArray);
+		debug($tagArray);
+		foreach($tagArray as $tag){
+			$conditionsArray = array(
+				'OR' => array(
+					array('Photo.tags LIKE' =>  $tag . ',%'),
+					array('Photo.tags LIKE' => '%,' . $tag),	
+				)	
+			);
+			$photoCount = $this->Photo->find('count', array(
+				'conditions' => $conditionsArray
+			));
 			$photos = $this->Photo->find('all', array(
 				'conditions' => $conditionsArray,
 				'joins' => array(
@@ -1742,7 +1745,6 @@ class ApiController extends AppController {
 				),
 				'fields' => array('Photo.id, Photo.thumbnail, User.id')
 			));
-			
 
 			
 			$userIDArray = array();
@@ -1756,12 +1758,28 @@ class ApiController extends AppController {
 				}
 				$i++;
 			}
+			$userIDArray = array_unique($userIDArray);
 			$tagList[] = array(
+				'tag' => $tag,
 				'photo_count' => $photoCount,
-				'Photo' => $photos['Photo'],
+				'Photo' => $photos,
 				'user_count' => count($userIDArray)
 			);			
 		}
+		$findString = '%' . $data['keyword'] . '%';
+		$user = $this->User->find('all', array(
+			'conditions' => array(
+				'OR' => array(
+					array('username LIKE' => $findString),
+					array('first_name LIKE' => $findString),
+					array('last_name LIKE' => $findString)  
+				)
+			),
+			'limit' => $limit,
+			'fields' => array('id', 'username', 'first_name', 'last_name', 'profile_picture')
+		));
+
+		$return['User'] = $user;
 		$return['Photo'] = $tagList;
 		return $return;
 	}
