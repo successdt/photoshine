@@ -10,7 +10,7 @@
 	<div class="crop-area">
 		<?php 
 			$imagePath = $this->Html->url('/img/upload/tmp/', true) . session_id() . '.jpg';
-			$dimension = @getimagesize($imagePath);
+			$dimension = @getimagesize($data['source']);
 		?>
 		
 		<?php if ($dimension) : ?>
