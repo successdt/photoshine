@@ -849,7 +849,7 @@ class ApiController extends AppController {
 
 		$limit = ($itemsPerPage * $data['page']) . "," . $itemsPerPage;		
 		$likes = $this->Like->find('all', array(
-			'conditions' => array('Photo.user_id' => $userId),
+			'conditions' => array('Like.user_id' => $userId),
 			'joins' => array(
 				array(
 					'table' => 'photos',
