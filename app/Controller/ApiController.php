@@ -1677,7 +1677,7 @@ class ApiController extends AppController {
 	}
 	
 	public function search($data, $userId = null){
-		$itemsPerPage = 20;
+		$itemsPerPage = 5;
 		$return = array(
 			'meta' => array(
 				'success' => false,
@@ -1718,7 +1718,7 @@ class ApiController extends AppController {
 			}	
 		}
 		$tagArray = array_unique($tagArray);
-		debug($tagArray);
+
 		foreach($tagArray as $tag){
 			$conditionsArray = array(
 				'OR' => array(
@@ -1778,9 +1778,15 @@ class ApiController extends AppController {
 			'limit' => $limit,
 			'fields' => array('id', 'username', 'first_name', 'last_name', 'profile_picture')
 		));
-
-		$return['User'] = $user;
-		$return['Photo'] = $tagList;
+		
+		//next page
+		$return['meta']['next_page'] = $data['page'] + 1;
+		if (count($user) < $itemsPerPage){
+			$return['meta']['next_page'] = 0;
+		}
+		
+		$return['data']['User'] = $user;
+		$return['data']['Photo'] = $tagList;
 		return $return;
 	}
 }

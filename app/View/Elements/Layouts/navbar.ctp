@@ -35,8 +35,8 @@
 					
 			<li class="divider-vertical"/>            
             <li>
-                <form class="navbar-form pull-left" action="<?php echo $this->Html->url(array('controller' => 'Ui', 'action' => 'searchResult')) ?>">
-                  <input type="text" class="span3" autocomplete="off" placeholder="Search for tags or users" style="padding-right: 44px;">
+                <form class="navbar-form pull-left" method="GET" action="<?php echo $this->Html->url(array('controller' => 'home', 'action' => 'search')) ?>">
+                  <input type="text" class="span3" name="q" autocomplete="off" placeholder="Search for tags or users" style="padding-right: 44px;">
                   <button type="submit" class="btn search-submit"><i class="icon-search icon-black"></i></button>
                 </form>
             <div id="suggestions" style="display: none;"></div>

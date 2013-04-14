@@ -37,15 +37,26 @@ class UserController extends AppController{
 		$user = $this->Auth->user();
 		$imgFormat = array('image/png', 'image/jpeg', 'image/pjeg');	
 		$successFlg = false;
-		$bug = '';		
+		$bug = '';
+			
 		if (!empty($_FILES) && in_array($_FILES["file"]["type"], $imgFormat)) {
 			$path = WWW_ROOT . str_replace('/', DS, PROFILE_DIR);
 			if (!is_dir($path)) {
 				mkdir($path, 0777, true);
 				chmod($path, 0777);
 			}
-			$tmp = $path . $user['User']['id'] . '.jpg';
-			$imgSize = getimagesize($_FILES['file']['tmp_name']);			
+			$date = new DateTime();
+			$time = $date->getTimestamp();
+			$tmp = $path . $user['User']['id'] . '_' . $time . '.jpg';
+			$imgSize = getimagesize($_FILES['file']['tmp_name']);
+			
+			//xóa file cũ
+			foreach (glob($path . $user['User']['id'] . '_*.*') as $filename) {
+			    unlink($filename);
+			}
+
+			$data['profile_picture'] = 'profile/' . $user['User']['id'] . '_' . $time . '.jpg';
+						
 			if (($imgSize[0] < 150) || ($imgSize[1] < 150)){
 				$bug = 'Image size is too small (must be at least 150x150)';
 				unlink($_FILES['file']['tmp_name']);				
@@ -62,7 +73,7 @@ class UserController extends AppController{
 			$bug = 'file not found or invalid image format';
 		}
 		
-		$data['profile_picture'] = 'profile/' . $user['User']['id'] . '.jpg';
+		
 		$Api = new ApiController;
 		$Api->updateYourData($data, $user['User']['id']);
 		$this->redirect(array('controller' => 'u', 'action' => $user['User']['username']));		

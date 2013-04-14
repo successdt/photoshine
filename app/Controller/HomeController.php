@@ -24,15 +24,14 @@ class HomeController extends AppController{
 		$this->set('activities', $data['data']);				
 	}
 	
-	public function search($keyword = null){
+	public function search(){
 		if (!isset($_SESSION)) {
 			session_start();
 		}
-		if($keyword){
-			$Api = new ApiController;
-			$response = $Api-> search(array('keyword' => $keyword));
-			debug($response);
-			die;
+		$data = $this->request->query;
+
+		if(isset($data['q']) && $data['q']){
+			$this->set('keyword', $data['q']);
 		}		
 	}
 	
