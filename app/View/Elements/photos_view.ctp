@@ -67,7 +67,7 @@
 			</a>
 			<a href="javascript:share('facebook', '<%= photo.thumbnail %>', '<%= photo.id %>', '<%= photo.caption %>')" class="pull-left sns-btn facebook"></a>
 			<a href="javascript:share('twitter', '<%= photo.thumbnail %>', '<%= photo.id %>', '<%= photo.caption %>')" class="pull-left sns-btn twitter"></a>
-			<a href="javascript:share('tumblr', '<%= photo.thumbnail %>', '<%= photo.id %>', '<%= photo.caption %>'))" class="pull-left sns-btn tumblr"></a>
+			<a href="javascript:share('tumblr', '<%= photo.thumbnail %>', '<%= photo.id %>', '<%= photo.caption %>')" class="pull-left sns-btn tumblr"></a>
 			<a href="javascript:share('pinterest', '<%= photo.thumbnail %>', '<%= photo.id %>', '<%= photo.caption %>')" class="pull-left sns-btn pinterest"></a>				
 		</div>	
 		<div class="listview-static">
