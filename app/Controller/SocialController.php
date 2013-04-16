@@ -309,6 +309,10 @@ class SocialController extends AppController {
 		$this->set(compact('isSuccess', 'name'));
 		$this->layout = "popup";
 	}
+	
+	function share(){
+		
+	}
 	/*
 	public function test(){
 		$this->autoRender = false;
