@@ -65,10 +65,10 @@
 			<a href="javascript:void(0)" class="pull-left  photodetail-like-btn btn btn-success <%= photo.user_had_liked ? 'active' : '' %>">
 				<i class="icon-heart icon-white"></i>	
 			</a>
-			<a href="javascript:void(0)" class="pull-left sns-btn facebook"></a>
-			<a href="javascript:void(0)" class="pull-left sns-btn twitter"></a>
-			<a href="javascript:void(0)" class="pull-left sns-btn tumblr"></a>
-			<a href="javascript:void(0)" class="pull-left sns-btn pinterest"></a>				
+			<a href="javascript:share('facebook', '<%= photo.thumbnail %>', '<%= photo.id %>', '<%= photo.caption %>')" class="pull-left sns-btn facebook"></a>
+			<a href="javascript:share('twitter', '<%= photo.thumbnail %>', '<%= photo.id %>', '<%= photo.caption %>')" class="pull-left sns-btn twitter"></a>
+			<a href="javascript:share('tumblr', '<%= photo.thumbnail %>', '<%= photo.id %>', '<%= photo.caption %>'))" class="pull-left sns-btn tumblr"></a>
+			<a href="javascript:share('pinterest', '<%= photo.thumbnail %>', '<%= photo.id %>', '<%= photo.caption %>')" class="pull-left sns-btn pinterest"></a>				
 		</div>	
 		<div class="listview-static">
 			<span class="pull-left time-ago">
@@ -447,3 +447,4 @@
 		$('.mapview-list-photo').hide();
 	}
 <?php echo $this->Html->scriptEnd() ?>
+<?php echo $this->element('share_link') ?>

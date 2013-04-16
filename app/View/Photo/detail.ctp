@@ -422,8 +422,9 @@ function share(name){
 	);
 	$pinParams = array(
 		'media' => 'http://' . $serverName . $this->webroot . 'img/' . $data['Photo']['thumbnail'],
-		'description' => $data['Photo']['caption'],
 		'url' => $shareUrl,
+		'description' => $data['Photo']['caption'],
+		
 		
 	);
  	?>
