@@ -431,6 +431,10 @@ function share(name){
  	var twUrl = '<?php echo 'https://twitter.com/intent/tweet?' . http_build_query($twParams) ?>';
  	var tbUrl = '<?php echo 'http://www.tumblr.com/share?' . http_build_query($tbParams) ?>';
  	var pinUrl = '<?php echo 'http://pinterest.com/pin/create/button/?' . http_build_query($pinParams) ?>';
+ 	fbUrl = fbUrl.replace('&amp;', '&');
+ 	twUrl = twUrl.replace('&amp;', '&');
+ 	tbUrl = tbUrl.replace('&amp;', '&');
+ 	pinUrl = pinUrl.replace('&amp;', '&');
  	switch(name) {
  		case 'facebook':
  			window.open(fbUrl, 'share to facebok', 'with=800, height=600');
