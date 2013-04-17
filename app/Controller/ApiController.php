@@ -3,7 +3,7 @@
  * @author thanhdd@lifetimetech.vn
  */
 class ApiController extends AppController {
-	public $uses = array('User', 'Photo', 'Location', 'Follow', 'Like', 'Comment');
+	public $uses = array('User', 'Photo', 'Location', 'Follow', 'Like', 'Comment', 'Notification');
 
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -270,7 +270,7 @@ class ApiController extends AppController {
 		$this->User->id = $userId;
 		$this->User->save($data);
 		$return['meta']['success'] = true;
-		
+
 		return $return;						
 	}
 	
@@ -628,6 +628,16 @@ class ApiController extends AppController {
 			return $return;			
 		}
 		$this->Like->save($params);
+		$photo = $this->Photo->find('first', array('conditions' => array('id' => $data['id'])));
+		if($photo['Photo']['user_id'] != $userId){
+			$noti = array(
+				'user_id' => $photo['Photo']['user_id'],
+				'from_user_id' => $userId,
+				'photo_id' => $params['photo_id'],
+				'type' => 1
+			);
+			$this->createNotification($noti);			
+		}
 		$return['meta']['status'] = true;
 		
 		return $return;
@@ -677,6 +687,16 @@ class ApiController extends AppController {
 		}
 		$data['user_id'] = $userId;
 		$this->Comment->save($data);
+		$photo = $this->Photo->find('first', array('conditions' => array('id' => $data['photo_id'])));
+		if($photo['Photo']['user_id'] != $userId){
+			$noti = array(
+				'user_id' => $photo['Photo']['user_id'],
+				'from_user_id' => $userId,
+				'photo_id' => $data['photo_id'],
+				'type' => 2
+			);
+			$this->createNotification($noti);			
+		}		
 		$return['meta']['status'] = true;
 		
 		return $return;		
@@ -1677,7 +1697,7 @@ class ApiController extends AppController {
 	}
 	
 	public function search($data, $userId = null){
-		$itemsPerPage = 5;
+		$itemsPerPage = 20;
 		$return = array(
 			'meta' => array(
 				'success' => false,
@@ -1788,5 +1808,110 @@ class ApiController extends AppController {
 		$return['data']['User'] = $user;
 		$return['data']['Photo'] = $tagList;
 		return $return;
+	}
+	private function createNotification($data, $userId = null){
+		if (!$data['user_id'] || !$data['type'] || !$data['from_user_id'] || !$data['photo_id']){
+			return 0;
+		}
+		else{
+			$data['user_had_read'] = 0;
+			$this->Notification->deleteAll($data);
+			$this->Notification->save($data);
+		}
+	}
+	public function getNotification($data, $userId = null){
+		$itemsPerPage = 20;
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!$userId){
+			$return['meta']['error_message'] = 'Empty user id';
+			return $return;
+		}
+		if (!isset($data['page']) || !$data['page'] || !($data['page']) || ($data['page'] < 0)){
+			$data['page'] = 0;
+		}
+		$limit = ($itemsPerPage * $data['page']) . "," . $itemsPerPage;
+		$response = $this->Notification->find('all', array(
+			'conditions' => array('Notification.user_id' => $userId),
+			'joins' => array(
+				array(
+					'table' => 'users',
+					'alias' => 'User',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Notification.from_user_id = User.id'
+					)
+				),
+				array(
+					'table' => 'photos',
+					'alias' => 'Photo',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Notification.photo_id = Photo.id'
+					)
+				)
+			),
+			'fields' => array('Notification.*, User.username, User.id', 'User.profile_picture', 'Photo.id', 'Photo.thumbnail'),
+			'order' => array('created_time DESC'),
+			'limit' => $limit
+		));
+
+		//next page
+		$return['meta']['next_page'] = $data['page'] + 1;
+		$return['meta']['success'] = true;
+		if (count($response) < $itemsPerPage){
+			$return['meta']['next_page'] = 0;
+		}
+		$return['data'] = $response;
+		return $return;			
+	}
+	public function getUnreadNotiCount($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!$userId){
+			$return['meta']['error_message'] = 'Empty user id';
+			return $return;
+		}
+		$response = $this->Notification->find('count', array(
+			'conditions' => array(
+				'user_id' => $userId,
+				'user_had_read' => 0
+			)
+		));
+		$return['meta']['success'] = true;
+		$return['data'] = $response;
+		return $return;	
+	}
+	public function readNotification($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!$data['id']){
+			$return['meta']['error_message'] = 'Empty notification id';
+			return $return;
+		}
+		$this->Notification->updateAll(
+			array('user_had_read' => 1),
+			array(
+				'id' => $data['id'],
+				'user_id' => $userId
+			)
+		);
+		$return['meta']['success'] = true;
+		return $return;			
 	}
 }

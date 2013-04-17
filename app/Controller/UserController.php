@@ -76,6 +76,8 @@ class UserController extends AppController{
 		
 		$Api = new ApiController;
 		$Api->updateYourData($data, $user['User']['id']);
+		$yourData = $Api->getYourData($data, $user['User']['id']);
+		$this->Auth->login(array('User' => $yourData['data']));
 		$this->redirect(array('controller' => 'u', 'action' => $user['User']['username']));		
 	}
 	

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 11, 2013 at 09:55 AM
+-- Generation Time: Apr 17, 2013 at 07:58 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `tb_comments` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `photo_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=95 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=96 ;
 
 --
 -- Dumping data for table `tb_comments`
@@ -76,7 +76,8 @@ INSERT INTO `tb_comments` (`id`, `created_time`, `text`, `user_id`, `photo_id`) 
 (91, '2013-04-09 17:33:52', 'hợ', 1, 39),
 (92, '2013-04-10 14:02:49', 'được', 3, 71),
 (93, '2013-04-10 14:57:10', 'hi', 3, 68),
-(94, '2013-04-10 14:58:02', 'woa, đẹp quá', 3, 69);
+(94, '2013-04-10 14:58:02', 'woa, đẹp quá', 3, 69),
+(95, '2013-04-17 08:42:23', 'woa', 3, 69);
 
 -- --------------------------------------------------------
 
@@ -114,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `tb_likes` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `photo_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=108 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=134 ;
 
 --
 -- Dumping data for table `tb_likes`
@@ -145,7 +146,30 @@ INSERT INTO `tb_likes` (`id`, `created_time`, `user_id`, `photo_id`) VALUES
 (101, '2013-04-09 17:10:51', 3, 51),
 (102, '2013-04-10 14:02:52', 3, 71),
 (106, '2013-04-10 14:27:50', 3, 41),
-(107, '2013-04-10 14:58:10', 3, 69);
+(107, '2013-04-10 14:58:10', 3, 69),
+(108, '2013-04-17 08:09:42', 3, 40),
+(109, '2013-04-17 08:09:57', 3, 39),
+(111, '2013-04-17 08:11:34', 3, 68),
+(112, '2013-04-17 16:23:34', 1, 39),
+(114, '2013-04-17 16:23:36', 1, 41),
+(115, '2013-04-17 16:23:37', 1, 43),
+(116, '2013-04-17 16:23:38', 1, 45),
+(117, '2013-04-17 16:23:39', 1, 46),
+(118, '2013-04-17 16:23:41', 1, 52),
+(119, '2013-04-17 16:23:42', 1, 51),
+(120, '2013-04-17 16:23:43', 1, 50),
+(121, '2013-04-17 16:23:44', 1, 49),
+(122, '2013-04-17 16:23:45', 1, 47),
+(123, '2013-04-17 16:23:46', 1, 53),
+(124, '2013-04-17 16:23:47', 1, 59),
+(125, '2013-04-17 16:23:48', 1, 54),
+(126, '2013-04-17 16:23:49', 1, 56),
+(127, '2013-04-17 16:23:52', 1, 57),
+(128, '2013-04-17 16:23:56', 1, 62),
+(130, '2013-04-17 16:30:48', 1, 61),
+(131, '2013-04-17 17:47:40', 3, 70),
+(132, '2013-04-17 17:47:54', 1, 40),
+(133, '2013-04-17 17:48:10', 1, 55);
 
 -- --------------------------------------------------------
 
@@ -160,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `tb_locations` (
   `name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `facebook_id` bigint(15) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=69 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=70 ;
 
 --
 -- Dumping data for table `tb_locations`
@@ -201,7 +225,8 @@ INSERT INTO `tb_locations` (`id`, `latitude`, `longitude`, `name`, `facebook_id`
 (65, 21.040339630667, 105.78759378602, NULL, 353546708069090),
 (66, 21.030637476431, 105.7847629939, NULL, 280104828770252),
 (67, 21.01900218867, 105.84666751078, NULL, 317011781742324),
-(68, 21.036108568022, 105.85553104152, NULL, 200257296777490);
+(68, 21.036108568022, 105.85553104152, NULL, 200257296777490),
+(69, 37.88942, -122.51752, NULL, 204509996246733);
 
 -- --------------------------------------------------------
 
@@ -212,10 +237,42 @@ INSERT INTO `tb_locations` (`id`, `latitude`, `longitude`, `name`, `facebook_id`
 CREATE TABLE IF NOT EXISTS `tb_notifications` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned DEFAULT NULL,
-  `text` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `type` int(1) DEFAULT NULL COMMENT '1. like your photo, 2. comment on your photo',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `from_user_id` int(10) unsigned NOT NULL,
+  `photo_id` int(10) unsigned NOT NULL,
   `user_had_read` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=27 ;
+
+--
+-- Dumping data for table `tb_notifications`
+--
+
+INSERT INTO `tb_notifications` (`id`, `user_id`, `type`, `created_time`, `from_user_id`, `photo_id`, `user_had_read`) VALUES
+(1, 1, 1, '2013-04-17 08:11:34', 3, 68, 1),
+(2, 1, 1, '2013-04-17 08:42:23', 3, 69, 1),
+(3, 3, 1, '2013-04-17 16:23:34', 1, 39, 0),
+(5, 3, 1, '2013-04-17 16:23:36', 1, 41, 1),
+(6, 3, 1, '2013-04-17 16:23:37', 1, 43, 1),
+(7, 3, 1, '2013-04-17 16:23:38', 1, 45, 0),
+(8, 3, 1, '2013-04-17 16:23:39', 1, 46, 0),
+(9, 3, 1, '2013-04-17 16:23:41', 1, 52, 0),
+(10, 3, 1, '2013-04-17 16:23:42', 1, 51, 0),
+(11, 3, 1, '2013-04-17 16:23:43', 1, 50, 0),
+(12, 3, 1, '2013-04-17 16:23:44', 1, 49, 0),
+(13, 3, 1, '2013-04-17 16:23:45', 1, 47, 1),
+(14, 3, 1, '2013-04-17 16:23:46', 1, 53, 0),
+(15, 3, 1, '2013-04-17 16:23:47', 1, 59, 0),
+(16, 3, 1, '2013-04-17 16:23:48', 1, 54, 0),
+(17, 3, 1, '2013-04-17 16:23:49', 1, 56, 0),
+(18, 3, 1, '2013-04-17 16:23:52', 1, 57, 0),
+(19, 3, 1, '2013-04-17 16:23:56', 1, 62, 0),
+(20, 3, 1, '2013-04-17 16:23:57', 1, 61, 1),
+(21, 3, 1, '2013-04-17 16:30:48', 1, 61, 0),
+(24, 1, 1, '2013-04-17 17:47:40', 3, 70, 0),
+(25, 3, 1, '2013-04-17 17:47:54', 1, 40, 0),
+(26, 3, 1, '2013-04-17 17:48:10', 1, 55, 0);
 
 -- --------------------------------------------------------
 
@@ -235,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `tb_photos` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `report` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=74 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=75 ;
 
 --
 -- Dumping data for table `tb_photos`
@@ -272,7 +329,8 @@ INSERT INTO `tb_photos` (`id`, `tags`, `location_id`, `created_time`, `low_resol
 (70, '#travel,#gift', 66, '2013-04-09 09:30:49', 'upload/70_low.jpg', 'upload/70_thumb.jpg', 'upload/70.jpg', '', 1, 0),
 (71, '#travel,#baby', NULL, '2013-04-09 10:43:55', 'upload/71_low.jpg', 'upload/71_thumb.jpg', 'upload/71.jpg', 'Baby', 1, 0),
 (72, '#travel,#food', 67, '2013-04-09 13:31:02', 'upload/72_low.jpg', 'upload/72_thumb.jpg', 'upload/72.jpg', 'Ngon quá', 3, 0),
-(73, '#travel,#natural', 68, '2013-04-10 14:20:17', 'upload/73_low.jpg', 'upload/73_thumb.jpg', 'upload/73.jpg', 'Cũng đẹp mà', 3, 0);
+(73, '#travel,#natural', 68, '2013-04-10 14:20:17', 'upload/73_low.jpg', 'upload/73_thumb.jpg', 'upload/73.jpg', 'Cũng đẹp mà', 3, 0),
+(74, '#magic,#euro', 69, '2013-04-12 15:27:38', 'upload/74_low.jpg', 'upload/74_thumb.jpg', 'upload/74.jpg', 'thử cái xem', 32, 0);
 
 -- --------------------------------------------------------
 
@@ -305,7 +363,7 @@ CREATE TABLE IF NOT EXISTS `tb_users` (
   `flickr_id` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `flickr_token` varchar(300) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=33 ;
 
 --
 -- Dumping data for table `tb_users`
@@ -313,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `tb_users` (
 
 INSERT INTO `tb_users` (`id`, `username`, `password`, `email`, `bio`, `gender`, `website`, `profile_picture`, `first_name`, `last_name`, `city`, `country`, `report`, `facebook_id`, `facebook_token`, `twitter_id`, `twitter_token`, `twitter_secret`, `tumblr_id`, `tumblr_token`, `tumblr_secret`, `flickr_id`, `flickr_token`) VALUES
 (1, 'duythanh', 'e10adc3949ba59abbe56e057f20f883e', '', '', 1, 'http://lifetimetech.vn', 'profile/1.jpg', 'Thành', 'Đào Duy', 'hanoi', 'Vietnam', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 'thanhdd', 'e10adc3949ba59abbe56e057f20f883e', 'thanhdd@lifetimetech.vn', 'PHP developer at Lifetime technologies co,.Ltd', 1, 'http://facebook.com/successdt', 'profile/3.jpg', 'Duy Thanh', 'Dao', 'Hanoi', 'Vietnam', NULL, '100000102092930', 'AAAFyyjCyQooBACygJ0P0gcytZBZCMIP4wh3QdelXJe5aZAAZBLZCzkoZCteqipxeOzb08QClE7ASHXZAnFoSwYgQqnuUAKNVzAgdSlnZBRKevQZDZD', '723755342', '723755342-323cWhvS8yhgiy2ErihgVzYi5Cr8DD7sz19A4ubE', '6YzVmc8ekmVi9Y2IPx2il0CeNn68HXGvpDr0PRE37I', NULL, NULL, NULL, '85894007@N04', '72157633057724575-3ba5f3d2efe6a978'),
+(3, 'thanhdd', 'e10adc3949ba59abbe56e057f20f883e', 'thanhdd@lifetimetech.vn', 'PHP developer at Lifetime technologies co,.Ltd', 1, 'http://facebook.com/successdt', 'profile/3_1366180233.jpg', 'Duy Thanh', 'Dao', 'Hanoi', 'Vietnam', NULL, '100000102092930', 'BAAFyyjCyQooBALp7EOBY8cFm6zb3bHQzS2rhT3RbdEdZAGTuqqnZAi5VeWaZAIZBTwzbRXponHcESr8OnhNIEP4QAR6LtlZCaqFQPrBLbVXVfsxxq7X2fSndVl8niH8ZBdfosb0Ul9NzPYTnHOIX7Jq2nQzZBZBEfZB8coG7Bk33OQroolFVgyyDLMdWp1V0u5JoZD', '723755342', '723755342-323cWhvS8yhgiy2ErihgVzYi5Cr8DD7sz19A4ubE', '6YzVmc8ekmVi9Y2IPx2il0CeNn68HXGvpDr0PRE37I', NULL, NULL, NULL, '85894007@N04', '72157633057724575-3ba5f3d2efe6a978'),
 (8, 'adminx', 'e10adc3949ba59abbe56e057f20f883e', '', '', 0, NULL, 'profile/default_avatar.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (9, 'adminxx', 'e10adc3949ba59abbe56e057f20f883e', '', '', 0, NULL, 'profile/default_avatar.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (10, 'admin123', 'e10adc3949ba59abbe56e057f20f883e', '', '', 0, NULL, 'profile/default_avatar.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -325,7 +383,19 @@ INSERT INTO `tb_users` (`id`, `username`, `password`, `email`, `bio`, `gender`, 
 (17, 'barcelona', 'e10adc3949ba59abbe56e057f20f883e', 'thanhdd@lifetimetech.vn', '', 0, NULL, 'profile/default_avatar.png', NULL, NULL, NULL, NULL, NULL, '100000102092930', 'AAAFyyjCyQooBACygJ0P0gcytZBZCMIP4wh3QdelXJe5aZAAZBLZCzkoZCteqipxeOzb08QClE7ASHXZAnFoSwYgQqnuUAKNVzAgdSlnZBRKevQZDZD', '723755342', '723755342-323cWhvS8yhgiy2ErihgVzYi5Cr8DD7sz19A4ubE', '6YzVmc8ekmVi9Y2IPx2il0CeNn68HXGvpDr0PRE37I', NULL, NULL, NULL, NULL, NULL),
 (18, 'dhbkhn', 'e10adc3949ba59abbe56e057f20f883e', 'thanhdd@lifetimetech.vn', '', 1, 'http://facebook.com/successdt', 'profile/18.jpg', 'bach khoa', 'ha noi', 'hanoi', 'Vietnam', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (19, 'mrzero', 'e10adc3949ba59abbe56e057f20f883e', 'thanhdd@lifetimetech.vn', '', 0, NULL, 'profile/default_avatar.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(20, 'admin1', 'e10adc3949ba59abbe56e057f20f883e', 'thanhdd@lifetimetech.vn', '', 1, '', 'profile/20.jpg', 'thanh', 'dao duy', '', '', NULL, '100000102092930', 'AAAFyyjCyQooBACygJ0P0gcytZBZCMIP4wh3QdelXJe5aZAAZBLZCzkoZCteqipxeOzb08QClE7ASHXZAnFoSwYgQqnuUAKNVzAgdSlnZBRKevQZDZD', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(20, 'admin1', 'e10adc3949ba59abbe56e057f20f883e', 'thanhdd@lifetimetech.vn', '', 1, '', 'profile/20.jpg', 'thanh', 'dao duy', '', '', NULL, '100000102092930', 'AAAFyyjCyQooBACygJ0P0gcytZBZCMIP4wh3QdelXJe5aZAAZBLZCzkoZCteqipxeOzb08QClE7ASHXZAnFoSwYgQqnuUAKNVzAgdSlnZBRKevQZDZD', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(21, 'photoshine', 'e10adc3949ba59abbe56e057f20f883e', 'thanhdd@lifetimetech.vn', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(22, 'mootjconvit', 'e10adc3949ba59abbe56e057f20f883e', 'ltthws@gmail.com', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(23, 'abcxyz', 'e10adc3949ba59abbe56e057f20f883e', 'ltthws@gmail.com', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(24, 'longlive', 'e10adc3949ba59abbe56e057f20f883e', 'duongtrang_dhbkhn@gmail.com', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(25, 'sohot1', 'e10adc3949ba59abbe56e057f20f883e', 'duongtrangdhbkhn@gmail.com', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(26, 'sohot11', 'aaa42296669b958c3cee6c0475c8093e', 'duongtrangdhbkhn@gmail.com', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(27, 'rakuten', 'e10adc3949ba59abbe56e057f20f883e', 'duongtrangdhbkhn@gmail.com', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(28, 'amazon', 'e10adc3949ba59abbe56e057f20f883e', 'ltthws@gmail.com', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(29, 'yahoovn', 'e10adc3949ba59abbe56e057f20f883e', 'duongtrang_dhbkhn@gmail.com', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(30, 'google', 'e10adc3949ba59abbe56e057f20f883e', 'duongtrang_dhbkhn@gmail.com', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(31, 'facebook', 'e10adc3949ba59abbe56e057f20f883e', 'smile10894@yahoo.com', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(32, 'mayback', 'e10adc3949ba59abbe56e057f20f883e', 'ltt_hws@gmail.com', NULL, NULL, NULL, 'profile/default_avatar.png', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

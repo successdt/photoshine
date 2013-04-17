@@ -30,6 +30,7 @@
 						<i class="icon-camera icon-black"></i>
 					</a>
 					<a href="javascript:void(0)" class="btn navbar-nf" rel="tooltip" title="Notifications">
+						<span></span>
 						<i class="icon-globe icon-black"></i>
 					</a>
 					
@@ -101,36 +102,13 @@
 			Notifications
 		</div>
 		<div class="nf-content" id="nf-content">
-			<?php for ($i = 0; $i < 8; $i++): ?>
-				<a class="notifications" href="#">
-					<?php echo $this->Html->image('photoshine/common_default_avatar.png', array('class' => 'notifications-avatar')); ?>
-					<div class="notifications-text">
-						<strong>phuongnh</strong> likes your photo
-					</div>
-					<?php echo $this->Html->image('tmp/tmp' . rand(1, 10) . '.jpg', array('class' => 'notifications-photo')) ?>
-				</a>
-				<a class="notifications" href="#">
-					<?php echo $this->Html->image('photoshine/common_default_avatar.png', array('class' => 'notifications-avatar')); ?>
-					<div class="notifications-text">
-						<strong>phuongnh</strong> also commented on your photo
-					</div>
-					<?php echo $this->Html->image('tmp/tmp' . rand(1, 10) . '.jpg', array('class' => 'notifications-photo')) ?>
-				</a>
-				<a class="notifications" href="#">
-					<?php echo $this->Html->image('photoshine/common_default_avatar.png', array('class' => 'notifications-avatar')); ?>
-					<div class="notifications-text">
-						<strong>phuongnh</strong> mentioned your in a comment
-					</div>
-					<?php echo $this->Html->image('tmp/tmp' . rand(1, 10) . '.jpg', array('class' => 'notifications-photo')) ?>
-				</a>
-			<?php endfor; ?>
 		</div>
 		<div class="nf-footer btn-success">
-			<a href="#" style="color: #FFF;">See All</a>
+			<a href="javascript:loadMoreNf()" style="color: #FFF;">See more</a>
 		</div>
 	</div>
 </div>
-<?php echo $this->Html->script(array('jquery.jscrollpane.min', 'jquery.mousewheel'), array('inline' => false)) ?>
+<?php echo $this->Html->script(array('jquery.jscrollpane.min', 'jquery.mousewheel', 'underscore.min'), array('inline' => false)) ?>
 
 <script type="text/template" id="feedback-template">
 <div style="width: 750px; height: 393px">
@@ -153,8 +131,29 @@
 	</div>
 </div>
 </script>
+<script type="text/template" id="notification-template">
+<% var root = '<?php echo $this->webroot ?>'%>
+<a class="notifications <%= noti.user_had_read ? '' : 'unread' %> top-nf top-nf<%=noti.id%>" href="<%= root + 'photo/detail/' + photo.id%>" target="_blank" onclick="readNf(<%= noti.id %>);">
+	<img class="notifications-avatar" src="<%= root + 'img/' + user.profile_picture %>"/>
+	<div class="notifications-text">
+		<strong><%= user.username %></strong> 
+		<% if(noti.type == 1){ %>
+		likes your photo
+		<% } %>
+		<% if(noti.type == 2){ %>
+		also commented on your photo
+		<% } %>
+		<% if(noti.type == 3){ %>
+		mentioned your in a comment
+		<% } %>
+	</div>
+	<img class="notifications-photo" src="<%= root + 'img/' + photo.thumbnail %>"/>
+</a>
+</script>
 <?php echo $this->Html->scriptStart(array('inline' => false)) ?>
-//<script>
+//<script>	
+	var root = '<?php echo $this->webroot ?>';
+	var nfPage = 0;
 	
 	$(document).ready(function(){
 		$('.navbar-inner a').tooltip({
@@ -171,12 +170,16 @@
 		$('.navbar-nf').click(function(e){
 			e.stopPropagation();
 			var left = $(this).offset().left + 8;
-			
 			$('.nf-popup').css('left', left);
 			$('.nf-popup').show();
-			$('.nf-content').jScrollPane();
+			
 		});
-		$('.nf-header, .nf-content').click(function(e){
+		$('.navbar-nf').one('click', function(){
+			loadNotification();
+//			$('.nf-content').jScrollPane();
+		});
+
+		$('.nf-header, .nf-content, .nf-footer').click(function(e){
 			e.stopPropagation();
 		});
 		$(document).click(function(){
@@ -199,6 +202,21 @@
 				width: 960
 			});
 		});
+		
+		$.ajax({
+			url : '<?php echo $this->Html->url(array('controller' => 'ajax', 'action' => 'callApi', 'getUnreadNotiCount')) ?>',
+			type : 'POST',
+			data : ({'id' : 0}),
+			complete : function (response){
+				var result = $.parseJSON(response.responseText);
+				var count = result.data;
+				if(count){
+					$('.navbar-nf i').hide();
+					$('.navbar-nf span').html(count);
+					$('title').prepend('(' + count + ') ');
+				}
+			}
+		});	
 	});
 	
 	function goto(url){
@@ -215,5 +233,79 @@
 	function showPosition(position){
 		var url = '<?php echo $this->Html->url(array('controller' => 'location', 'action' => 'nearby')) ?>/' + position.coords.latitude + '/' + position.coords.longitude;
 		goto(url);
+	}
+	
+	//load notification from ajax request
+	function loadNotification(){
+		$('.loading').show();
+		$.ajax({
+			url : '<?php echo $this->Html->url(array('controller' => 'ajax', 'action' => 'callApi', 'getNotification')) ?>',
+			type : 'POST',
+			data : ({'page' : nfPage}),
+			complete : function (response){
+				var result = $.parseJSON(response.responseText);
+				$('.loading').hide();
+				nfLoadingLock = true;
+				nfPage = result.meta.next_page;
+				if (!nfPage){
+					nfLoadingLock = false;
+					$('.nf-footer a').remove();
+				}
+				
+				for (var i = 0; i < result.data.length; i++){
+					var template = _.template(
+				     	$( "#notification-template" ).html()
+				    );
+					var markup = template({photo : result.data[i].Photo, user : result.data[i].User, noti : result.data[i].Notification});
+					
+					
+					if(!i){
+						$('#nf-content').append(markup);
+						var nfPane = $('#nf-content');
+						nfPane.jScrollPane();
+					}
+					else{
+						$('#nf-content').append(markup);
+						var nfPane = $('#nf-content');
+						nfPane.jScrollPane();
+						var nfApi = nfPane.data('jsp');
+						nfApi.getContentPane().append(markup);
+						nfApi.reinitialise();						
+					}
+					
+				}
+				
+			}
+		});		
+	}
+	function loadMoreNf(){
+		$('.loading').show();
+		nfLoadingLock = false;
+		loadNotification();
+	}
+	function readNf(id){
+		$('.top-nf' + id).removeClass('unread');
+		//giam bot so notification
+		var count = parseInt($('.navbar-nf span').html());
+		var title = $('title').html();
+		if(count > 1){
+			count--;
+			$('.navbar-nf span').html(count);
+			title = title.replace('(' + (count + 1) + ')', '(' + count + ')');
+			$('title').html(title);
+		}
+		else{
+			$('.navbar-nf span').hide();
+			$('.navbar-nf i').show();
+			title = title.replace('(' + count + ')', '');
+			$('title').html(title);
+		}
+		$.ajax({
+			url : '<?php echo $this->Html->url(array('controller' => 'ajax', 'action' => 'callApi', 'readNotification')) ?>',
+			type : 'POST',
+			data : ({'id' : id}),
+			complete : function (response){
+			}
+		});	
 	}
 <?php echo $this->Html->scriptEnd() ?>

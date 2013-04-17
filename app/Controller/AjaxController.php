@@ -45,7 +45,7 @@ class AjaxController extends AppController{
 	
 	public function test(){
 		$Api = new ApiController();
-		$result = $Api->checkUser('thanh');
+		$result = $Api->getNotification(array(), 1);
 		debug($result);		
 	} 
 }
