@@ -25,6 +25,7 @@ class PhotoController extends AppController{
 		
 		$this->set('token', $token['data']);
 		$this->set('data', $photo['data']);
+		$this->set('popup', $popup);
 	}
 	
 	public function channel($name = null){

@@ -259,13 +259,11 @@
 					var markup = template({photo : result.data[i].Photo, user : result.data[i].User, noti : result.data[i].Notification});
 					
 					
-					if(!i){
+					if(nfPage < 2){
 						$('#nf-content').append(markup);
-						var nfPane = $('#nf-content');
-						nfPane.jScrollPane();
 					}
 					else{
-						$('#nf-content').append(markup);
+//						$('#nf-content').append(markup);
 						var nfPane = $('#nf-content');
 						nfPane.jScrollPane();
 						var nfApi = nfPane.data('jsp');
@@ -273,6 +271,9 @@
 						nfApi.reinitialise();						
 					}
 					
+				}
+				if (nfPage < 2){
+					$('#nf-content').jScrollPane();
 				}
 				
 			}

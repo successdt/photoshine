@@ -1815,7 +1815,10 @@ class ApiController extends AppController {
 		}
 		else{
 			$data['user_had_read'] = 0;
-			$this->Notification->deleteAll($data);
+			$this->Notification->deleteAll(array(
+				'from_user_id' => $data['from_user_id'],
+				'photo_id' => $data['photo_id']
+			));
 			$this->Notification->save($data);
 		}
 	}
@@ -1911,6 +1914,35 @@ class ApiController extends AppController {
 				'user_id' => $userId
 			)
 		);
+		$return['meta']['success'] = true;
+		return $return;			
+	}
+	public function deletePhoto($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!$data['id']){
+			$return['meta']['error_message'] = 'Empty photo id';
+			return $return;
+		}
+		$photo = $this->Photo->find('first', array(
+			'conditions' => array(
+				'id' => $data['id']
+			),
+			'fields' => array('standard_resolution', 'low_resolution_url', 'thumbnail')
+		));
+		$this->Photo->deleteAll(array('id' => $data['id']));
+		$this->Like->deleteAll(array('photo_id' => $data['id']));
+		$this->Comment->deleteAll(array('photo_id' => $data['id']));
+		$this->Notification->deleteAll(array('photo_id' => $data['id']));
+		$dir = 'img/';
+		unlink($dir . $photo['Photo']['standard_resolution']);
+		unlink($dir . $photo['Photo']['low_resolution_url']);
+		unlink($dir . $photo['Photo']['thumbnail']);
 		$return['meta']['success'] = true;
 		return $return;			
 	}

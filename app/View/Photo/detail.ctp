@@ -4,6 +4,11 @@ if(!isset($data['Photo']) || !$data['Photo'])
 $data['like_count'] = count($data['Like']);
 $data['Photo']['tags'] = explode(',', $data['Photo']['tags']);
 $likeBtn = $data['Photo']['user_had_liked'] ? 'active' : '';
+$userId = AuthComponent::user('User.id');
+$isYourPhoto = false;
+if ($userId == $data['Photo']['user_id']){
+	$isYourPhoto = true;
+}
 ?>
 
 <?php echo $this->Html->css(array('jquery.jscrollpane')) ?>
@@ -76,7 +81,10 @@ $likeBtn = $data['Photo']['user_had_liked'] ? 'active' : '';
 					<abbr class="time-ago" title="<?php echo $data['Photo']['created_time'] ?>"><?php echo $data['Photo']['created_time'] ?></abbr>
 				</div>
 				<div class="detail-caption">
-					<?php echo h($data['Photo']['caption']) ?>
+					<span class="caption-text"><?php echo h($data['Photo']['caption']) ?></span>
+					<?php if($isYourPhoto): ?>
+						<textarea class="edit-input" style="display: none; width: 333px; height: 39px; margin: 10px 10px 0px -44px;"><?php echo h($data['Photo']['caption']) ?></textarea>
+					<?php endif; ?>
 					<?php
 						if (isset($data['Photo']['tags'][0])){
 							echo ' ' . $data['Photo']['tags'][0];
@@ -93,16 +101,31 @@ $likeBtn = $data['Photo']['user_had_liked'] ? 'active' : '';
 			</div>
 	</div>
 	<div class="photodetail-sns">
-		<a href="javascript:void(0)" class="pull-left photodetail-like-btn btn btn-success <?php echo $likeBtn ?>">
+		<a href="javascript:void(0)" class="pull-left photodetail-like-btn btn btn-success <?php echo $likeBtn ?>"  rel="tooltip" title="Like this photo">
 			<i class="icon-heart icon-white"></i>	
 		</a>
-		<a href="javascript:share('facebook')" class="pull-left sns-btn facebook"></a>
-		<a href="javascript:share('twitter')" class="pull-left sns-btn twitter"></a>
-		<a href="javascript:share('tumblr')" class="pull-left sns-btn tumblr"></a>
-		<a href="javascript:share('pinterest')" class="pull-left sns-btn pinterest"></a>
-		<a href="javascript:void(0)" class="pull-left btn more-opt">
+		<a href="javascript:share('facebook')" class="pull-left sns-btn facebook" rel="tooltip" title="share this page to facebook"></a>
+		<a href="javascript:share('twitter')" class="pull-left sns-btn twitter" rel="tooltip" title="share this page to twitter"></a>
+		<a href="javascript:share('tumblr')" class="pull-left sns-btn tumblr" rel="tooltip" title="share this page to tumblr"></a>
+		<a href="javascript:share('pinterest')" class="pull-left sns-btn pinterest" rel="tooltip" title="share this page to pinterest"></a>
+		<?php if($isYourPhoto): ?>
+			<a href="javascript:void(0)" class="pull-left btn edit-photo" rel="tooltip" title="Edit your photo">
+				<i class="icon-edit"></i>
+			</a>
+			<a href="javascript:void(0)" class="pull-left btn edit-save hidden btn-success" rel="tooltip" style="display: none;" title="Save">
+				<i class="icon icon-ok"></i>
+			</a>
+			<a href="javascript:void(0)" class="pull-left btn edit-cancel hidden btn-danger" rel="tooltip" style="display: none;" title="Cancel">
+				<i class="icon icon-remove"></i>
+			</a>
+			<a href="javascript:void(0)" class="pull-left btn edit-delete hidden btn-danger" rel="tooltip" style="display: none;" title="Delete">
+				<i class="icon icon-trash"></i>
+			</a>
+		<?php endif; ?>
+		<a href="javascript:void(0)" class="pull-left btn more-opt" rel="tooltip" title="View more infomation">
 			<i class="icon-align-justify"></i>
 		</a>
+		
 	</div>
 	<div class="photodetail-list-like">
 		<span><span class="photodetail-like-count"><?php echo $data['like_count'] ?></span> Likes</span> <br />
@@ -193,6 +216,7 @@ var root = '<?php echo $this->webroot ?>';
 var username = '<?php echo AuthComponent::user('User.username') ?>';
 var photoId = '<?php echo $data['Photo']['id'] ?>';
 var profile_picture = '<?php echo AuthComponent::user('User.profile_picture') ?>';
+var popup = '<?php echo $popup ?>';
  $(document).ready(function(){	
  	 	
 	$('.photodetail-list-like, .photodetail-list-comment').jScrollPane();
@@ -351,7 +375,57 @@ var profile_picture = '<?php echo AuthComponent::user('User.profile_picture') ?>
 	
 	callback();
 	
-	
+	<?php if($isYourPhoto): ?>
+	$('.edit-photo').click(function(){
+		$('.photodetail-sns .sns-btn').hide();
+		$('.photodetail-sns .hidden').show();
+		$('.edit-input').fadeIn();
+		$('.caption-text').hide();
+		$('.edit-cancel').click(function(){
+			$('.photodetail-sns .sns-btn').show();
+			$('.photodetail-sns .hidden').hide();
+			$('.edit-input').fadeOut();
+			$('.caption-text').show();		
+		});
+		$('.edit-save').click(function(){
+			var newCaption = $('.edit-input').val();
+			$('.photodetail-sns .sns-btn').show();
+			$('.photodetail-sns .hidden').hide();
+			$('.edit-input').hide();
+			$('.caption-text').html(newCaption).fadeIn();
+			parent.$('.loading').show();
+			$.ajax({
+				url : root + 'ajax/callApi/updatePhoto',
+				type : 'POST',
+				data : {'photoId' : photoId, 'caption' : newCaption},
+				complete : function (response){
+					parent.$('.loading').hide();
+				}
+			});		
+		});
+		$('.edit-delete').click(function(){
+			parent.$('.loading').show();
+			if(confirm("Are you sure to want to remove this photo?")){
+				$.ajax({
+					url : root + 'ajax/callApi/deletePhoto',
+					type : 'POST',
+					data : {'id' : photoId},
+					complete : function (response){
+						parent.$('.loading').hide();
+						if (popup){
+							parent.$().slidebox.close();
+						}
+						else {
+							window.location = '<?php echo $this->Html->url(array('controller' => 'photo', 'action' => 'popular')) ?>';
+						}
+					}
+				});				
+			}
+
+		});
+		
+	});
+	<?php endif; ?>	
 });
 
 function updateComment(){
