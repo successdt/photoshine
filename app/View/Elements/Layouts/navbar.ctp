@@ -167,12 +167,14 @@
 			});
 		});
 		
-		$('.navbar-nf').click(function(e){
+		$('.navbar-nf').toggle(function(e){
 			e.stopPropagation();
 			var left = $(this).offset().left + 8;
 			$('.nf-popup').css('left', left);
 			$('.nf-popup').show();
 			
+		}, function(){
+			$('.nf-popup').hide();
 		});
 		$('.navbar-nf').one('click', function(){
 			loadNotification();
