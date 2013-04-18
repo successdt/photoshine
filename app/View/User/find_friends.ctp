@@ -59,7 +59,7 @@ if (isset($token['twitter_token']) && $token['twitter_token']){
 	<div class="friend-result <%= snsName %>-result">
 		<div class="pull-left image80">
 			<a href="<%= root + 'u/' + user.username %>">
-				<img src="<%= root + '/img/' + user.profile_picture %>" class="image80"/>
+				<img src="<%= root + 'img/' + user.profile_picture %>" class="image80"/>
 			</a>
 			<div class="sns-overlay">
 				<img src="<%= root %>img/photoshine/suggest_type_<%= snsName %>.png"/>
