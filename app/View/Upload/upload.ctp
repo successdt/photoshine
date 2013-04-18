@@ -1,9 +1,9 @@
 
-<?php if(isset($data) && $data): ?>
+<?php /* if(isset($data) && $data): ?>
 <div class="alert alert-error" style="width: 400px; margin: 5px auto; text-align: center;" >
 	<?php echo $data ?>
 </div>
-<?php endif ?>
+<?php endif; */?>
 <?php echo $this->Html->scriptStart(array('inline' =>false)) ?>
 //<script>
 $(document).ready(function(){
@@ -11,5 +11,7 @@ $(document).ready(function(){
 	//resize slidebox
 	parent.$('#slidebox, #slidebox iframe').css('height', height + 'px');
 	parent.$('.loading').hide();
+	alert('<?php echo $data ?>');
+	window.location = '<?php echo $this->Html->url(array('controlller' => 'upload', 'action' => 'start')) ?>';
 });
 <?php echo $this->Html->scriptEnd() ?>

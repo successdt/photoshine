@@ -144,6 +144,10 @@
 					<!-- dropdown menu links -->
 					</ul>
 				</div>
+			<?php else: ?>
+				<div class="btn-group pull-right">
+					<?php echo $this->Html->link('Edit Profile', array('controller' => 'user', 'action' => 'editProfile'), array('class' => 'btn')) ?>
+				</div>				
 			<?php endif; ?>
 		</div>
 	</div>
