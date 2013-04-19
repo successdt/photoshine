@@ -272,7 +272,7 @@ var popup = '<?php echo $popup ?>';
 	});
 	//share photo
 	$('.share-submit').live('click', function(){
-		var caption = $('.feedback-text').html();
+		var caption = $('.feedback-text').val();
 		var photoId = '<?php echo $data['Photo']['id'] ?>';
 		var photoUrl = '<?php echo h($data['Photo']['standard_resolution'])  ?>';
 		var listSns = {
