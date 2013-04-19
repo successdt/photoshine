@@ -18,7 +18,7 @@
 					<input type="password" name="data[password]" class="login-input" id="password" placeholder="Password"/>
 				</div>
 				<div style="width: 300px; margin: 0 auto;">
-					<button class="btn btn-success submit" style="width: 100%;">Log in</button>
+					<button class="btn btn-success submit" name="data[submit]" style="width: 100%;">Log in</button>
 					<span>
 						<?php echo $this->Html->link(__('Forgot your password?'), 'javascript:resetPass()') ?>
 					</span>
