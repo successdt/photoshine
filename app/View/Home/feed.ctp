@@ -100,7 +100,7 @@
 			<div class="listview-caption-content">
 				<a href="<%= root + 'u/' + photo.User.username %>" class="bold-link"><%= photo.User.username %></a> :
 				<br />
-				<%= text2link(photo.caption, root) %>
+				<%= photo.caption ? text2link(photo.caption, root) : '' %>
 				<br />
 			</div>
 			

@@ -1203,6 +1203,7 @@ class ApiController extends AppController {
 					)
 				)
 			),
+			'order' => 'created_time DESC',
 			'fields' => array('Photo.*', 'Location.*', 'User.id', 'User.username', 'User.profile_picture'),
 			'limit' => $limit
 		));

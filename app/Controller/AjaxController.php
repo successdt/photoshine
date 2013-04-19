@@ -42,6 +42,26 @@ class AjaxController extends AppController{
 			$this->Auth->login($result['data']);
 		return json_encode($result);
 	}
+	/**
+	 * long polling
+	 */
+	public function push(){
+		set_time_limit(60);
+		$user = $this->Auth->user();
+		$userId = $user['User']['id'];
+		$data = $this->request->query;
+		$lastTime = $data['time'];
+		$filename = 'files/' . $userId . '_data';
+		$fileTime = 0;
+		for($i = 0; $i < 200; $i++){
+			if (file_exists($filename)) {
+			    echo filectime($filename);
+			}
+			debug($filename);
+			die;
+			usleep(200000);
+		}	
+	}
 	
 	public function test(){
 		$Api = new ApiController();

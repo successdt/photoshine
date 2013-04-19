@@ -37,7 +37,7 @@
 		</div>
 		<div class="gridview-caption">
 			<a href="<%= root + 'u/' + photo.User.name %>"><%= photo.User.username %></a> :
-			<%= text2link(photo.caption, root) %>
+			<%= photo.caption ? text2link(photo.caption, root) : '' %>
 		</div>
 		<div class="gridview-static">
 			<span class="pull-left time-ago">
@@ -92,7 +92,7 @@
 			<div class="listview-caption-content">
 				<a href="<%= root + 'u/' + photo.User.username %>" class="bold-link"><%= photo.User.username %></a> :
 				<br />
-				<%= text2link(photo.caption, root) %>
+				<%= photo.caption ? text2link(photo.caption, root) : '' %>
 				<br />
 			</div>
 			
