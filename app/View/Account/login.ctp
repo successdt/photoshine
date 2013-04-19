@@ -20,7 +20,7 @@
 				<div style="width: 300px; margin: 0 auto;">
 					<button class="btn btn-success submit" style="width: 100%;">Log in</button>
 					<span>
-						<?php echo $this->Html->link(__('Forgot your password?'), array('controller' => 'Account', 'action' => 'resetPassword')) ?>
+						<?php echo $this->Html->link(__('Forgot your password?'), 'javascript:resetPass()') ?>
 					</span>
 				</div>
 			</form>
@@ -63,5 +63,33 @@ $(document).ready(function(){
 			}
 		});		
 	}
+
 });
+function resetPass(){
+		var username = prompt('Enter your username to reset password');
+		var re = /^[\w\.@]{6,50}$/;
+		var validation = re.test(username);
+		if (!validation){
+			alert('Invalid username format!');
+		}
+		else {
+			$('.loading').show();
+			$.ajax({
+				url : '<?php echo $this->Html->url(array('controller' => 'account', 'action' => 'resetPassword')) ?>',
+				type : 'POST',
+				data : {'username' : username},
+				complete : function(response){
+					var result = $.parseJSON(response.responseText);
+					
+					$('.loading').hide();
+					if (result.meta.success && result.data.email){
+						alert('A new password has been sent to email address: ' + result.data.email);
+					}
+					else {
+						alert('error occurs');
+					}
+				}
+			});				
+		}
+	}
 <?php echo $this->Html->scriptEnd() ?>

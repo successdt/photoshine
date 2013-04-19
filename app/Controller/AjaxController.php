@@ -36,7 +36,7 @@ class AjaxController extends AppController{
 		
 		$Api = new ApiController();
 		$result = $Api->{$apiName}($data, $userId);
-		
+		unset($result['data']['pwd']);
 		//case login
 		if ((($apiName == 'login') || ($apiName == 'registerUser')) && ($result['data']['status'] == 'ok'))
 			$this->Auth->login($result['data']);

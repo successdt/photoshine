@@ -44,27 +44,27 @@ class EmailConfig {
 
 	public $default = array(
 		'transport' => 'Mail',
-		'from' => 'you@localhost',
-		//'charset' => 'utf-8',
-		//'headerCharset' => 'utf-8',
+		'from' => 'success.ddt@gmail.com',
+		'charset' => 'utf-8',
+		'headerCharset' => 'utf-8',
 	);
 
 	public $smtp = array(
 		'transport' => 'Smtp',
-		'from' => array('site@localhost' => 'My Site'),
-		'host' => 'localhost',
-		'port' => 25,
+		'from' => array('success.ddt@gmail.com' => 'My Site'),
+		'host' => 'ssl://smtp.gmail.com',
+		'port' => 465,
 		'timeout' => 30,
-		'username' => 'user',
-		'password' => 'secret',
+		'username' => 'success.ddt@gmail.com',
+		'password' => '24071990',
 		'client' => null,
 		'log' => false,
-		//'charset' => 'utf-8',
-		//'headerCharset' => 'utf-8',
+		'charset' => 'utf-8',
+		'headerCharset' => 'utf-8',
 	);
 
 	public $fast = array(
-		'from' => 'you@localhost',
+		'from' => 'success.ddt@gmail.com',
 		'sender' => null,
 		'to' => null,
 		'cc' => null,
@@ -83,15 +83,15 @@ class EmailConfig {
 		'attachments' => null,
 		'emailFormat' => null,
 		'transport' => 'Smtp',
-		'host' => 'localhost',
-		'port' => 25,
+		'host' => 'ssl://smtp.gmail.com',
+		'port' => 465,
 		'timeout' => 30,
-		'username' => 'user',
-		'password' => 'secret',
+		'username' => 'success.ddt@gmail.com',
+		'password' => '24071990',
 		'client' => null,
 		'log' => true,
-		//'charset' => 'utf-8',
-		//'headerCharset' => 'utf-8',
+		'charset' => 'utf-8',
+		'headerCharset' => 'utf-8',
 	);
 
 }

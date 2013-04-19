@@ -1976,4 +1976,35 @@ class ApiController extends AppController {
 		$return['data']['User'] = $user;
 		return $return;	
 	}
+	public function resetPassword($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		if (!$data['username']){
+			$return['meta']['error_message'] = 'Empty username';
+			return $return;
+		}
+		$data['password'] = str_split(md5(rand()), 8);
+		$this->User->updateAll(array("password" => "'" . md5($data['password'][0]) ."'"), array('username' => trim($data['username'])));
+		$user = $this->User->find('first', array(
+			'conditions' => array('username' => trim($data['username'])),
+			'fields' => array('email')
+			)
+		);
+		if(isset($user['User']['email'])){
+			$return['meta']['success'] = true;
+			$return['data']['pwd'] = $data['password'][0];
+			$return['data']['email'] = $user['User']['email'];
+						
+		}
+		else{
+			$return['meta']['error'] = 'Username does not exist';
+		}
+
+		return $return;			
+	}
 }
