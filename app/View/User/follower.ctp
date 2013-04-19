@@ -11,7 +11,7 @@
 	<div class="friend-result result">
 		<div class="pull-left image80">
 			<a href="<%= root + 'u/' + user.username %>" target="_blank">
-				<img src="<%= root + '/img/' + user.profile_picture %>" class="image80"/>
+				<img src="<%= root + 'img/' + user.profile_picture %>" class="image80"/>
 			</a>
 		</div>
 		
