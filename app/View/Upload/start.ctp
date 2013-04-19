@@ -11,7 +11,13 @@
 				<input type="file" name="file" id="file" class="file-browser" style="display: none;" />
 				<button type="submit" class="upload-next btn btn-warning pull-left margin5" title="submit">Next</button>		
 			</form>
-
+	</div>
+	<div style="width: 100%;">
+		<div style="width: 264px; margin: 50px auto;" class="alert alert-success">
+			<p>Your photo must be at least 600x600 pixels.</p>
+			<p>Allowed file types for upload are: jpg and png</p>
+		</div>
+		
 	</div>
 </div>
 <?php echo $this->Html->scriptStart(array('inline' =>false)) ?>

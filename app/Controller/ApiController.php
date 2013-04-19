@@ -481,6 +481,7 @@ class ApiController extends AppController {
 			'user_had_accepted' => 1 //muốn confirm thì sửa cái này
 		);
 		$this->Follow->save($params);
+		
 		$return['meta']['success'] = true;
 		
 		return $return;		
@@ -1945,5 +1946,34 @@ class ApiController extends AppController {
 		unlink($dir . $photo['Photo']['thumbnail']);
 		$return['meta']['success'] = true;
 		return $return;			
+	}
+	
+	public function suggest($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		$user = $this->User->find('all', array(
+			'joins' => array(
+				array(
+					'table' => 'follows',
+					'alias' => 'Follow',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Follow.to_user_id = User.id'
+					)
+				)
+			),
+			'fields' => array('User.id', 'User.username', 'User.profile_picture', 'User.first_name', 'User.last_name'),
+			'group' => 'Follow.to_user_id',
+			'order' => 'COUNT(Follow.to_user_id) DESC'
+		));
+		$photo = $this->getPopularPhotos($data, $userId = null);
+		$return['data']['Photo'] = $photo['data'];
+		$return['data']['User'] = $user;
+		return $return;	
 	}
 }

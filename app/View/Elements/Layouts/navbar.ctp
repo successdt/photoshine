@@ -144,6 +144,9 @@
 		also commented on your photo
 		<% } %>
 		<% if(noti.type == 3){ %>
+		started follow you
+		<% } %>
+		<% if(noti.type == 3){ %>
 		mentioned your in a comment
 		<% } %>
 	</div>

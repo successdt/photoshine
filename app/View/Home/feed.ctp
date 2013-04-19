@@ -1,47 +1,65 @@
-<div class="feed-block listview-block">
-		<?php foreach($activities as $activity): ?>
-			<?php
-			$photoUrl = '';
-			if (isset($activity['photo_id']))
-				$photoUrl = $this->Html->url(array('controller' => 'photo', 'action' => 'detail', $activity['photo_id']));
-		
-		 	?>
-			<a class="notifications" href="<?php echo $photoUrl ?>">
+<?php if(count($activities)) : ?>
+	<div class="feed-block listview-block">
+			<?php foreach($activities as $activity): ?>
 				<?php
-				if (isset($activity['profile_picture']))
-						echo $this->Html->image($activity['profile_picture'], array('class' => 'notifications-avatar')); ?>
-				<div class="notifications-text">	
-					<span>
-						<strong><?php echo $activity['from_user'] ?></strong>
-						<?php
-						if ($activity['type'] == 'like'){
-							echo ' likes ';
-						}
-						if ($activity['type'] == 'comment'){
-							echo '  also commented on  ';
-						}
-					 	?>	
-				 		<?php
-				 		if ($activity['to_user'] == AuthComponent::user('User.username'))
-					 		echo "your ";
-				 		else
-				 			echo '<strong>' . $activity['to_user'] . "</strong>'s ";
-					  	?>
-					 	photo
-					</span>
-					<span class="time-ago" style="display: block;">
-						<?php $time = date('Y-m-d H:i:s', $activity['created_time']); ?>
-						<abbr class="time-ago" title="<?php echo $time ?>"><?php echo $time ?></abbr>
-					</span>
-				</div>
-				<?php echo $this->Html->image($activity['thumbnail'], array('class' => 'notifications-photo')) ?>
-			</a>
-		<?php endforeach; ?>
-</div>
+				$photoUrl = '';
+				if (isset($activity['photo_id']))
+					$photoUrl = $this->Html->url(array('controller' => 'photo', 'action' => 'detail', $activity['photo_id']));
+			
+			 	?>
+				<a class="notifications" href="<?php echo $photoUrl ?>">
+					<?php
+					if (isset($activity['profile_picture']))
+							echo $this->Html->image($activity['profile_picture'], array('class' => 'notifications-avatar')); ?>
+					<div class="notifications-text">	
+						<span>
+							<strong><?php echo $activity['from_user'] ?></strong>
+							<?php
+							if ($activity['type'] == 'like'){
+								echo ' likes ';
+							}
+							if ($activity['type'] == 'comment'){
+								echo '  also commented on  ';
+							}
+						 	?>	
+					 		<?php
+					 		if ($activity['to_user'] == AuthComponent::user('User.username'))
+						 		echo "your ";
+					 		else
+					 			echo '<strong>' . $activity['to_user'] . "</strong>'s ";
+						  	?>
+						 	photo
+						</span>
+						<span class="time-ago" style="display: block;">
+							<?php $time = date('Y-m-d H:i:s', $activity['created_time']); ?>
+							<abbr class="time-ago" title="<?php echo $time ?>"><?php echo $time ?></abbr>
+						</span>
+					</div>
+					<?php echo $this->Html->image($activity['thumbnail'], array('class' => 'notifications-photo')) ?>
+				</a>
+			<?php endforeach; ?>
+	</div>
+	<div class="listview-wrapper" style="margin-left: 310px;">
+	
+	</div>	
+<?php else : ?>		
+	<div class="feed-hint" style="margin: 5px;">
+		<?php echo $this->Html->image('help/search_hint.png') ?>
+		<?php echo $this->Html->image('help/find_friends_click.png') ?>
+		<?php echo $this->Html->image('help/find_fb_friend.png') ?>
+		<?php echo $this->Html->image('help/start_following.png') ?>
+	</div>
+	<div style="width: 100%;">
+		<div style="width: 335px; margin: 0 auto; padding: 5px 10px; border-radius: 5px;" class="btn-success">
+			<h1>Popular photos and suggest users</h1>
+		</div>
+	</div>
+	<div class="listview-wrapper">
 
-<div class="listview-wrapper" style="margin-left: 310px;">
+	</div>	
+<?php endif; ?>
 
-</div>
+
 
 <script type="text/template" id="list-template">
 	<% var root = '<?php echo $this->webroot ?>'; %>
@@ -152,7 +170,24 @@
 		
 	</div>
 </script>
-
+<script type="text/template" id="user-result">
+	<% var root = '<?php echo $this->webroot ?>'; %>
+	<div class="listview-block  user-result">
+		<a href="<%= root + 'u/' + user.username %>">
+			<div class="margin10 result-avatar">
+				<img src="<%= root + 'img/' + user.profile_picture %>" alt="<%= user.username %>" />
+			</div>
+			<div class="result-name">
+				<span class="ellipsis">
+					<h5><%= user.username %></h5>
+				</span>
+				<span class="ellipsis">
+					<h6><%= user.first_name ? user.first_name : '' + ' ' + user.last_name ? user.last_name : '' %></h6>
+				</span>
+			</div>
+		</a>
+	</div>
+</script>
 
 <?php echo $this->Html->script(array('jquery.masonry.min', 'jquery.imagesloaded'), array('inline' => false)) ?>
 <?php echo $this->Html->scriptStart(array('inline' => false)) ?>
@@ -258,6 +293,7 @@
 				page = result.meta.next_page;
 				if (!page){
 					loadingLock = false;
+					loadSuggest();
 				}
 				
 				for (var i = 0; i < result.data.length; i++){
@@ -280,6 +316,35 @@
 		}, 200);
 		
 		$('abbr.time-ago').timeago();
+	}
+	
+	function loadSuggest(){
+		$('.loading').show();
+		$.ajax({
+			url : root + 'ajax/callApi/suggest',
+			type : 'POST',
+			data : { 'page' : 0},
+			complete : function (response){
+				var result = $.parseJSON(response.responseText);
+				$('.loading').hide();
+				for (var i = 0; i < result.data.Photo.length; i++){
+					
+					var listTemplate = _.template(
+				     	$( "#list-template" ).html()
+				    );
+					var listMarkup = listTemplate({photo : result.data.Photo[i]});
+					$('.listview-wrapper').append(listMarkup);				
+				}
+				for (var i = 0; i < result.data.User.length; i++){
+					var userTemplate = _.template(
+				     	$( "#user-result" ).html()
+				    );
+					var listMarkup = userTemplate({user : result.data.User[i].User});
+					$('.listview-wrapper').append(listMarkup);								
+				}
+				callback();
+			}
+		});			
 	}
 	
 	

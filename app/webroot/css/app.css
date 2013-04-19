@@ -1265,6 +1265,12 @@ body > .navbar-fixed-top .brand {
 	transition-duration: 0ms;
 	margin-left: 0px;
 }
+.feed-hint img{
+	margin: 5px;
+	border: 1px solid green;
+	width: 335px;
+	height: 350px;
+}
 
 /* HOME BEFORE LOGIN */
 .home-logo {
