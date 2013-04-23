@@ -1919,6 +1919,27 @@ class ApiController extends AppController {
 		$return['meta']['success'] = true;
 		return $return;			
 	}
+	
+	/**
+	 * read all notifications
+	 */
+	public function readAllNotification($data, $userId = null){
+		$return = array(
+			'meta' => array(
+				'success' => false,
+				'error_message' => ''
+			),
+			'data' => array()
+		);
+		$this->Notification->updateAll(
+			array('user_had_read' => 1),
+			array(
+				'user_id' => $userId
+			)
+		);
+		$return['meta']['success'] = true;
+		return $return;			
+	}	
 	public function deletePhoto($data, $userId = null){
 		$return = array(
 			'meta' => array(

@@ -300,10 +300,10 @@ define('IMG_AVATAR_DIR', 'img/avatar/');
 define('FB_TOKEN', '187469724661182|vwCngrIYJJHlqcnaxCJ5WvldhGg');
 
 Configure::write('Facebook.config', array(
- 	// 'appId' => '407687702659722',
- 	// 'secret' => 'fc776ed1aa4627033568b4bccd1c290d',
- 	 	'appId' => '178723562279571',
- 		'secret' => '9d957304b09215ece4169732d9925a0c',
+ 	 'appId' => '407687702659722',
+ 	 'secret' => 'fc776ed1aa4627033568b4bccd1c290d',
+// 	'appId' => '178723562279571',
+//	'secret' => '9d957304b09215ece4169732d9925a0c',
 
  	'perms' => 'offline_access, user_groups, publish_stream,publish_actions'
 	

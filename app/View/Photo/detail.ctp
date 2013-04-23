@@ -320,7 +320,7 @@ var popup = '<?php echo $popup ?>';
 	
 	//post comment
 	$('.post-comment').keypress(function(e){
-		if (e.keyCode == 13){
+		if (e.keyCode == 13 && (!e.shiftKey)){
 			e.preventDefault();
 			var text = $(this).val();
 			$(this).val('');

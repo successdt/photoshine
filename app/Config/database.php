@@ -64,7 +64,7 @@ class DATABASE_CONFIG {
 		'persistent' => false,
 		'host' => 'localhost',
 		'login' => 'root',
-		'password' => 'ltt123',
+		'password' => '',
 		'database' => 'photoshine',
 		'prefix' => 'tb_',
 		'encoding' => 'utf8',
