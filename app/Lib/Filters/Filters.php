@@ -50,19 +50,19 @@ class Filters {
 		$this->execute("convert -extract '{$size}x{$size}+{$x}+{$y}' $input -resize '{$outputSize}x{$outputSize}' $output");
 	}
 	
-	private function composite($input, $mask, $alpha = '50', $mode = 'Multiply') {
-		$tmp =  WWW_ROOT . str_replace('/', DS, FILTERS_DIR) . uniqid('', true) . '.png';
-		$this->execute("convert $mask -alpha opaque -channel a -evaluate set $alpha% +channel $tmp");
-		$this->execute("convert $input $tmp -compose $mode -composite $input");
-		unlink($tmp);
-	}
+//	private function composite($input, $mask, $alpha = '50', $mode = 'Multiply') {
+//		$tmp =  WWW_ROOT . str_replace('/', DS, FILTERS_DIR) . uniqid('', true) . '.png';
+//		$this->execute("convert $mask -alpha opaque -channel a -evaluate set $alpha% +channel $tmp");
+//		$this->execute("convert $input $tmp -compose $mode -composite $input");
+//		unlink($tmp);
+//	}
 	
-	private function alpha($input, $alpha, $type = 'jpeg', $width = 600, $height = 600) {
-		$tmp =  WWW_ROOT . str_replace('/', DS, FILTERS_DIR) . uniqid('', true) . '.jpg';
-		copy($input, $tmp);
-		$this->execute("convert $tmp -channel A -evaluate 50% $tmp");
-		return $tmp;
-	}
+//	private function alpha($input, $alpha, $type = 'jpeg', $width = 600, $height = 600) {
+//		$tmp =  WWW_ROOT . str_replace('/', DS, FILTERS_DIR) . uniqid('', true) . '.jpg';
+//		copy($input, $tmp);
+//		$this->execute("convert $tmp -channel A -evaluate 50% $tmp");
+//		return $tmp;
+//	}
 	
 	private function thumbnail($input, $size = 120) {
 		$this->execute("convert $this->input -resize {$size}x{$size} $this->output");
@@ -70,6 +70,7 @@ class Filters {
 	
 	private function beauty() {
 		$this->execute("convert $this->input -color-matrix '1.3 0 0 0   0 1.3 0 0   0 0 1.3 0   0 0 0 1' $this->output");
+		//matrix reg green blue alpha
 	}
 	
 	private function bright() {

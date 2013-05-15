@@ -40,6 +40,12 @@
 								'happytear', 'inkwash', 'instant', 'lomo', 'nostalgia',
 								'retro', 'richtone', 'sunrise', 'vibrant', 'xpro'
 							);
+							$filterName = array(
+								'none', 'c-41', 'birghtness', 'brown', 'vienna', 'classic',
+								'amaro', 'inkwell', 'walden', 'lomo', 'seirra',
+								'hudson', 'rise', 'sunshine', 'vibrance', 'x-pro'
+							);
+							$i = 0;
 						?>
 						<?php foreach ($filterList as $filter) : ?>
 							<div class="func-preview" style="width: 76px; float: left; margin: 2px 5px;">
@@ -50,7 +56,11 @@
 									) 
 								?>
 								<div style="font-size: 14px; text-align: center;">
-									<?php echo ucwords($filter) ?>
+									<?php // echo ucwords($filter) ?>
+									<?php
+									echo ucwords($filterName[$i]);
+									$i++;
+								 	?>
 								</div>
 							</div>
 						<?php endforeach; ?>		  
