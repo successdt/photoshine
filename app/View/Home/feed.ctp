@@ -241,7 +241,7 @@
 		
 
 		//like photo process
-		$('.gridview-like-btn').live('click', function(){
+		$('.gridview-like-btn, .photodetail-like-btn').live('click', function(){
 			var outter = $(this).closest('.data-div');
 			var photoId = $(outter).data('id');
 			var likeCount =  parseInt($(outter).find('.gridview-like-count').html());
@@ -250,11 +250,13 @@
 				url =  root + 'ajax/callApi/unlikePhoto';
 				$('.photo_' + photoId + ' .gridview-like-count').html(likeCount - 1);
 				$('.photo_' + photoId).find('.gridview-like-btn').removeClass('active');
+				$('.photo_' + photoId).find('.photodetail-like-btn').removeClass('active');
 			}
 			else{
 				url = root + 'ajax/callApi/likePhoto';
 				$('.photo_' + photoId + ' .gridview-like-count').html(likeCount + 1);
 				$('.photo_' + photoId).find('.gridview-like-btn').addClass('active');
+				$('.photo_' + photoId).find('.photodetail-like-btn').addClass('active');
 			}
 			$('.loading').show();
 			
